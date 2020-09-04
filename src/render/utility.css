@@ -1,0 +1,11 @@
+/* General Classes */
+.card {
+  width: 150px;
+  border-radius: 5px;
+  padding: 1rem;
+  background: var(--light0);
+}
+
+.card-title {
+  color: var(--dark1);
+}

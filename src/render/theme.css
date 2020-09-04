@@ -1,3 +1,7 @@
+/* Can be edited by the user to change the appearance w/o having
+ * to change class names or add data attributes, etc.
+*/
+
 :root {
   /* CSS HEX */
   --light0: #d9e5e6ff;

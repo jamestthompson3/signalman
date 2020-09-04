@@ -6,7 +6,6 @@ const rules = require("./webpack.rules");
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
-console.log(path.resolve(__dirname, "src"));
 rules.push(
   {
     test: /\.css$/,
@@ -33,6 +32,10 @@ rules.push(
         }
       }
     ]
+  },
+  {
+    test: /\.node$/,
+    use: "node-loader"
   }
 );
 
@@ -42,5 +45,9 @@ module.exports = {
   module: {
     rules
   },
-  plugins: [new HardSourceWebpackPlugin()]
+  target: "electron-renderer",
+  plugins: [
+    new HardSourceWebpackPlugin(),
+    new webpack.ExternalsPlugin("commonjs", ["electron"])
+  ]
 };

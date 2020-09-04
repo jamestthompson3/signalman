@@ -3,7 +3,8 @@ import path from "path";
 import * as shortcut from "electron-squirrel-startup";
 import fs from "fs";
 
-import { getDataDir } from "./filesystem/utils/projectDir";
+import { bootstrap } from "./filesystem/utils/createInitialFiles";
+import { registerHandlers } from "./eventlisteners";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (shortcut) {
@@ -11,19 +12,17 @@ if (shortcut) {
   app.quit();
 }
 
-const dataDir = getDataDir(app);
-
-// make sure data directory exists
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir);
-}
+bootstrap();
 
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    backgroundColor: "#091818ff"
+    backgroundColor: "#091818ff",
+    webPreferences: {
+      preload: `${__dirname}/preload.js`
+    }
   });
 
   // and load the index.html of the app.
@@ -57,3 +56,4 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+registerHandlers();
