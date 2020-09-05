@@ -2,26 +2,37 @@ import fs from "fs";
 import {
   getDataDir,
   readDataFile,
-  readTemplateFile
+  readTemplateFile,
 } from "../filesystem/utils/projectDir";
 import { PROMISE_STATUS } from "../constants/index";
+import uniq from "lodash/uniq";
+import keyBy from "lodash/keyBy";
 
 const dataDir = getDataDir();
 
-export async function handleWorkspaceRequest(event, arg) {
+export async function handleWorkspaceRequest(event) {
   fs.readFile(`${dataDir}settings.json`, "utf8", async (err, data) => {
+    if (err) {
+      console.error(err);
+      throw new Error();
+    }
     const { displayOnStartup } = JSON.parse(data.toString());
     const startupCards = displayOnStartup.map(readDataFile);
     const cardContents = await Promise.allSettled(startupCards);
-    // TODO get return value of filtered files
-    cardContents.filter(card => card.status !== PROMISE_STATUS.REJECTED);
-    const templates = cardContents.map(card =>
-      readTemplateFile(card.viewTemplate)
+    const filteredCards = cardContents
+      .filter((card) => card.status !== PROMISE_STATUS.REJECTED)
+      .map((promise) => promise.value);
+    const templates = uniq(filteredCards.map((card) => card.viewTemplate));
+
+    const templateContents = await Promise.allSettled(
+      templates.map(readTemplateFile)
     );
-    const templateContents = await Promise.allSettled(templates);
-    templateContents.filter(
-      template => template.status !== PROMISE_STATUS.REJECTED
+    const filteredTemplates = keyBy(
+      templateContents
+        .filter((template) => template.status !== PROMISE_STATUS.REJECTED)
+        .map((promise) => promise.value),
+      "name"
     );
-    event.reply("workspaceInit", [cardContents, templateContents]);
+    event.reply("workspaceInit", [filteredCards, filteredTemplates]);
   });
 }

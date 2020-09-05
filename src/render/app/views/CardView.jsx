@@ -1,7 +1,9 @@
 import React from "react";
 import { useMachine } from "@xstate/react";
 import { cardviewMachine } from "machines/cardview-general.machine.js";
+
 import { on } from "utils/messagePassing.js";
+import { Card } from "./Card.jsx";
 
 export function CardView() {
   const [currentState, send] = useMachine(cardviewMachine);
@@ -9,13 +11,19 @@ export function CardView() {
     on("workspaceInit", (e, data) => send({ type: "CARDS_LOADED", data }));
   }, []);
 
-  const { context } = currentState;
-  return context.cards.map(card => (
-    <div className="card" key={card.title}>
-      <h2 data-field="title" className="card-title">
-        {card.title}
-      </h2>
-      <p>{card.text}</p>
-    </div>
-  ));
+  const {
+    context: {
+      cards: [contents, templates],
+    },
+  } = currentState;
+  console.log({ contents });
+  return contents
+    ? contents.map((card) => (
+        <Card
+          contents={card}
+          template={templates[card.viewTemplate]}
+          key={card.title}
+        />
+      ))
+    : null;
 }

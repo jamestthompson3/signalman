@@ -17,12 +17,12 @@ bootstrap();
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
     backgroundColor: "#091818ff",
     webPreferences: {
-      preload: `${__dirname}/preload.js`
-    }
+      preload: `${__dirname}/preload.js`,
+    },
   });
 
   // and load the index.html of the app.

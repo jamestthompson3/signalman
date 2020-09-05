@@ -14,19 +14,19 @@ export function bootstrap() {
       user: "",
       modifier: "",
       title: "settings",
-      viewTemplate: "configuration"
+      viewTemplate: "configuration",
     };
     const configurationTemplate = {
       name: "configuration",
       displayFields: "all",
-      labelFields: true
+      labelFields: true,
     };
     const viewTemplate = {
       name: "basic-view",
       displayFields: ["text", "title", "modified", "modifier"],
-      labelFields: false
+      labelFields: false,
     };
-    fs.mkdirSync(dataDir);
+    fs.mkdirSync(dataDir, { recursive: true });
     fs.mkdirSync(`${dataDir}templates`);
     fs.writeFileSync(`${dataDir}/settings.json`, JSON.stringify(initialConfig));
     fs.writeFileSync(
