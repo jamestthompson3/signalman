@@ -33,3 +33,15 @@ export function readDataFile(name) {
     .then(JSON.parse)
     .catch(console.error);
 }
+
+/*
+ * @returns: Promise<JSON>
+ */
+export function readTemplateFile(name) {
+  const dataDir = getDataDir();
+  const filePath = `${dataDir}/templates/${name}.json`;
+  return readFile(filePath, "utf8")
+    .then(data => data.toString())
+    .then(JSON.parse)
+    .catch(console.error);
+}

@@ -9,7 +9,7 @@ export const cardviewMachine = Machine(
     initial: "idle",
     strict: "true",
     context: {
-      cards: () => <h1>Loading</h1>
+      cards: []
     },
     states: {
       idle: {
@@ -27,15 +27,7 @@ export const cardviewMachine = Machine(
     actions: {
       requestCards: () => send("requestWorkspace"),
       saveCards: assign({
-        cards: (_, e) => () => {
-          console.log({ e });
-          return e.data.map(card => (
-            <div className="card" key={card.title}>
-              <h2 className="card-title">{card.title}</h2>
-              {card.text}
-            </div>
-          ));
-        }
+        cards: (_, e) => e.data
       })
     }
   }

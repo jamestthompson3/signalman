@@ -13,9 +13,29 @@ export function bootstrap() {
       modified: new Date(),
       user: "",
       modifier: "",
-      title: "settings"
+      title: "settings",
+      viewTemplate: "configuration"
+    };
+    const configurationTemplate = {
+      name: "configuration",
+      displayFields: "all",
+      labelFields: true
+    };
+    const viewTemplate = {
+      name: "basic-view",
+      displayFields: ["text", "title", "modified", "modifier"],
+      labelFields: false
     };
     fs.mkdirSync(dataDir);
+    fs.mkdirSync(`${dataDir}templates`);
     fs.writeFileSync(`${dataDir}/settings.json`, JSON.stringify(initialConfig));
+    fs.writeFileSync(
+      `${dataDir}templates/configuration.json`,
+      JSON.stringify(configurationTemplate)
+    );
+    fs.writeFileSync(
+      `${dataDir}templates/basic-view.json`,
+      JSON.stringify(viewTemplate)
+    );
   }
 }

@@ -45,6 +45,12 @@ module.exports = {
   module: {
     rules
   },
+  resolve: {
+    alias: {
+      machines: path.resolve(__dirname, "src/render/app/machines"),
+      utils: path.resolve(__dirname, "src/render/app/utils")
+    }
+  },
   target: "electron-renderer",
   plugins: [
     new HardSourceWebpackPlugin(),
