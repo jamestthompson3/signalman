@@ -9,16 +9,18 @@
   --mid: #579c9eff;
   --dark1: #447c7dff;
   --dark0: #091818ff;
+  --accent: #E59600;
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin: auto;
   max-width: 38rem;
   padding: 2rem;
-  color: var(--light1);
-  background: var(--dark0);
+  color: var(--dark0);
+  background: linear-gradient(hsl(185, 21%, 88%), hsl(185, 21%, 79%));
+  background-repeat: no-repeat;
 }
 
 h1 {
-  color: var(--light0);
+  color: var(--dark1);
 }

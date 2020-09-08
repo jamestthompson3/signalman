@@ -1,12 +1,17 @@
 import "../utility.css";
 import React from "react";
 import { CardView } from "./views/CardView.jsx";
+import { useMachine } from "@xstate/react";
+import { workspaceMachine } from "machines/workspace-general.machine.js";
 
 export function App() {
-  return (
+  const [currentState, send] = useMachine(workspaceMachine);
+  const { context } = currentState;
+  console.log(context);
+  return context.state ? (
     <>
-      <h1>Welcome to Signalman!</h1>
-      <CardView />
+      <h1>{context.state.name}</h1>
+      <CardView contents={context.shown} />
     </>
-  );
+  ) : null;
 }

@@ -1,10 +1,13 @@
 /* General Classes */
 .card {
   border-radius: 5px;
-  background: var(--light0);
+  background: #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  box-shadow: hsl(185, 21%, 65%) 0px 4px 6px -1px,hsl(185, 21%, 53%) 0px 2px 4px -1px;
+  will-change: transform;
+  transform: translate(0, 0);
 }
 
 .card-title {
@@ -27,4 +30,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 1.25rem;
+}
+
+.card-field p:focus, .card-field p:active {
+  outline: var(--accent) auto 1px;
 }

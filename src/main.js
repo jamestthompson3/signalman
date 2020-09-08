@@ -6,6 +6,8 @@ import fs from "fs";
 import { bootstrap } from "./filesystem/utils/createInitialFiles";
 import { registerHandlers } from "./eventlisteners";
 
+const isDev = process.env.NODE_ENV !== "production";
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (shortcut) {
   // eslint-disable-line global-require
@@ -13,6 +15,10 @@ if (shortcut) {
 }
 
 bootstrap();
+
+// In this file you can include the rest of your app's specific main process
+// code. You can also put them in separate files and import them here.
+registerHandlers();
 
 const createWindow = () => {
   // Create the browser window.
@@ -24,12 +30,20 @@ const createWindow = () => {
       preload: `${__dirname}/preload.js`,
     },
   });
+  isDev && mainWindow.webContents.openDevTools();
+  mainWindow.webContents.on("devtools-opened", () => {
+    mainWindow && mainWindow.focus();
+    setImmediate(() => {
+      mainWindow && mainWindow.focus();
+    });
+  });
+
+  mainWindow.webContents.on("devtools-reload-page", () => {
+    backgroundWindow && backgroundWindow.reload();
+  });
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
@@ -53,7 +67,3 @@ app.on("activate", () => {
     createWindow();
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
-registerHandlers();

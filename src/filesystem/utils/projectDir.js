@@ -16,7 +16,7 @@ export function getDataDir() {
     case "darwin":
       return app.getPath("userData");
     case "win32":
-      return path.join(app.getPath("userData"), "Roaming\\signalman\\data\\");
+      return path.join(app.getPath("userData"), "data\\");
     default:
       return app.getPath("userData");
   }

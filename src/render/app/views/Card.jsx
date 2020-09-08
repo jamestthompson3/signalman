@@ -2,6 +2,10 @@ import React from "react";
 
 const STATIC_FIELDS = ["created", "modified", "modifier", "title"];
 
+// TODO:
+// expose templatting to parent component so I can execute logic on the fields
+// Drag and drop all the things!!
+
 // very naive first pass
 function parseTemplateFields(displayFields, labelFields, contents) {
   const renderFields = (fields) =>
@@ -29,7 +33,7 @@ function parseTemplate({ contents, template }) {
         {contents.title}
       </h2>
       <div className="card-meta">
-        <i>{contents.modifier}</i>
+        <i>{contents.modifier === "" ? "Signalman User" : contents.modifier}</i>
         <small>created: {new Date(contents.created).toLocaleString()}</small>
         <small>modified: {new Date(contents.modified).toLocaleString()}</small>
       </div>
