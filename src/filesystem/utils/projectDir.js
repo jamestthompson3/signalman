@@ -23,7 +23,7 @@ export function getDataDir() {
 }
 
 /*
- * @returns: Promise<JSON>
+ * @returns: Promise<JSONObject>
  */
 export function readDataFile(name) {
   const dataDir = getDataDir();
@@ -35,7 +35,7 @@ export function readDataFile(name) {
 }
 
 /*
- * @returns: Promise<JSON>
+ * @returns: Promise<JSONObject>
  */
 export function readTemplateFile(name) {
   const dataDir = getDataDir();

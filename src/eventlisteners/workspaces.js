@@ -14,8 +14,7 @@ const dataDir = getDataDir();
 // Chunk it somehow...
 // Maybe add an event listener, then in a state machine or higher level component create a new component for each
 // event emitted.
-export async function handleWorkspaceRequest(event) {
-  console.log("WORKSPACE REQUESTED");
+export async function workspaceRequest(event) {
   fs.readFile(`${dataDir}state.json`, "utf8", async (err, data) => {
     if (err) {
       console.error(err);
@@ -40,7 +39,7 @@ export async function handleWorkspaceRequest(event) {
         .map((promise) => promise.value),
       "name"
     );
-    event.reply("workspaceInit", {
+    event.reply("workspace:init", {
       state,
       shown: [filteredCards, filteredTemplates],
     });

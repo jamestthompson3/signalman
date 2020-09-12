@@ -1,6 +1,9 @@
 import { ipcMain } from "electron";
-import { handleWorkspaceRequest } from "./workspaces";
+import { workspaceRequest } from "./workspaces";
+import { saveCard, updateCard } from "./cards";
 
 export function registerHandlers() {
-  ipcMain.on("requestWorkspace", handleWorkspaceRequest);
+  ipcMain.on("workspace:request", workspaceRequest);
+  ipcMain.on("card:save", saveCard);
+  ipcMain.on("card:update", updateCard);
 }

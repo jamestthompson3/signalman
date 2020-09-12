@@ -9,7 +9,7 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 rules.push(
   {
     test: /\.css$/,
-    use: [{ loader: "style-loader" }, { loader: "css-loader" }]
+    use: [{ loader: "style-loader" }, { loader: "css-loader" }],
   },
   {
     test: /\.jsx?$/,
@@ -22,20 +22,24 @@ rules.push(
           workerParallelJobs: 50,
           workerNodeArgs: ["--max-old-space-size=1024"],
           poolRespawn: isDevelopment ? false : true,
-          poolTimeout: 2000
-        }
+          poolTimeout: 2000,
+        },
       },
       {
         loader: "babel-loader",
         options: {
-          presets: ["@babel/preset-react"]
-        }
-      }
-    ]
+          presets: ["@babel/preset-react"],
+          plugins: [
+            "@babel/plugin-syntax-class-properties",
+            "@babel/plugin-proposal-class-properties",
+          ],
+        },
+      },
+    ],
   },
   {
     test: /\.node$/,
-    use: "node-loader"
+    use: "node-loader",
   }
 );
 
@@ -43,17 +47,18 @@ module.exports = {
   mode: isDevelopment ? "development" : "production",
   devtool: "source-map",
   module: {
-    rules
+    rules,
   },
   resolve: {
     alias: {
       machines: path.resolve(__dirname, "src/render/app/machines"),
-      utils: path.resolve(__dirname, "src/render/app/utils")
-    }
+      common: path.resolve(__dirname, "src/render/app/common"),
+      utils: path.resolve(__dirname, "src/render/app/utils"),
+    },
   },
   target: "electron-renderer",
   plugins: [
     new HardSourceWebpackPlugin(),
-    new webpack.ExternalsPlugin("commonjs", ["electron"])
-  ]
+    new webpack.ExternalsPlugin("commonjs", ["electron"]),
+  ],
 };

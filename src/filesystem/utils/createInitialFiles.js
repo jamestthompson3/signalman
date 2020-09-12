@@ -16,6 +16,7 @@ const initialState = {
 };
 
 const initialConfig = {
+  id: "settings",
   name: `${USER}'s Switchyard`,
   created: new Date(),
   modified: new Date(),

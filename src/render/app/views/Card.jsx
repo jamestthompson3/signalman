@@ -1,18 +1,26 @@
 import React from "react";
+import { Editable } from "common/components/ContentEditable.jsx";
+import { useMachine } from "@xstate/react";
+import { cardUpdateMachine } from "machines/card-update.machine";
 
-const STATIC_FIELDS = ["created", "modified", "modifier", "title"];
+const STATIC_FIELDS = ["created", "modified", "modifier", "title", "id"];
 
 // TODO:
 // expose templatting to parent component so I can execute logic on the fields
 // Drag and drop all the things!!
-
 // very naive first pass
-function parseTemplateFields(displayFields, labelFields, contents) {
+function parseTemplateFields(displayFields, labelFields, contents, send) {
   const renderFields = (fields) =>
     fields.map((field) => (
       <div className="card-field" key={field}>
         {labelFields && <p>{field}: </p>}
-        <p contentEditable>{contents[field]}</p>
+        <Editable
+          className="field-content"
+          value={contents[field]}
+          send={(data) =>
+            send({ type: "UPDATE_FIELD", data: { field, value: data } })
+          }
+        />
       </div>
     ));
   if (displayFields === "all") {
@@ -25,7 +33,8 @@ function parseTemplateFields(displayFields, labelFields, contents) {
 }
 
 // This thing is gonna get messy
-function parseTemplate({ contents, template }) {
+// FIXME I don't like prop-drilling the send function.
+function parseTemplate({ contents, template, send }) {
   const { displayFields, labelFields } = template;
   return (
     <div className="card">
@@ -36,14 +45,18 @@ function parseTemplate({ contents, template }) {
         <i>{contents.modifier === "" ? "Signalman User" : contents.modifier}</i>
         <small>created: {new Date(contents.created).toLocaleString()}</small>
         <small>modified: {new Date(contents.modified).toLocaleString()}</small>
+        <small>
+          <i>{contents.id}</i>
+        </small>
       </div>
       <div className="card-body">
-        {parseTemplateFields(displayFields, labelFields, contents)}
+        {parseTemplateFields(displayFields, labelFields, contents, send)}
       </div>
     </div>
   );
 }
 
 export function Card({ contents, template }) {
-  return parseTemplate({ contents, template });
+  const [_, send] = useMachine(cardUpdateMachine.withContext({ ...contents }));
+  return parseTemplate({ contents, template, send });
 }

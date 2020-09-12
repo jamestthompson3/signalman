@@ -22,20 +22,26 @@ export const workspaceMachine = Machine(
       },
       RENDER: {
         entry: "saveWorkspace",
+        on: {
+          NEW_CARD: {
+            actions: "saveCard",
+          },
+        },
       },
     },
   },
   {
     actions: {
       saveWorkspace: assign((_, e) => e.data),
+      saveCard: (_, e) => send("card:saveCard", e.data),
     },
     services: {
       requestWorkspace: () => (callback) => {
         // register listener for RPC calls from mainIPC
-        on("workspaceInit", (_, data) =>
+        on("workspace:init", (_, data) =>
           callback({ type: "WORKSPACE_LOADED", data })
         );
-        send("requestWorkspace");
+        send("workspace:request");
       },
     },
   }
