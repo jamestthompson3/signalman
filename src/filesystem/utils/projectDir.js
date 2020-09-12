@@ -8,6 +8,7 @@ import util from "util";
 import { app } from "electron";
 
 const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
 
 export function getDataDir() {
   switch (process.platform) {
@@ -44,4 +45,13 @@ export function readTemplateFile(name) {
     .then((data) => data.toString())
     .then(JSON.parse)
     .catch(console.error);
+}
+
+/*
+ * @returns: Promise<>
+ */
+export function writeDataFile(name, data) {
+  const dataDir = getDataDir();
+  const filePath = `${dataDir}${name}.json`;
+  return writeFile(filePath, JSON.stringify(data));
 }

@@ -23,7 +23,7 @@ export const cardUpdateMachine = Machine(
     actions: {
       updateField: (ctx, e) => {
         const processedData = { ...ctx, [e.data.field]: e.data.value };
-        console.log({ processedData });
+        // TODO if calls start to choke I/O, maybe enqueue updates and process them on a timer loop?
         send("card:update", processedData);
       },
     },
