@@ -2,8 +2,7 @@ import React from "react";
 import { Editable } from "common/components/ContentEditable.jsx";
 import { useMachine } from "@xstate/react";
 import { cardUpdateMachine } from "machines/card-update.machine";
-
-const STATIC_FIELDS = ["created", "modified", "modifier", "title", "id"];
+import { STATIC_FIELDS } from "./constants";
 
 // TODO:
 // expose templatting to parent component so I can execute logic on the fields
@@ -34,6 +33,7 @@ function parseTemplateFields(displayFields, labelFields, contents, send) {
 
 // This thing is gonna get messy
 // FIXME I don't like prop-drilling the send function.
+// TODO figure out editing titles
 function parseTemplate({ contents, template, send }) {
   const { displayFields, labelFields } = template;
   return (
@@ -46,7 +46,7 @@ function parseTemplate({ contents, template, send }) {
         <small>created: {new Date(contents.created).toLocaleString()}</small>
         <small>modified: {new Date(contents.modified).toLocaleString()}</small>
         <small>
-          <i>{contents.id}</i>
+          id: <i>{contents.id}</i>
         </small>
       </div>
       <div className="card-body">

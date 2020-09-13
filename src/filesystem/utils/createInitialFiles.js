@@ -32,10 +32,9 @@ const configurationTemplate = {
 };
 const viewTemplate = {
   name: "basic-view",
-  displayFields: ["text", "title", "modified", "modifier"],
+  displayFields: ["text"],
   labelFields: false,
 };
-
 export function bootstrap() {
   const dataDir = getDataDir();
 

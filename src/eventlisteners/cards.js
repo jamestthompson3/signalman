@@ -1,12 +1,15 @@
 import { v4 as uuidv4 } from "uuid";
 import { readDataFile, writeDataFile } from "../filesystem/utils/projectDir";
-import { PROMISE_STATUS } from "../constants/index";
+import { PROMISE_STATUS, USER } from "../constants/index";
 
-export function saveCard(event) {
+export function saveCard(_, data) {
   const cardId = uuidv4();
   const card = {
-    id: id,
-    ...event.data,
+    id: cardId,
+    ...data,
+    created: new Date(),
+    modified: new Date(),
+    modifier: USER,
   };
   writeDataFile(cardId, card)
     .then(() => {})

@@ -12,7 +12,7 @@ export class Editable extends React.Component {
   disableNewlines = (e) => {
     const keyCode = e.keyCode || e.which;
 
-    if (keyCode === 13) {
+    if (keyCode === 13 && !e.ctrlKey) {
       e.returnValue = false;
       if (e.preventDefault) e.preventDefault();
     }

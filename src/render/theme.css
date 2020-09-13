@@ -23,4 +23,5 @@ body {
 
 h1 {
   color: var(--dark1);
+  text-align: center;
 }

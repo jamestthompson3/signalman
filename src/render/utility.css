@@ -39,3 +39,9 @@
 .field-content p:focus, .field-content p:active {
   outline: var(--accent) auto 1px;
 }
+
+.workspace {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

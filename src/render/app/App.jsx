@@ -21,10 +21,12 @@ export function App() {
   }, []);
   console.log(context);
   return context.state ? (
-    <>
+    <div className="workspace">
       <h1>{context.state.name}</h1>
       <CardView contents={context.shown} />
-      <kbd>ctrl + n</kbd> to create new card
-    </>
+      <span>
+        <kbd>ctrl + n</kbd> to create new card
+      </span>
+    </div>
   ) : null;
 }

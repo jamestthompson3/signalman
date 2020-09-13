@@ -1,7 +1,10 @@
 import uniq from "lodash/uniq";
 import keyBy from "lodash/keyBy";
 
-import { readDataFile, readTemplateFile } from "../filesystem/utils/projectDir";
+import {
+  readDataFile,
+  readTemplateFiles,
+} from "../filesystem/utils/projectDir";
 import { PROMISE_STATUS } from "../constants/index";
 import ipc from "../ipc";
 
@@ -18,11 +21,8 @@ export async function workspaceRequest(event) {
       const filteredCards = cardContents
         .filter((card) => card.status !== PROMISE_STATUS.REJECTED)
         .map((promise) => promise.value);
-      const templates = uniq(filteredCards.map((card) => card.viewTemplate));
 
-      const templateContents = await Promise.allSettled(
-        templates.map(readTemplateFile)
-      );
+      const templateContents = await readTemplateFiles();
       const filteredTemplates = keyBy(
         templateContents
           .filter((template) => template.status !== PROMISE_STATUS.REJECTED)
@@ -37,6 +37,7 @@ export async function workspaceRequest(event) {
     .catch(console.error);
 }
 
+// TODO better atomic data handling
 export function updateGlobalState(msg) {
   ipc.config.id = "bg:state-updater";
   readDataFile("state").then((state) => {

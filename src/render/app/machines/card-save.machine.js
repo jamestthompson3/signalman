@@ -1,8 +1,8 @@
-import { Machine } from "xstate";
+import { Machine, assign } from "xstate";
 
 import { send } from "../utils/messagePassing.js";
 
-export const cardUpdateMachine = Machine(
+export const cardSaveMachine = Machine(
   {
     id: "card-update",
     initial: "idle",
@@ -14,6 +14,9 @@ export const cardUpdateMachine = Machine(
           UPDATE_FIELD: {
             actions: "updateField",
           },
+          SAVE_CARD: {
+            actions: "saveCard",
+          },
         },
       },
       RENDER: {},
@@ -21,10 +24,12 @@ export const cardUpdateMachine = Machine(
   },
   {
     actions: {
-      updateField: (ctx, e) => {
-        const processedData = { ...ctx, [e.data.field]: e.data.value };
-        // TODO if calls start to choke I/O, maybe enqueue updates and process them on a timer loop?
-        send("card:update", processedData);
+      updateField: assign((ctx, e) => ({
+        ...ctx,
+        [e.data.field]: e.data.value,
+      })),
+      saveCard: (ctx) => {
+        send("card:save", ctx);
       },
     },
     services: {},

@@ -9,6 +9,7 @@ import { app } from "electron";
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
+const readDir = util.promisify(fs.readdir);
 
 export function getDataDir() {
   switch (process.platform) {
@@ -36,15 +37,19 @@ export function readDataFile(name) {
 }
 
 /*
- * @returns: Promise<JSONObject>
+ * @returns: Promise<JSONObject>[]
  */
-export function readTemplateFile(name) {
-  const dataDir = getDataDir();
-  const filePath = `${dataDir}/templates/${name}.json`;
-  return readFile(filePath, "utf8")
-    .then((data) => data.toString())
-    .then(JSON.parse)
-    .catch(console.error);
+export async function readTemplateFiles() {
+  const path = `${getDataDir()}templates/`;
+  const files = await readDir(path);
+  return Promise.allSettled(
+    files.map((filePath) =>
+      readFile(path + filePath, "utf8")
+        .then((data) => data.toString())
+        .then(JSON.parse)
+        .catch(console.errror)
+    )
+  ).catch(console.error);
 }
 
 /*
