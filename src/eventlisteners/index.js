@@ -13,6 +13,9 @@ export function registerHandlers() {
 function registerBackgroundState() {
   ipc.config.id = "background";
   ipc.serve(() => {
-    ipc.server.on("bg:globalUpdate", updateGlobalState);
+    ipc.server.on("bg:globalUpdate", (data, socket) => {
+      updateGlobalState(data);
+    });
   });
+  ipc.server.start();
 }

@@ -3,6 +3,7 @@ import keyBy from "lodash/keyBy";
 
 import {
   readDataFile,
+  writeDataFile,
   readTemplateFiles,
 } from "../filesystem/utils/projectDir";
 import { PROMISE_STATUS } from "../constants/index";
@@ -37,13 +38,30 @@ export async function workspaceRequest(event) {
     .catch(console.error);
 }
 
-// TODO better atomic data handling
+// As it currently stands, there are only a few data operations that should cause a global state update
+// 0: add or remove a displayed card
+// 1: change theme
+// 2: rename the workspace
+// 3: change user
 export function updateGlobalState(msg) {
+  console.log({ msg });
   ipc.config.id = "bg:state-updater";
   readDataFile("state").then((state) => {
-    const updatedState = { ...state, [msg.field]: msg.value };
-    writeDataFile("state", updatedState)
-      .then(() => {})
-      .catch((e) => ipc.of.background.emit("bg:updateError", e));
+    switch (msg.type) {
+      case "CARD_SAVE": {
+        const updatedState = {
+          ...state,
+          displayedCards: [...state.displayedCards, msg.data.id],
+        };
+        writeDataFile("state", updatedState)
+          .then(() => {
+            ipc.of.background.emit("bg:reloadState", updatedState);
+          })
+          .catch((e) => ipc.of.background.emit("bg:updateError", e));
+        break;
+      }
+      default:
+        break;
+    }
   });
 }

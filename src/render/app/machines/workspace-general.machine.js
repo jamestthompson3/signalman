@@ -23,9 +23,7 @@ export const workspaceMachine = Machine(
       RENDER: {
         entry: "saveWorkspace",
         on: {
-          NEW_CARD: {
-            actions: "saveCard",
-          },
+          RELOAD: ".",
         },
       },
     },
@@ -33,15 +31,18 @@ export const workspaceMachine = Machine(
   {
     actions: {
       saveWorkspace: assign((_, e) => e.data),
-      saveCard: (_, e) => send("card:saveCard", e.data),
     },
     services: {
       requestWorkspace: () => (callback) => {
         // register listener for RPC calls from mainIPC
-        on("workspace:init", (_, data) =>
-          callback({ type: "WORKSPACE_LOADED", data })
-        );
+        on("workspace:init", (_, data) => {
+          callback({ type: "WORKSPACE_LOADED", data });
+        });
         send("workspace:request");
+        on("bg:reloadState", (_, data) => {
+          console.log("reloading...");
+          callback({ type: "RELOAD", data });
+        });
       },
     },
   }

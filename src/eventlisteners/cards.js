@@ -1,8 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
+
 import { readDataFile, writeDataFile } from "../filesystem/utils/projectDir";
 import { PROMISE_STATUS, USER } from "../constants/index";
+import ipc from "../ipc";
 
 export function saveCard(_, data) {
+  ipc.config.id = "bg:save-card";
   const cardId = uuidv4();
   const card = {
     id: cardId,
@@ -12,7 +15,14 @@ export function saveCard(_, data) {
     modifier: USER,
   };
   writeDataFile(cardId, card)
-    .then(() => {})
+    .then(() => {
+      ipc.connectTo("background", () =>
+        ipc.of.background.emit("bg:globalUpdate", {
+          type: "CARD_SAVE",
+          data: card,
+        })
+      );
+    })
     .catch((e) => event.reply("card:saveError", e));
 }
 

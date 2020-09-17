@@ -1,5 +1,4 @@
 import React from "react";
-import { DialogOverlay, DialogContent, Dialog } from "@reach/dialog";
 import { useMachine } from "@xstate/react";
 
 import { cardSaveMachine } from "machines/card-save.machine";
@@ -35,8 +34,8 @@ export function CardView({ contents }) {
       {shown.map((card) => (
         <Card
           contents={card}
-          template={templates[card.viewTemplate]}
-          key={card.title}
+          template={templates[card.viewTemplate] || templates["basic-view"]}
+          key={card.id}
         />
       ))}
     </>
@@ -45,18 +44,27 @@ export function CardView({ contents }) {
 
 function NewCard({ close, open, template }) {
   const [_, send] = useMachine(cardSaveMachine);
+  const input = React.useRef(null);
   const saveAndClose = () => {
     send({ type: "SAVE_CARD" });
     close();
   };
+  React.useEffect(() => {
+    if (input.current) {
+      input.current.focus();
+    }
+  }, [open]);
   return open ? (
     <div className="card">
       <form onSubmit={saveAndClose}>
-        <Editable
+        <textarea
+          ref={input}
           className="field-content"
-          value=""
-          send={(data) =>
-            send({ type: "UPDATE_FIELD", data: { field: "text", value: data } })
+          onChange={(e) =>
+            send({
+              type: "UPDATE_FIELD",
+              data: { field: "text", value: e.target.value },
+            })
           }
         />
         <button type="submit" onClick={saveAndClose}>
