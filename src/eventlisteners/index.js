@@ -1,21 +1,33 @@
 import { ipcMain } from "electron";
-import ipc from "../ipc";
-import { workspaceRequest, updateGlobalState } from "./workspaces";
-import { saveCard, updateCard } from "./cards";
+import { interpret } from "xstate";
+import { MESSAGES } from "../constants/bridge";
+import { eventHandlerMachine } from "./eventHandler.machine";
+
+const eventService = interpret(eventHandlerMachine);
+
+// eventService.onTransition(console.log);
+eventService.start();
 
 export function registerHandlers() {
-  registerBackgroundState();
-  ipcMain.on("workspace:request", workspaceRequest);
-  ipcMain.on("card:save", saveCard);
-  ipcMain.on("card:update", updateCard);
-}
-
-function registerBackgroundState() {
-  ipc.config.id = "background";
-  ipc.serve(() => {
-    ipc.server.on("bg:globalUpdate", (data, socket) => {
-      updateGlobalState(data);
+  ipcMain.on(MESSAGES.REQUEST_WORKSPACE, (e) => {
+    eventService.send({
+      type: MESSAGES.REQUEST_WORKSPACE,
+      event: e,
     });
   });
-  ipc.server.start();
+  ipcMain.on(MESSAGES.SAVE_CARD, (_, data) => {
+    eventService.send({ type: MESSAGES.SAVE_CARD, data });
+  });
+  ipcMain.on(MESSAGES.UPDATE_CARD, async (_, data) => {
+    eventService.send({
+      type: MESSAGES.UPDATE_CARD,
+      data,
+    });
+  });
+  ipcMain.on(MESSAGES.BG_GLOBAL_UPDATE, (_, data) => {
+    eventService.send({
+      type: MESSAGES.BG_GLOBAL_UPDATE,
+      data,
+    });
+  });
 }

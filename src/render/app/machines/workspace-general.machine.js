@@ -1,6 +1,9 @@
 import { Machine, assign } from "xstate";
 
 import { send, on } from "../utils/messagePassing.js";
+import { MESSAGES } from "global/constants/bridge";
+
+const { WORKSPACE_LOADED, REQUEST_WORKSPACE, RELOAD_STATE } = MESSAGES;
 
 export const workspaceMachine = Machine(
   {
@@ -35,11 +38,11 @@ export const workspaceMachine = Machine(
     services: {
       requestWorkspace: () => (callback) => {
         // register listener for RPC calls from mainIPC
-        on("workspace:init", (_, data) => {
+        on(WORKSPACE_LOADED, (_, data) => {
           callback({ type: "WORKSPACE_LOADED", data });
         });
-        send("workspace:request");
-        on("bg:reloadState", (_, data) => {
+        send(REQUEST_WORKSPACE);
+        on(RELOAD_STATE, (_, data) => {
           console.log("reloading...");
           callback({ type: "RELOAD", data });
         });

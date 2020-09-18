@@ -54,6 +54,7 @@ module.exports = {
       machines: path.resolve(__dirname, "src/render/app/machines"),
       common: path.resolve(__dirname, "src/render/app/common"),
       utils: path.resolve(__dirname, "src/render/app/utils"),
+      global: path.resolve(__dirname, "src/"),
     },
   },
   target: "electron-renderer",

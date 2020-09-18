@@ -1,4 +1,3 @@
-import uniq from "lodash/uniq";
 import keyBy from "lodash/keyBy";
 
 import {
@@ -6,36 +5,37 @@ import {
   writeDataFile,
   readTemplateFiles,
 } from "../filesystem/utils/projectDir";
-import { PROMISE_STATUS } from "../constants/index";
+import { PROMISE_STATUS } from "../constants";
+import { MESSAGES } from "../constants/bridge";
+
 import ipc from "../ipc";
+
+const { WORKSPACE_LOADED } = MESSAGES;
 
 // TODO load state of workspace
 // Chunk it somehow...
 // Maybe add an event listener, then in a state machine or higher level component create a new component for each
 // event emitted.
 export async function workspaceRequest(event) {
-  readDataFile("state")
-    .then(async (state) => {
-      const { displayedCards } = state;
-      const startupCards = displayedCards.map(readDataFile);
-      const cardContents = await Promise.allSettled(startupCards);
-      const filteredCards = cardContents
-        .filter((card) => card.status !== PROMISE_STATUS.REJECTED)
-        .map((promise) => promise.value);
+  const state = await readDataFile("state");
+  const { displayedCards } = state;
+  const startupCards = displayedCards.map(readDataFile);
+  const cardContents = await Promise.allSettled(startupCards);
+  const filteredCards = cardContents
+    .filter((card) => card.status !== PROMISE_STATUS.REJECTED)
+    .map((promise) => promise.value);
 
-      const templateContents = await readTemplateFiles();
-      const filteredTemplates = keyBy(
-        templateContents
-          .filter((template) => template.status !== PROMISE_STATUS.REJECTED)
-          .map((promise) => promise.value),
-        "name"
-      );
-      event.reply("workspace:init", {
-        state,
-        shown: [filteredCards, filteredTemplates],
-      });
-    })
-    .catch(console.error);
+  const templateContents = await readTemplateFiles();
+  const filteredTemplates = keyBy(
+    templateContents
+      .filter((template) => template.status !== PROMISE_STATUS.REJECTED)
+      .map((promise) => promise.value),
+    "name"
+  );
+  event.reply(WORKSPACE_LOADED, {
+    state,
+    shown: [filteredCards, filteredTemplates],
+  });
 }
 
 // As it currently stands, there are only a few data operations that should cause a global state update
