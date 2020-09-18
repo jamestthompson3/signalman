@@ -13,6 +13,7 @@
 .card-title {
   color: var(--dark1);
   text-align: center;
+  display: flex;
 }
 
 .card-meta {

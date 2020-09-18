@@ -10,7 +10,7 @@ import { MESSAGES } from "../constants/bridge";
 
 import ipc from "../ipc";
 
-const { WORKSPACE_LOADED } = MESSAGES;
+const { WORKSPACE_LOADED, REMOVE_SUCCESS } = MESSAGES;
 
 // TODO load state of workspace
 // Chunk it somehow...
@@ -64,4 +64,12 @@ export function updateGlobalState(msg) {
         break;
     }
   });
+}
+
+export async function workspaceRemoveCard(id) {
+  const state = await readDataFile("state");
+  const { displayedCards } = state;
+  const updatedDisplay = displayedCards.filter((card) => card !== id);
+  await writeDataFile("state", { ...state, displayedCards: updatedDisplay });
+  event.reply(REMOVE_SUCCESS);
 }

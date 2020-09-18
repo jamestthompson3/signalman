@@ -1,6 +1,9 @@
 import { Machine, assign } from "xstate";
 
 import { send } from "../utils/messagePassing.js";
+import { MESSAGES } from "global/constants/bridge";
+
+const { SAVE_CARD } = MESSAGES;
 
 export const cardSaveMachine = Machine(
   {
@@ -29,7 +32,7 @@ export const cardSaveMachine = Machine(
         [e.data.field]: e.data.value,
       })),
       saveCard: (ctx) => {
-        send("card:save", ctx);
+        send(SAVE_CARD, ctx);
       },
     },
     services: {},

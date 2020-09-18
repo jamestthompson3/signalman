@@ -9,6 +9,7 @@ const {
   SAVE_CARD,
   UPDATE_CARD,
   BG_GLOBAL_UPDATE,
+  WORKSPACE_REMOVE_CARD,
 } = MESSAGES;
 
 const {
@@ -16,6 +17,7 @@ const {
   SAVING_CARD,
   UPDATING_CARD,
   BG_STATE_UPDATING,
+  REMOVING_CARD,
 } = STATES;
 
 export const eventHandlerMachine = Machine(
@@ -30,6 +32,7 @@ export const eventHandlerMachine = Machine(
           [SAVE_CARD]: SAVING_CARD,
           [UPDATE_CARD]: UPDATING_CARD,
           [BG_GLOBAL_UPDATE]: BG_STATE_UPDATING,
+          [WORKSPACE_REMOVE_CARD]: REMOVING_CARD,
         },
       },
       [INITIALIZING_WORKSPACE]: {
@@ -53,6 +56,13 @@ export const eventHandlerMachine = Machine(
           onError: "ERROR",
         },
       },
+      [REMOVING_CARD]: {
+        invoke: {
+          src: "workspaceRemoveCard",
+          onDone: "LISTENING",
+          onError: "ERROR",
+        },
+      },
       [BG_STATE_UPDATING]: {
         invoke: {
           src: "updateGlobalState",
@@ -68,6 +78,7 @@ export const eventHandlerMachine = Machine(
   {
     services: {
       requestWorkspace: (_, e) => workspaceRequest(e.event),
+      workspaceRemoveCard: (_, e) => workspaceRemoveCard(e.data),
       saveCard: (_, e) => saveCard(e.data),
       updateCard: (_, e) => updateCard(e.data),
       updateGlobalState: (_, e) => updateGlobalState(e.data),

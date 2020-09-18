@@ -2,9 +2,6 @@ import { v4 as uuidv4 } from "uuid";
 
 import { writeDataFile } from "../filesystem/utils/projectDir";
 import { USER } from "../constants/index";
-// import {MESSAGES} from "../constants/bridge"
-
-// const {SAVE_CARD, UPDATE_CARD} = MESSAGES
 
 export async function saveCard(data) {
   const cardId = uuidv4();

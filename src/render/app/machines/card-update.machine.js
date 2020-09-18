@@ -1,6 +1,9 @@
 import { Machine } from "xstate";
 
 import { send } from "../utils/messagePassing.js";
+import { MESSAGES } from "global/constants/bridge";
+
+const { UPDATE_CARD } = MESSAGES;
 
 export const cardUpdateMachine = Machine(
   {
@@ -24,7 +27,7 @@ export const cardUpdateMachine = Machine(
       updateField: (ctx, e) => {
         const processedData = { ...ctx, [e.data.field]: e.data.value };
         // TODO if calls start to choke I/O, maybe enqueue updates and process them on a timer loop?
-        send("card:update", processedData);
+        send(UPDATE_CARD, processedData);
       },
     },
     services: {},

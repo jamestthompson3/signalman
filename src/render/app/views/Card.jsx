@@ -38,9 +38,10 @@ function parseTemplate({ contents, template, send }) {
   const { displayFields, labelFields } = template;
   return (
     <div className="card">
-      <h2 data-field="title" className="card-title">
-        {contents.title}
-      </h2>
+      <div className="card-title">
+        <h2 data-field="title">{contents.title}</h2>
+        <button>close</button>
+      </div>
       <div className="card-meta">
         <i>{contents.modifier === "" ? "Signalman User" : contents.modifier}</i>
         <small>created: {new Date(contents.created).toLocaleString()}</small>
