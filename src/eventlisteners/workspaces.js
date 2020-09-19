@@ -1,22 +1,22 @@
-import keyBy from "lodash/keyBy";
-
-import {
-  readDataFile,
-  writeDataFile,
-  readTemplateFiles,
-} from "../filesystem/utils/projectDir";
-import { PROMISE_STATUS } from "../constants";
 import { MESSAGES } from "../constants/bridge";
 
-import ipc from "../ipc";
+const {
+  WORKSPACE_LOADED,
+  SAVE_CARD,
+  RELOAD_STATE,
+  WORKSPACE_REMOVE_CARD,
+} = MESSAGES;
 
-const { WORKSPACE_LOADED, REMOVE_SUCCESS } = MESSAGES;
+// TODO fix this flow for reloading global objs.
+async function loadWorkspace() {
+  // Import only on demand
+  const keyBy = require("lodash/keyBy");
+  const {
+    readDataFile,
+    readTemplateFiles,
+  } = require("../filesystem/utils/projectDir");
+  const { PROMISE_STATUS } = require("../constants");
 
-// TODO load state of workspace
-// Chunk it somehow...
-// Maybe add an event listener, then in a state machine or higher level component create a new component for each
-// event emitted.
-export async function workspaceRequest(event) {
   const state = await readDataFile("state");
   const { displayedCards } = state;
   const startupCards = displayedCards.map(readDataFile);
@@ -32,9 +32,14 @@ export async function workspaceRequest(event) {
       .map((promise) => promise.value),
     "name"
   );
+  return { state, shown: [filteredCards, filteredTemplates] };
+}
+
+export async function workspaceRequest(event) {
+  const { state, shown } = await loadWorkspace();
   event.reply(WORKSPACE_LOADED, {
     state,
-    shown: [filteredCards, filteredTemplates],
+    shown,
   });
 }
 
@@ -43,33 +48,34 @@ export async function workspaceRequest(event) {
 // 1: change theme
 // 2: rename the workspace
 // 3: change user
-export function updateGlobalState(msg) {
-  console.log({ msg });
-  ipc.config.id = "bg:state-updater";
-  readDataFile("state").then((state) => {
-    switch (msg.type) {
-      case "CARD_SAVE": {
-        const updatedState = {
-          ...state,
-          displayedCards: [...state.displayedCards, msg.data.id],
-        };
-        writeDataFile("state", updatedState)
-          .then(() => {
-            ipc.of.background.emit("bg:reloadState", updatedState);
-          })
-          .catch((e) => ipc.of.background.emit("bg:updateError", e));
-        break;
-      }
-      default:
-        break;
-    }
-  });
-}
-
-export async function workspaceRemoveCard(id) {
+export async function updateGlobalState({ type, data, event }) {
+  const {
+    readDataFile,
+    writeDataFile,
+  } = require("../filesystem/utils/projectDir");
   const state = await readDataFile("state");
-  const { displayedCards } = state;
-  const updatedDisplay = displayedCards.filter((card) => card !== id);
-  await writeDataFile("state", { ...state, displayedCards: updatedDisplay });
-  event.reply(REMOVE_SUCCESS);
+  switch (type) {
+    case SAVE_CARD: {
+      const updatedState = {
+        ...state,
+        displayedCards: [...state.displayedCards, data.id],
+      };
+      await writeDataFile("state", updatedState);
+      const newWorkspace = await loadWorkspace();
+      event.reply(RELOAD_STATE, newWorkspace);
+      break;
+    }
+    case WORKSPACE_REMOVE_CARD: {
+      const updatedState = {
+        ...state,
+        displayedCards: state.displayedCards.filter((card) => card !== data),
+      };
+      await writeDataFile("state", updatedState);
+      const newWorkspace = await loadWorkspace();
+      event.reply(RELOAD_STATE, newWorkspace);
+      break;
+    }
+    default:
+      break;
+  }
 }

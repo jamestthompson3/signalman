@@ -1,7 +1,5 @@
 import { app, BrowserWindow } from "electron";
-import path from "path";
 import * as shortcut from "electron-squirrel-startup";
-import fs from "fs";
 
 import { bootstrap } from "./filesystem/utils/createInitialFiles";
 import { registerHandlers } from "./eventlisteners";
@@ -33,10 +31,6 @@ const createWindow = () => {
     setImmediate(() => {
       mainWindow && mainWindow.focus();
     });
-  });
-
-  mainWindow.webContents.on("devtools-reload-page", () => {
-    backgroundWindow && backgroundWindow.reload();
   });
 
   // and load the index.html of the app.

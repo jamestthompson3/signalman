@@ -35,6 +35,7 @@ const viewTemplate = {
   displayFields: ["text"],
   labelFields: false,
 };
+
 export function bootstrap() {
   const dataDir = getDataDir();
 

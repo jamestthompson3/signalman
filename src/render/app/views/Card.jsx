@@ -1,8 +1,13 @@
 import React from "react";
-import { Editable } from "common/components/ContentEditable.jsx";
 import { useMachine } from "@xstate/react";
+
+import { Editable } from "common/components/ContentEditable.jsx";
 import { cardUpdateMachine } from "machines/card-update.machine";
 import { STATIC_FIELDS } from "./constants";
+import { workspaceEmitter } from "../utils/emitter";
+import { MESSAGES } from "global/constants/bridge";
+
+const { WORKSPACE_REMOVE_CARD } = MESSAGES;
 
 // TODO:
 // expose templatting to parent component so I can execute logic on the fields
@@ -40,7 +45,13 @@ function parseTemplate({ contents, template, send }) {
     <div className="card">
       <div className="card-title">
         <h2 data-field="title">{contents.title}</h2>
-        <button>close</button>
+        <button
+          onClick={() => {
+            workspaceEmitter.emit(WORKSPACE_REMOVE_CARD, contents.id);
+          }}
+        >
+          close
+        </button>
       </div>
       <div className="card-meta">
         <i>{contents.modifier === "" ? "Signalman User" : contents.modifier}</i>

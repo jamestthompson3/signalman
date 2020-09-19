@@ -1,9 +1,10 @@
 import { Machine, assign } from "xstate";
 
-import { send } from "../utils/messagePassing.js";
+import { send, on } from "../utils/messagePassing.js";
 import { MESSAGES } from "global/constants/bridge";
+import { workspaceEmitter } from "../utils/emitter";
 
-const { SAVE_CARD } = MESSAGES;
+const { SAVE_CARD, RELOAD_STATE } = MESSAGES;
 
 export const cardSaveMachine = Machine(
   {
@@ -32,6 +33,9 @@ export const cardSaveMachine = Machine(
         [e.data.field]: e.data.value,
       })),
       saveCard: (ctx) => {
+        on(RELOAD_STATE, (_, data) => {
+          workspaceEmitter.emit(RELOAD_STATE, data);
+        });
         send(SAVE_CARD, ctx);
       },
     },

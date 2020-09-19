@@ -1,4 +1,4 @@
-import { Machine } from "xstate";
+import { Machine, send } from "xstate";
 
 import { MESSAGES, STATES } from "../constants/bridge";
 import { workspaceRequest, updateGlobalState } from "./workspaces";
@@ -45,7 +45,7 @@ export const eventHandlerMachine = Machine(
       [SAVING_CARD]: {
         invoke: {
           src: "saveCard",
-          onDone: "LISTENING",
+          onDone: BG_STATE_UPDATING,
           onError: "ERROR",
         },
       },
@@ -57,10 +57,9 @@ export const eventHandlerMachine = Machine(
         },
       },
       [REMOVING_CARD]: {
-        invoke: {
-          src: "workspaceRemoveCard",
-          onDone: "LISTENING",
-          onError: "ERROR",
+        entry: "workspaceRemoveCard",
+        on: {
+          [BG_GLOBAL_UPDATE]: [BG_STATE_UPDATING],
         },
       },
       [BG_STATE_UPDATING]: {
@@ -78,15 +77,29 @@ export const eventHandlerMachine = Machine(
   {
     services: {
       requestWorkspace: (_, e) => workspaceRequest(e.event),
-      workspaceRemoveCard: (_, e) => workspaceRemoveCard(e.data),
-      saveCard: (_, e) => saveCard(e.data),
+      saveCard: async (_, { data, event }) => {
+        const card = await saveCard(data);
+        return {
+          type: SAVE_CARD,
+          data: card,
+          event,
+        };
+      },
       updateCard: (_, e) => updateCard(e.data),
-      updateGlobalState: (_, e) => updateGlobalState(e.data),
+      updateGlobalState: (_, { data }) => updateGlobalState(data),
     },
     actions: {
       logError: (_, e) => {
         console.error(e);
       },
+      workspaceRemoveCard: send((_, { data, event }) => ({
+        type: BG_GLOBAL_UPDATE,
+        data: {
+          type: WORKSPACE_REMOVE_CARD,
+          data,
+          event,
+        },
+      })),
     },
   }
 );

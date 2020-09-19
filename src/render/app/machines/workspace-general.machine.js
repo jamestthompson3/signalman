@@ -33,7 +33,9 @@ export const workspaceMachine = Machine(
       RENDER: {
         entry: "saveWorkspace",
         on: {
-          RELOAD: ".",
+          [RELOAD_STATE]: {
+            actions: "saveWorkspace",
+          },
           REMOVE_CARD: REMOVING_CARD,
         },
       },
@@ -45,7 +47,7 @@ export const workspaceMachine = Machine(
           onError: "idle",
         },
         on: {
-          RELOAD: "RENDER",
+          [RELOAD_STATE]: "RENDER",
         },
       },
     },
@@ -61,22 +63,12 @@ export const workspaceMachine = Machine(
           callback({ type: WORKSPACE_LOADED, data });
         });
         send(REQUEST_WORKSPACE);
-        on(RELOAD_STATE, (_, data) => {
-          console.log("reloading...");
-          callback({ type: "RELOAD", data });
-        });
       },
       removeCard: (ctx, e) => (callback) => {
-        on(REMOVE_SUCCESS, () => {
-          callback({
-            type: "RELOAD",
-            data: {
-              ...ctx,
-              shown: ctx.shown.filter((card) => card.id !== e.data),
-            },
-          });
+        on(RELOAD_STATE, (_, data) => {
+          callback({ type: RELOAD_STATE, data });
         });
-        send(REQUEST_WORKSPACE, e.data);
+        send(WORKSPACE_REMOVE_CARD, e.data);
       },
     },
   }

@@ -13,21 +13,21 @@ const {
 
 const eventService = interpret(eventHandlerMachine);
 
-// eventService.onTransition(console.log);
+// eventService.onEvent((e) => console.log({ type: e.type, data: e.data }));
 eventService.start();
 
 export function registerHandlers() {
-  ipcMain.on(REQUEST_WORKSPACE, (e) => {
+  ipcMain.on(REQUEST_WORKSPACE, (event) => {
     eventService.send({
       type: REQUEST_WORKSPACE,
-      event: e,
+      event,
     });
   });
-  ipcMain.on(WORKSPACE_REMOVE_CARD, (_, data) => {
-    eventService.send({ type: WORKSPACE_REMOVE_CARD, data });
+  ipcMain.on(WORKSPACE_REMOVE_CARD, (event, data) => {
+    eventService.send({ type: WORKSPACE_REMOVE_CARD, data, event });
   });
-  ipcMain.on(SAVE_CARD, (_, data) => {
-    eventService.send({ type: MESSAGES.SAVE_CARD, data });
+  ipcMain.on(SAVE_CARD, (event, data) => {
+    eventService.send({ type: SAVE_CARD, data, event });
   });
   ipcMain.on(UPDATE_CARD, async (_, data) => {
     eventService.send({

@@ -4,6 +4,7 @@ import { useMachine } from "@xstate/react";
 import { cardSaveMachine } from "machines/card-save.machine";
 import { Card } from "./Card.jsx";
 import { Editable } from "common/components/ContentEditable.jsx";
+import { MESSAGES } from "global/constants/bridge";
 import { STATIC_FIELDS } from "./constants";
 
 export function CardView({ contents }) {
