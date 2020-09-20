@@ -2,12 +2,12 @@ import { Machine, assign } from "xstate";
 
 import { send, on } from "../utils/messagePassing.js";
 import { MESSAGES, STATES } from "global/constants/bridge";
+import { workspaceEmitter } from "../utils/emitter";
 
 const {
   WORKSPACE_LOADED,
   REQUEST_WORKSPACE,
   RELOAD_STATE,
-  REMOVE_SUCCESS,
   WORKSPACE_REMOVE_CARD,
 } = MESSAGES;
 const { REMOVING_CARD } = STATES;
@@ -20,12 +20,7 @@ export const workspaceMachine = Machine(
     context: {},
     states: {
       idle: {
-        invoke: {
-          id: "workspaceRequest",
-          src: "requestWorkspace",
-          onDone: ".",
-          onError: ".",
-        },
+        entry: "requestWorkspace",
         on: {
           [WORKSPACE_LOADED]: "RENDER",
         },
@@ -36,16 +31,11 @@ export const workspaceMachine = Machine(
           [RELOAD_STATE]: {
             actions: "saveWorkspace",
           },
-          REMOVE_CARD: REMOVING_CARD,
+          [WORKSPACE_REMOVE_CARD]: REMOVING_CARD,
         },
       },
       [REMOVING_CARD]: {
-        invoke: {
-          id: REMOVING_CARD,
-          src: "removeCard",
-          onDone: ".",
-          onError: "idle",
-        },
+        entry: "removeCard",
         on: {
           [RELOAD_STATE]: "RENDER",
         },
@@ -55,19 +45,17 @@ export const workspaceMachine = Machine(
   {
     actions: {
       saveWorkspace: assign((_, e) => e.data),
-    },
-    services: {
-      requestWorkspace: () => (callback) => {
+      requestWorkspace: () => {
         // register listener for RPC calls from mainIPC
         on(WORKSPACE_LOADED, (_, data) => {
-          callback({ type: WORKSPACE_LOADED, data });
+          workspaceEmitter.emit(WORKSPACE_LOADED, data);
+        });
+        on(RELOAD_STATE, (_, data) => {
+          workspaceEmitter.emit(RELOAD_STATE, data);
         });
         send(REQUEST_WORKSPACE);
       },
-      removeCard: (ctx, e) => (callback) => {
-        on(RELOAD_STATE, (_, data) => {
-          callback({ type: RELOAD_STATE, data });
-        });
+      removeCard: (_, e) => {
         send(WORKSPACE_REMOVE_CARD, e.data);
       },
     },

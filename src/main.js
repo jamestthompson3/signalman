@@ -18,7 +18,7 @@ registerHandlers();
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1200,
+    width: 1800,
     height: 800,
     backgroundColor: "#091818ff",
     webPreferences: {

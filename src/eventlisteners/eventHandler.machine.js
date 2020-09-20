@@ -9,6 +9,7 @@ const {
   SAVE_CARD,
   UPDATE_CARD,
   BG_GLOBAL_UPDATE,
+  RELOAD_STATE,
   WORKSPACE_REMOVE_CARD,
 } = MESSAGES;
 
@@ -85,7 +86,7 @@ export const eventHandlerMachine = Machine(
           event,
         };
       },
-      updateCard: (_, e) => updateCard(e.data),
+      updateCard: (_, { data }) => updateCard(data),
       updateGlobalState: (_, { data }) => updateGlobalState(data),
     },
     actions: {

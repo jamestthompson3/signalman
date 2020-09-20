@@ -7,7 +7,6 @@ const {
   WORKSPACE_REMOVE_CARD,
 } = MESSAGES;
 
-// TODO fix this flow for reloading global objs.
 async function loadWorkspace() {
   // Import only on demand
   const keyBy = require("lodash/keyBy");
@@ -74,6 +73,10 @@ export async function updateGlobalState({ type, data, event }) {
       const newWorkspace = await loadWorkspace();
       event.reply(RELOAD_STATE, newWorkspace);
       break;
+    }
+    case RELOAD_STATE: {
+      const newWorkspace = await loadWorkspace();
+      event.reply(RELOAD_STATE, newWorkspace);
     }
     default:
       break;

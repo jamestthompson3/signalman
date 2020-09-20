@@ -69,6 +69,6 @@ function parseTemplate({ contents, template, send }) {
 }
 
 export function Card({ contents, template }) {
-  const [_, send] = useMachine(cardUpdateMachine.withContext({ ...contents }));
+  const [, send] = useMachine(cardUpdateMachine.withContext(contents));
   return parseTemplate({ contents, template, send });
 }

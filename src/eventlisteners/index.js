@@ -29,10 +29,11 @@ export function registerHandlers() {
   ipcMain.on(SAVE_CARD, (event, data) => {
     eventService.send({ type: SAVE_CARD, data, event });
   });
-  ipcMain.on(UPDATE_CARD, async (_, data) => {
+  ipcMain.on(UPDATE_CARD, async (event, data) => {
     eventService.send({
       type: UPDATE_CARD,
       data,
+      event,
     });
   });
   ipcMain.on(BG_GLOBAL_UPDATE, (_, data) => {

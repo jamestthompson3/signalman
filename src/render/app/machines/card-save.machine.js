@@ -9,11 +9,11 @@ const { SAVE_CARD, RELOAD_STATE } = MESSAGES;
 export const cardSaveMachine = Machine(
   {
     id: "card-update",
-    initial: "idle",
+    initial: "LISTENING",
     strict: "true",
     context: {},
     states: {
-      idle: {
+      LISTENING: {
         on: {
           UPDATE_FIELD: {
             actions: "updateField",
@@ -23,7 +23,6 @@ export const cardSaveMachine = Machine(
           },
         },
       },
-      RENDER: {},
     },
   },
   {
@@ -33,12 +32,8 @@ export const cardSaveMachine = Machine(
         [e.data.field]: e.data.value,
       })),
       saveCard: (ctx) => {
-        on(RELOAD_STATE, (_, data) => {
-          workspaceEmitter.emit(RELOAD_STATE, data);
-        });
         send(SAVE_CARD, ctx);
       },
     },
-    services: {},
   }
 );

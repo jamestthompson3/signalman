@@ -4,15 +4,22 @@ function emitter() {
     on(event, cb) {
       const callbacks = listeners.get(event);
       if (!callbacks) {
-        listeners.set(event, [cb]);
+        listeners.set(event, new Set([cb]));
       } else {
-        callbacks.push(cb);
+        callbacks.add(cb);
       }
     },
     emit(event, ...args) {
-      (listeners.get(event) || []).map((cb) => {
-        cb(...args);
-      });
+      if (listeners.has(event)) {
+        Array.from(listeners.get(event)).map((cb) => {
+          cb(...args);
+        });
+      }
+    },
+    remove(event, cb) {
+      if (listeners.has(event)) {
+        listeners.get(event).delete(cb);
+      }
     },
   };
 }

@@ -7,6 +7,7 @@ export const MESSAGES = {
   RELOAD_STATE: "bg:reloadState",
   WORKSPACE_REMOVE_CARD: "workspace:removeCard",
   REMOVE_SUCCESS: "workspace:removeCardSuccess",
+  WORKSPACE_NAME_UPDATE: "workspace:nameUpdate",
 };
 
 export const STATES = {
