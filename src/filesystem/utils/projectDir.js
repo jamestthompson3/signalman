@@ -1,17 +1,17 @@
-// Data dir is found in the following locations:
-// Linux:   /home/alice/.local/share/signalman
-// Windows: C:\Users\Alice\AppData\Roaming\emojipicker\data
-// macOS:   /Users/Alice/Library/Application Support/signalman
-import path from "path";
 import fs from "fs";
 import util from "util";
-import { app } from "electron";
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const readDir = util.promisify(fs.readdir);
 
+// Data dir is found in the following locations:
+// Linux:   /home/alice/.local/share/signalman
+// Windows: C:\Users\Alice\AppData\Roaming\emojipicker\data
+// macOS:   /Users/Alice/Library/Application Support/signalman
 export function getDataDir() {
+  const path = require("path");
+  const { app } = require("electron");
   switch (process.platform) {
     case "linux":
       return path.join(app.getPath("home"), ".local/share/signalman/");

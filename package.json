@@ -96,6 +96,7 @@
     "react-contenteditable": "^3.3.5",
     "react-dom": "^16.13.1",
     "uuid": "^8.3.0",
+    "vscode-ripgrep": "^1.9.0",
     "xstate": "^4.13.0"
   }
 }

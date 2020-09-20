@@ -82,3 +82,14 @@ export async function updateGlobalState({ type, data, event }) {
       break;
   }
 }
+
+export function workspaceSearch({ data, event }) {
+  const { isMainThread, Worker } = require("worker_threads");
+  if (isMainThread) {
+    new Worker(__filename);
+  } else {
+    // --no-column --no-line-number --color never 'searchTerm' directory
+    const { rgPath } = require("vscode-ripgrep");
+    console.log(rgPath);
+  }
+}

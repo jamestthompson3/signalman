@@ -1,7 +1,11 @@
 import { Machine, send } from "xstate";
 
 import { MESSAGES, STATES } from "../constants/bridge";
-import { workspaceRequest, updateGlobalState } from "./workspaces";
+import {
+  workspaceRequest,
+  updateGlobalState,
+  workspaceSearch,
+} from "./workspaces";
 import { saveCard, updateCard } from "./cards";
 
 const {
@@ -11,6 +15,7 @@ const {
   BG_GLOBAL_UPDATE,
   RELOAD_STATE,
   WORKSPACE_REMOVE_CARD,
+  WORKSPACE_SEARCHING,
 } = MESSAGES;
 
 const {
@@ -70,6 +75,10 @@ export const eventHandlerMachine = Machine(
           onError: "ERROR",
         },
       },
+      [WORKSPACE_SEARCHING]: {
+        entry: "search",
+        // TODO go back to LISTENING state
+      },
       ERROR: {
         actions: "logError",
       },
@@ -93,6 +102,7 @@ export const eventHandlerMachine = Machine(
       logError: (_, e) => {
         console.error(e);
       },
+      search: (_, { data, event }) => workspaceSearch(data, event),
       workspaceRemoveCard: send((_, { data, event }) => ({
         type: BG_GLOBAL_UPDATE,
         data: {
