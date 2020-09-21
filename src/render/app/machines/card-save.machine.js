@@ -1,10 +1,9 @@
 import { Machine, assign } from "xstate";
 
-import { send, on } from "../utils/messagePassing.js";
+import { send } from "../utils/messagePassing.js";
 import { MESSAGES } from "global/constants/bridge";
-import { workspaceEmitter } from "../utils/emitter";
 
-const { SAVE_CARD, RELOAD_STATE } = MESSAGES;
+const { SAVE_CARD } = MESSAGES;
 
 export const cardSaveMachine = Machine(
   {
@@ -16,24 +15,24 @@ export const cardSaveMachine = Machine(
       LISTENING: {
         on: {
           UPDATE_FIELD: {
-            actions: "updateField",
+            actions: "updateField"
           },
           SAVE_CARD: {
-            actions: "saveCard",
-          },
-        },
-      },
-    },
+            actions: "saveCard"
+          }
+        }
+      }
+    }
   },
   {
     actions: {
       updateField: assign((ctx, e) => ({
         ...ctx,
-        [e.data.field]: e.data.value,
+        [e.data.field]: e.data.value
       })),
-      saveCard: (ctx) => {
+      saveCard: ctx => {
         send(SAVE_CARD, ctx);
-      },
-    },
+      }
+    }
   }
 );

@@ -16,11 +16,11 @@ export const cardUpdateMachine = Machine(
       LISTENING: {
         on: {
           UPDATE_FIELD: {
-            actions: "updateField",
-          },
-        },
-      },
-    },
+            actions: "updateField"
+          }
+        }
+      }
+    }
   },
   {
     actions: {
@@ -32,7 +32,7 @@ export const cardUpdateMachine = Machine(
           workspaceEmitter.emit(WORKSPACE_NAME_UPDATE, e.data.value);
         }
         return processedData;
-      }),
-    },
+      })
+    }
   }
 );

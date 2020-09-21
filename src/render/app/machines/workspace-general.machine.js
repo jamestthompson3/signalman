@@ -2,13 +2,13 @@ import { Machine, assign } from "xstate";
 
 import { send, on } from "../utils/messagePassing.js";
 import { MESSAGES, STATES } from "global/constants/bridge";
-import { workspaceEmitter } from "../utils/emitter";
+import { workspaceDriver } from "../utils/eventMachines";
 
 const {
   WORKSPACE_LOADED,
   REQUEST_WORKSPACE,
   RELOAD_STATE,
-  WORKSPACE_REMOVE_CARD,
+  WORKSPACE_REMOVE_CARD
 } = MESSAGES;
 const { REMOVING_CARD } = STATES;
 
@@ -22,25 +22,25 @@ export const workspaceMachine = Machine(
       idle: {
         entry: "requestWorkspace",
         on: {
-          [WORKSPACE_LOADED]: "RENDER",
-        },
+          [WORKSPACE_LOADED]: "RENDER"
+        }
       },
       RENDER: {
         entry: "saveWorkspace",
         on: {
           [RELOAD_STATE]: {
-            actions: "saveWorkspace",
+            actions: "saveWorkspace"
           },
-          [WORKSPACE_REMOVE_CARD]: REMOVING_CARD,
-        },
+          [WORKSPACE_REMOVE_CARD]: REMOVING_CARD
+        }
       },
       [REMOVING_CARD]: {
         entry: "removeCard",
         on: {
-          [RELOAD_STATE]: "RENDER",
-        },
-      },
-    },
+          [RELOAD_STATE]: "RENDER"
+        }
+      }
+    }
   },
   {
     actions: {
@@ -48,16 +48,16 @@ export const workspaceMachine = Machine(
       requestWorkspace: () => {
         // register listener for RPC calls from mainIPC
         on(WORKSPACE_LOADED, (_, data) => {
-          workspaceEmitter.emit(WORKSPACE_LOADED, data);
+          workspaceDriver.send(WORKSPACE_LOADED, data);
         });
         on(RELOAD_STATE, (_, data) => {
-          workspaceEmitter.emit(RELOAD_STATE, data);
+          workspaceDriver.send(RELOAD_STATE, data);
         });
         send(REQUEST_WORKSPACE);
       },
       removeCard: (_, e) => {
         send(WORKSPACE_REMOVE_CARD, e.data);
-      },
-    },
+      }
+    }
   }
 );

@@ -1,4 +1,4 @@
-function emitter() {
+export function emitter() {
   const listeners = new Map();
   return {
     on(event, cb) {
@@ -11,7 +11,7 @@ function emitter() {
     },
     emit(event, ...args) {
       if (listeners.has(event)) {
-        Array.from(listeners.get(event)).map((cb) => {
+        Array.from(listeners.get(event)).map(cb => {
           cb(...args);
         });
       }
@@ -21,6 +21,11 @@ function emitter() {
         listeners.get(event).delete(cb);
       }
     },
+    drain() {
+      for (const key of listeners.keys()) {
+        listeners.delete(key);
+      }
+    }
   };
 }
 

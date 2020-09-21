@@ -7,7 +7,7 @@ const { WORKSPACE_NAME_UPDATE } = MESSAGES;
 export function WorkspaceTitle({ name }) {
   const [title, setTitle] = React.useState(name);
   React.useEffect(() => {
-    workspaceEmitter.on(WORKSPACE_NAME_UPDATE, (data) => {
+    workspaceEmitter.on(WORKSPACE_NAME_UPDATE, data => {
       setTitle(data);
     });
   }, []);
