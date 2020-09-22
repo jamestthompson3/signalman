@@ -8,7 +8,7 @@ const {
   WORKSPACE_REMOVE_CARD,
   SAVE_CARD,
   UPDATE_CARD,
-  BG_GLOBAL_UPDATE,
+  BG_GLOBAL_UPDATE
 } = MESSAGES;
 
 const eventService = interpret(eventHandlerMachine);
@@ -17,10 +17,10 @@ const eventService = interpret(eventHandlerMachine);
 eventService.start();
 
 export function registerHandlers() {
-  ipcMain.on(REQUEST_WORKSPACE, (event) => {
+  ipcMain.on(REQUEST_WORKSPACE, event => {
     eventService.send({
       type: REQUEST_WORKSPACE,
-      event,
+      event
     });
   });
   ipcMain.on(WORKSPACE_REMOVE_CARD, (event, data) => {
@@ -33,13 +33,13 @@ export function registerHandlers() {
     eventService.send({
       type: UPDATE_CARD,
       data,
-      event,
+      event
     });
   });
   ipcMain.on(BG_GLOBAL_UPDATE, (_, data) => {
     eventService.send({
       type: BG_GLOBAL_UPDATE,
-      data,
+      data
     });
   });
 }

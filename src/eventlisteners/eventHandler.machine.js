@@ -4,7 +4,7 @@ import { MESSAGES, STATES } from "../constants/bridge";
 import {
   workspaceRequest,
   updateGlobalState,
-  workspaceSearch,
+  workspaceSearch
 } from "./workspaces";
 import { saveCard, updateCard } from "./cards";
 
@@ -13,9 +13,8 @@ const {
   SAVE_CARD,
   UPDATE_CARD,
   BG_GLOBAL_UPDATE,
-  RELOAD_STATE,
   WORKSPACE_REMOVE_CARD,
-  WORKSPACE_SEARCHING,
+  WORKSPACE_SEARCHING
 } = MESSAGES;
 
 const {
@@ -23,7 +22,7 @@ const {
   SAVING_CARD,
   UPDATING_CARD,
   BG_STATE_UPDATING,
-  REMOVING_CARD,
+  REMOVING_CARD
 } = STATES;
 
 export const eventHandlerMachine = Machine(
@@ -38,51 +37,51 @@ export const eventHandlerMachine = Machine(
           [SAVE_CARD]: SAVING_CARD,
           [UPDATE_CARD]: UPDATING_CARD,
           [BG_GLOBAL_UPDATE]: BG_STATE_UPDATING,
-          [WORKSPACE_REMOVE_CARD]: REMOVING_CARD,
-        },
+          [WORKSPACE_REMOVE_CARD]: REMOVING_CARD
+        }
       },
       [INITIALIZING_WORKSPACE]: {
         invoke: {
           src: "requestWorkspace",
           onDone: "LISTENING",
-          onError: "ERROR",
-        },
+          onError: "ERROR"
+        }
       },
       [SAVING_CARD]: {
         invoke: {
           src: "saveCard",
           onDone: BG_STATE_UPDATING,
-          onError: "ERROR",
-        },
+          onError: "ERROR"
+        }
       },
       [UPDATING_CARD]: {
         invoke: {
           src: "updateCard",
           onDone: "LISTENING",
-          onError: "ERROR",
-        },
+          onError: "ERROR"
+        }
       },
       [REMOVING_CARD]: {
         entry: "workspaceRemoveCard",
         on: {
-          [BG_GLOBAL_UPDATE]: [BG_STATE_UPDATING],
-        },
+          [BG_GLOBAL_UPDATE]: [BG_STATE_UPDATING]
+        }
       },
       [BG_STATE_UPDATING]: {
         invoke: {
           src: "updateGlobalState",
           onDone: "LISTENING",
-          onError: "ERROR",
-        },
+          onError: "ERROR"
+        }
       },
       [WORKSPACE_SEARCHING]: {
-        entry: "search",
+        entry: "search"
         // TODO go back to LISTENING state
       },
       ERROR: {
-        actions: "logError",
-      },
-    },
+        actions: "logError"
+      }
+    }
   },
   {
     services: {
@@ -92,11 +91,11 @@ export const eventHandlerMachine = Machine(
         return {
           type: SAVE_CARD,
           data: card,
-          event,
+          event
         };
       },
       updateCard: (_, { data }) => updateCard(data),
-      updateGlobalState: (_, { data }) => updateGlobalState(data),
+      updateGlobalState: (_, { data }) => updateGlobalState(data)
     },
     actions: {
       logError: (_, e) => {
@@ -108,9 +107,9 @@ export const eventHandlerMachine = Machine(
         data: {
           type: WORKSPACE_REMOVE_CARD,
           data,
-          event,
-        },
-      })),
-    },
+          event
+        }
+      }))
+    }
   }
 );

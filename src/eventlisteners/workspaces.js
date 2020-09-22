@@ -4,7 +4,7 @@ const {
   WORKSPACE_LOADED,
   SAVE_CARD,
   RELOAD_STATE,
-  WORKSPACE_REMOVE_CARD,
+  WORKSPACE_REMOVE_CARD
 } = MESSAGES;
 
 async function loadWorkspace() {
@@ -12,7 +12,7 @@ async function loadWorkspace() {
   const keyBy = require("lodash/keyBy");
   const {
     readDataFile,
-    readTemplateFiles,
+    readTemplateFiles
   } = require("../filesystem/utils/projectDir");
   const { PROMISE_STATUS } = require("../constants");
 
@@ -21,14 +21,14 @@ async function loadWorkspace() {
   const startupCards = displayedCards.map(readDataFile);
   const cardContents = await Promise.allSettled(startupCards);
   const filteredCards = cardContents
-    .filter((card) => card.status !== PROMISE_STATUS.REJECTED)
-    .map((promise) => promise.value);
+    .filter(card => card.status !== PROMISE_STATUS.REJECTED)
+    .map(promise => promise.value);
 
   const templateContents = await readTemplateFiles();
   const filteredTemplates = keyBy(
     templateContents
-      .filter((template) => template.status !== PROMISE_STATUS.REJECTED)
-      .map((promise) => promise.value),
+      .filter(template => template.status !== PROMISE_STATUS.REJECTED)
+      .map(promise => promise.value),
     "name"
   );
   return { state, shown: [filteredCards, filteredTemplates] };
@@ -38,7 +38,7 @@ export async function workspaceRequest(event) {
   const { state, shown } = await loadWorkspace();
   event.reply(WORKSPACE_LOADED, {
     state,
-    shown,
+    shown
   });
 }
 
@@ -50,14 +50,14 @@ export async function workspaceRequest(event) {
 export async function updateGlobalState({ type, data, event }) {
   const {
     readDataFile,
-    writeDataFile,
+    writeDataFile
   } = require("../filesystem/utils/projectDir");
   const state = await readDataFile("state");
   switch (type) {
     case SAVE_CARD: {
       const updatedState = {
         ...state,
-        displayedCards: [...state.displayedCards, data.id],
+        displayedCards: [...state.displayedCards, data.id]
       };
       await writeDataFile("state", updatedState);
       const newWorkspace = await loadWorkspace();
@@ -67,7 +67,7 @@ export async function updateGlobalState({ type, data, event }) {
     case WORKSPACE_REMOVE_CARD: {
       const updatedState = {
         ...state,
-        displayedCards: state.displayedCards.filter((card) => card !== data),
+        displayedCards: state.displayedCards.filter(card => card !== data)
       };
       await writeDataFile("state", updatedState);
       const newWorkspace = await loadWorkspace();
@@ -84,12 +84,30 @@ export async function updateGlobalState({ type, data, event }) {
 }
 
 export function workspaceSearch({ data, event }) {
-  const { isMainThread, Worker } = require("worker_threads");
-  if (isMainThread) {
-    new Worker(__filename);
-  } else {
-    // --no-column --no-line-number --color never 'searchTerm' directory
-    const { rgPath } = require("vscode-ripgrep");
-    console.log(rgPath);
-  }
+  const { getDataDir } = require("../filesystem/utils/projectDir");
+  const { execFile } = require("child_process");
+  const path = require("path");
+  const { rgPath } = require("vscode-ripgrep");
+  let rg =
+    process.env !== "production"
+      ? path.resolve("node_modules/vscode-ripgrep/bin/rg")
+      : rgPath;
+
+  const dataDir = getDataDir();
+  execFile(
+    rg,
+    [
+      "--block-buffered",
+      "--no-column",
+      "--no-line-number",
+      "--color",
+      "never",
+      data,
+      dataDir
+    ],
+    (err, stdout) => {
+      if (err) throw err;
+      console.log({ stdout });
+    }
+  );
 }
