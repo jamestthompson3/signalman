@@ -1,6 +1,6 @@
 import { interpret } from "xstate";
-import { workspaceMachine } from "../machines/workspace-general.machine";
-import { emitter } from "./emitter";
+import { workspaceMachine } from "machines/workspace-general.machine";
+import { searchMachine } from "machines/search.machine";
 
 function eventDriver(machine) {
   let service;
@@ -9,6 +9,7 @@ function eventDriver(machine) {
       if (service) {
         throw new Error("driver already initialzed");
       }
+      if (trace) console.log("INITIALZING DRIVER: ", machine.id);
       service = interpret(machine).start();
       if (trace) service.onEvent(console.log);
       return service;
@@ -22,8 +23,9 @@ function eventDriver(machine) {
     stop() {
       service.stop();
       service = undefined;
-    }
+    },
   };
 }
 
 export const workspaceDriver = eventDriver(workspaceMachine);
+export const searchDriver = eventDriver(searchMachine);

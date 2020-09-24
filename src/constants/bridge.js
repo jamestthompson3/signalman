@@ -9,6 +9,8 @@ export const MESSAGES = {
   WORKSPACE_NAME_UPDATE: "workspace:nameUpdate",
   WORKSPACE_REMOVE_CARD: "workspace:removeCard",
   WORKSPACE_SEARCH: "workspace:search",
+  SEARCH_RESULT: "workspace:searchResult",
+  CLEAR_SEARCH: "workspace:searchClear",
 };
 
 export const STATES = {

@@ -46,3 +46,21 @@
   flex-direction: column;
   justify-content: space-between;
 }
+
+.search-form {
+  max-width: 320px;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+}
+
+.searchbox {
+  margin: 0;
+  padding: 0.5rem;
+  border-radius: 3px;
+  border: none;
+  box-shadow: hsl(185, 21%, 65%) 0px 4px 6px -1px,hsl(185, 21%, 53%) 0px 2px 4px -1px;
+  width: 100%;
+  -webkit-appearance: none;
+  font-size: 13px;
+}
