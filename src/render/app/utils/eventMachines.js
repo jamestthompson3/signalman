@@ -25,6 +25,9 @@ function eventDriver(machine) {
       service.stop();
       service = undefined;
     },
+    isRunning() {
+      return Boolean(service);
+    },
   };
 }
 

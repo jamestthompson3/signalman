@@ -14,14 +14,14 @@ const { WORKSPACE_REMOVE_CARD, DELETE_CARD } = MESSAGES;
 // Drag and drop all the things!!
 // very naive first pass
 function parseTemplateFields(displayFields, labelFields, contents, send) {
-  const renderFields = fields =>
-    fields.map(field => (
+  const renderFields = (fields) =>
+    fields.map((field) => (
       <div className="card-field" key={field}>
         {labelFields && <p>{field}: </p>}
         <Editable
           className="field-content"
           value={contents[field]}
-          send={data =>
+          send={(data) =>
             send({ type: "UPDATE_FIELD", data: { field, value: data } })
           }
         />
@@ -29,7 +29,7 @@ function parseTemplateFields(displayFields, labelFields, contents, send) {
     ));
   if (displayFields === "all") {
     const fields = Object.keys(contents).filter(
-      key => !STATIC_FIELDS.includes(key)
+      (key) => !STATIC_FIELDS.includes(key)
     );
     return renderFields(fields);
   }

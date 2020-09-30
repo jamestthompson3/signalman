@@ -8,7 +8,9 @@ import { Card } from "./Card.jsx";
 export function CardView({ contents }) {
   const [showDialog, setShowDialog] = React.useState(false);
   React.useEffect(() => {
-    deleteCardDriver.init();
+    if (!deleteCardDriver.isRunning()) {
+      deleteCardDriver.init();
+    }
     return () => deleteCardDriver.stop();
   }, []);
   const open = () => setShowDialog(true);
@@ -28,7 +30,7 @@ export function CardView({ contents }) {
   const templates = contents[1];
   const shown = contents[0];
   return (
-    <>
+    <div className="card-view-container">
       <NewCard
         open={showDialog}
         close={close}
@@ -41,7 +43,7 @@ export function CardView({ contents }) {
           key={card.id}
         />
       ))}
-    </>
+    </div>
   );
 }
 

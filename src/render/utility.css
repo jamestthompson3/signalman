@@ -88,3 +88,41 @@
 .action-button.danger {
   background: red;
 }
+
+.list {
+  background: white;
+  padding: 0.5rem;
+  border-left: 3px solid var(--dark0);
+  margin: 0.25rem 0rem;
+}
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.list:first-child {
+  margin-top: 0rem;
+  margin-bottom: 0.25rem;
+}
+
+.list:last-child {
+  margin-bottom: 0rem;
+  margin-top: 0.25rem;
+}
+
+.list:only-child {
+  margin: 0rem;
+}
+
+.workspace-view-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.card-view-container {
+  display: flex;
+  flex-direction: column;
+}

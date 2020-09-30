@@ -1,6 +1,7 @@
 import React from "react";
 import { useService } from "@xstate/react";
 import { CardView } from "../CardView.jsx";
+import { ListView } from "../list/index.jsx";
 import { Search } from "../Search.jsx";
 import { WorkspaceTitle } from "./WorkspaceTitle.jsx";
 import { workspaceDriver } from "../../utils/eventMachines";
@@ -19,7 +20,10 @@ export function Workspace() {
     <>
       <WorkspaceTitle name={context.state.name} />
       <Search />
-      <CardView contents={context.shown} />
+      <div className="workspace-view-container">
+        <ListView contents={context.shown} />
+        <CardView contents={context.shown} />
+      </div>
     </>
   );
 }

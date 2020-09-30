@@ -5,14 +5,15 @@ ul {
 }
 * {
   margin: 0;
-  max-width: 100vw;
 }
 body {
   overflow-x: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   height: 100vh;
+  width: 100vw;
   scroll-snap-type: y proximity;
+  width: 90vw;
 }
 html,
 body {
@@ -20,7 +21,6 @@ body {
   font-family: "Anton", sans-serif;
   margin: 0px;
   padding: 0px;
-  width: 100%;
 }
 
 @media(max-width: 485px) {
