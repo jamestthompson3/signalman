@@ -8,9 +8,10 @@ const {
   WORKSPACE_LOADED,
   REQUEST_WORKSPACE,
   RELOAD_STATE,
-  WORKSPACE_REMOVE_CARD
+  ADD_CARD,
+  WORKSPACE_REMOVE_CARD,
 } = MESSAGES;
-const { REMOVING_CARD } = STATES;
+const { REMOVING_CARD, ADDING_CARD } = STATES;
 
 export const workspaceMachine = Machine(
   {
@@ -22,25 +23,32 @@ export const workspaceMachine = Machine(
       idle: {
         entry: "requestWorkspace",
         on: {
-          [WORKSPACE_LOADED]: "RENDER"
-        }
+          [WORKSPACE_LOADED]: "RENDER",
+        },
       },
       RENDER: {
         entry: "saveWorkspace",
         on: {
           [RELOAD_STATE]: {
-            actions: "saveWorkspace"
+            actions: "saveWorkspace",
           },
-          [WORKSPACE_REMOVE_CARD]: REMOVING_CARD
-        }
+          [WORKSPACE_REMOVE_CARD]: REMOVING_CARD,
+          [ADD_CARD]: ADDING_CARD,
+        },
       },
       [REMOVING_CARD]: {
         entry: "removeCard",
         on: {
-          [RELOAD_STATE]: "RENDER"
-        }
-      }
-    }
+          [RELOAD_STATE]: "RENDER",
+        },
+      },
+      [ADDING_CARD]: {
+        entry: "addCard",
+        on: {
+          [RELOAD_STATE]: "RENDER",
+        },
+      },
+    },
   },
   {
     actions: {
@@ -57,7 +65,12 @@ export const workspaceMachine = Machine(
       },
       removeCard: (_, e) => {
         send(WORKSPACE_REMOVE_CARD, e.data);
-      }
-    }
+      },
+      addCard: (ctx, e) => {
+        if (e.data && !ctx.shown[0].find((card) => card.id === e.data)) {
+          send(ADD_CARD, e.data);
+        }
+      },
+    },
   }
 );

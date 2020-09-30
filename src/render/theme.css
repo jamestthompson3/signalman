@@ -10,6 +10,7 @@
   --dark1: #447c7dff;
   --dark0: #091818ff;
   --accent: #E59600;
+  --shadow: hsl(185, 21%, 65%) 0px 4px 6px -1px,hsl(185, 21%, 53%) 0px 2px 4px -1px;
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;

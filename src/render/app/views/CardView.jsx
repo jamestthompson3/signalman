@@ -2,18 +2,20 @@ import React from "react";
 import { useMachine } from "@xstate/react";
 
 import { cardSaveMachine } from "machines/card-save.machine";
+import { deleteCardDriver } from "../utils/eventMachines";
 import { Card } from "./Card.jsx";
-import { Editable } from "common/components/ContentEditable.jsx";
-import { MESSAGES } from "global/constants/bridge";
-import { STATIC_FIELDS } from "./constants";
 
 export function CardView({ contents }) {
   const [showDialog, setShowDialog] = React.useState(false);
+  React.useEffect(() => {
+    deleteCardDriver.init();
+    return () => deleteCardDriver.stop();
+  }, []);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
   React.useEffect(() => {
     const newCard = (e) => {
-      if (e.ctrlKey && event.key === "n") {
+      if (e.ctrlKey && e.key === "n") {
         open();
       }
       if (e.key === "Escape") {

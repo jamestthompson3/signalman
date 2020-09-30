@@ -6,24 +6,30 @@ import {
   updateGlobalState,
   workspaceSearch,
 } from "./workspaces";
-import { saveCard, updateCard } from "./cards";
+// TODO, maybe JIT import these??
+import { saveCard, updateCard, addCard, deleteCard } from "./cards";
 
 const {
+  ADD_CARD,
+  BG_GLOBAL_UPDATE,
   REQUEST_WORKSPACE,
+  RELOAD_STATE,
   SAVE_CARD,
   UPDATE_CARD,
-  BG_GLOBAL_UPDATE,
   WORKSPACE_REMOVE_CARD,
   WORKSPACE_SEARCH,
+  DELETE_CARD,
 } = MESSAGES;
 
 const {
-  INITIALIZING_WORKSPACE,
-  SAVING_CARD,
-  UPDATING_CARD,
+  ADDING_CARD,
   BG_STATE_UPDATING,
-  SEARCHING,
+  INITIALIZING_WORKSPACE,
   REMOVING_CARD,
+  SAVING_CARD,
+  SEARCHING,
+  UPDATING_CARD,
+  DELETING_CARD,
 } = STATES;
 
 export const eventHandlerMachine = Machine(
@@ -34,12 +40,14 @@ export const eventHandlerMachine = Machine(
     states: {
       LISTENING: {
         on: {
-          [WORKSPACE_SEARCH]: SEARCHING,
+          [ADD_CARD]: ADDING_CARD,
+          [BG_GLOBAL_UPDATE]: BG_STATE_UPDATING,
           [REQUEST_WORKSPACE]: INITIALIZING_WORKSPACE,
           [SAVE_CARD]: SAVING_CARD,
           [UPDATE_CARD]: UPDATING_CARD,
-          [BG_GLOBAL_UPDATE]: BG_STATE_UPDATING,
           [WORKSPACE_REMOVE_CARD]: REMOVING_CARD,
+          [WORKSPACE_SEARCH]: SEARCHING,
+          [DELETE_CARD]: DELETING_CARD,
         },
       },
       [INITIALIZING_WORKSPACE]: {
@@ -56,10 +64,24 @@ export const eventHandlerMachine = Machine(
           onError: "ERROR",
         },
       },
+      [ADDING_CARD]: {
+        invoke: {
+          src: "addCard",
+          onDone: BG_STATE_UPDATING,
+          onError: "ERROR",
+        },
+      },
       [UPDATING_CARD]: {
         invoke: {
           src: "updateCard",
           onDone: "LISTENING",
+          onError: "ERROR",
+        },
+      },
+      [DELETING_CARD]: {
+        invoke: {
+          src: "deleteCard",
+          onDone: BG_STATE_UPDATING,
           onError: "ERROR",
         },
       },
@@ -108,6 +130,21 @@ export const eventHandlerMachine = Machine(
             rej(e);
           }
         }),
+      addCard: async (_, { data, event }) => {
+        await addCard(data);
+        return {
+          type: RELOAD_STATE,
+          event,
+        };
+      },
+      deleteCard: async (_, { data, event }) => {
+        await deleteCard(data);
+        return {
+          type: WORKSPACE_REMOVE_CARD,
+          event,
+          data,
+        };
+      },
       updateCard: (_, { data }) => updateCard(data),
       updateGlobalState: (_, { data }) => updateGlobalState(data),
     },

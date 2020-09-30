@@ -1,6 +1,7 @@
 import { interpret } from "xstate";
 import { workspaceMachine } from "machines/workspace-general.machine";
 import { searchMachine } from "machines/search.machine";
+import { cardDeleteMachine } from "machines/card-delete.machine";
 
 function eventDriver(machine) {
   let service;
@@ -29,3 +30,4 @@ function eventDriver(machine) {
 
 export const workspaceDriver = eventDriver(workspaceMachine);
 export const searchDriver = eventDriver(searchMachine);
+export const deleteCardDriver = eventDriver(cardDeleteMachine);

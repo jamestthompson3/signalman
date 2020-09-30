@@ -7,6 +7,8 @@ const {
   REQUEST_WORKSPACE,
   WORKSPACE_REMOVE_CARD,
   SAVE_CARD,
+  ADD_CARD,
+  DELETE_CARD,
   UPDATE_CARD,
   BG_GLOBAL_UPDATE,
   WORKSPACE_SEARCH,
@@ -33,6 +35,12 @@ export function registerHandlers() {
   });
   ipcMain.on(SAVE_CARD, (event, data) => {
     eventService.send({ type: SAVE_CARD, data, event });
+  });
+  ipcMain.on(ADD_CARD, (event, data) => {
+    eventService.send({ type: ADD_CARD, data, event });
+  });
+  ipcMain.on(DELETE_CARD, (event, data) => {
+    eventService.send({ type: DELETE_CARD, data, event });
   });
   ipcMain.on(UPDATE_CARD, async (event, data) => {
     eventService.send({

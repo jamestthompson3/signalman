@@ -4,6 +4,8 @@ export const MESSAGES = {
   REMOVE_SUCCESS: "workspace:removeCardSuccess",
   REQUEST_WORKSPACE: "workspace:request",
   SAVE_CARD: "card:save",
+  ADD_CARD: "workspace:addCard",
+  DELETE_CARD: "card:delete",
   UPDATE_CARD: "card:update",
   WORKSPACE_LOADED: "workspace:loaded",
   WORKSPACE_NAME_UPDATE: "workspace:nameUpdate",
@@ -17,7 +19,9 @@ export const STATES = {
   BG_STATE_UPDATING: "bg:globalUpdating",
   INITIALIZING_WORKSPACE: "workspace:init",
   REMOVING_CARD: "workspace:removingCard",
+  DELETING_CARD: "card:deleting",
   SAVING_CARD: "card:saving",
+  ADDING_CARD: "workspace:addingCard",
   UPDATING_CARD: "card:updating",
   SEARCHING: "workspace:searching",
 };

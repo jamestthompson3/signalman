@@ -7,7 +7,7 @@ const { SAVE_CARD } = MESSAGES;
 
 export const cardSaveMachine = Machine(
   {
-    id: "card-update",
+    id: "card-save",
     initial: "LISTENING",
     strict: "true",
     context: {},
@@ -15,24 +15,24 @@ export const cardSaveMachine = Machine(
       LISTENING: {
         on: {
           UPDATE_FIELD: {
-            actions: "updateField"
+            actions: "updateField",
           },
           SAVE_CARD: {
-            actions: "saveCard"
-          }
-        }
-      }
-    }
+            actions: "saveCard",
+          },
+        },
+      },
+    },
   },
   {
     actions: {
       updateField: assign((ctx, e) => ({
         ...ctx,
-        [e.data.field]: e.data.value
+        [e.data.field]: e.data.value,
       })),
-      saveCard: ctx => {
+      saveCard: (ctx) => {
         send(SAVE_CARD, ctx);
-      }
-    }
+      },
+    },
   }
 );

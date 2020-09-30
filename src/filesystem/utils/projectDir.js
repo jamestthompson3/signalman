@@ -4,6 +4,7 @@ import util from "util";
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const readDir = util.promisify(fs.readdir);
+const deleteFile = util.promisify(fs.unlink);
 
 // Data dir is found in the following locations:
 // Linux:   /home/alice/.local/share/signalman
@@ -59,4 +60,10 @@ export function writeDataFile(name, data) {
   const dataDir = getDataDir();
   const filePath = `${dataDir}${name}.json`;
   return writeFile(filePath, JSON.stringify(data));
+}
+
+export function deleteDataFile(name) {
+  const dataDir = getDataDir();
+  const filePath = `${dataDir}${name}.json`;
+  return deleteFile(filePath);
 }
