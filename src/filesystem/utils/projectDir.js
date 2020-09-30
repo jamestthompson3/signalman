@@ -13,16 +13,26 @@ const deleteFile = util.promisify(fs.unlink);
 export function getDataDir() {
   const path = require("path");
   const { app } = require("electron");
+  let dataDir;
   switch (process.platform) {
     case "linux":
-      return path.join(app.getPath("home"), ".local/share/signalman/");
+      dataDir = path.join(app.getPath("home"), ".local/share/signalman/");
+      break;
     case "darwin":
-      return app.getPath("userData");
+      dataDir = app.getPath("userData");
+      break;
     case "win32":
-      return path.join(app.getPath("userData"), "data\\");
+      dataDir = path.join(app.getPath("userData"), "data\\");
+      break;
     default:
-      return app.getPath("userData");
+      dataDir = app.getPath("userData");
+      break;
   }
+  if (process.env.NODE_ENV !== "production") {
+    dataDir = `${dataDir}dev${path.sep}`;
+  }
+  // TODO, maybe a good usecase for different workspaces?
+  return dataDir;
 }
 
 /*
