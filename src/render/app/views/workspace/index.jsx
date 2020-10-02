@@ -43,7 +43,12 @@ export function Workspace() {
       />
       <div className="workspace-view-container">
         <ListView contents={context.shown} />
-        <CardView contents={{ cards: [], templates: {} }} />
+        <CardView
+          contents={{
+            cards: context.today,
+            templates: context.shown.templates,
+          }}
+        />
       </div>
     </>
   );

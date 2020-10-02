@@ -19,7 +19,7 @@ export const workspaceMachine = Machine(
     id: "workspace-general",
     initial: "idle",
     strict: "true",
-    context: {},
+    context: { today: [] },
     states: {
       idle: {
         entry: "requestWorkspace",
@@ -35,6 +35,9 @@ export const workspaceMachine = Machine(
           },
           [WORKSPACE_REMOVE_CARD]: REMOVING_CARD,
           [ADD_CARD]: ADDING_CARD,
+          [SCHEDULED_TASKS]: {
+            actions: "saveTodaysTasks",
+          },
         },
       },
       [REMOVING_CARD]: {
@@ -54,13 +57,16 @@ export const workspaceMachine = Machine(
   {
     actions: {
       saveWorkspace: assign((_, e) => e.data),
+      saveTodaysTasks: assign({
+        today: (_, e) => e.data,
+      }),
       requestWorkspace: () => {
         // register listener for RPC calls from mainIPC
         on(WORKSPACE_LOADED, (_, data) => {
           workspaceDriver.send(WORKSPACE_LOADED, data);
         });
         on(SCHEDULED_TASKS, (_, data) =>
-          console.log("from scheduled listener", { data })
+          workspaceDriver.send(SCHEDULED_TASKS, data)
         );
         on(RELOAD_STATE, (_, data) => {
           workspaceDriver.send(RELOAD_STATE, data);

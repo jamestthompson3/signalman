@@ -42,7 +42,11 @@ function parseTemplateFields(displayFields, labelFields, contents, send) {
 function parseTemplate({ contents, template, send }) {
   const { displayFields, labelFields } = template;
   return (
-    <div className="card">
+    <div
+      data-status={contents.status}
+      data-time-allotted={contents.timeAllotted}
+      className="card"
+    >
       <div className="card-title">
         <h2 data-field="title">{contents.title}</h2>
         <div style={{ display: "flex" }}>

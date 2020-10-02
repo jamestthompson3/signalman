@@ -17,16 +17,20 @@ function parseTemplate({ contents, template, send }) {
   return (
     <div className="list">
       <div className="list-content">
-        <Editable
-          className="field-content"
-          value={contents.title || contents.text}
-          send={(data) =>
-            send({
-              type: "UPDATE_FIELD",
-              data: { field: contents.title ? "title" : "text", value: data },
-            })
-          }
-        />
+        {contents.id !== "settings" ? (
+          <Editable
+            className="field-content"
+            value={contents.title || contents.text}
+            send={(data) =>
+              send({
+                type: "UPDATE_FIELD",
+                data: { field: contents.title ? "title" : "text", value: data },
+              })
+            }
+          />
+        ) : (
+          <p>{contents.title}</p>
+        )}
         <div style={{ display: "flex" }}>
           <button
             className="action-button"

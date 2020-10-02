@@ -46,14 +46,14 @@ export function Search() {
           );
         }}
       >
-        <label htmlFor="search" aria-hidden="true">
+        <label style={{ display: "none" }} htmlFor="search" aria-hidden="true">
           search
         </label>
         <input
           id="search"
           type="search"
           className="searchbox"
-          placeholder="/"
+          placeholder="search"
           onKeyDown={captureFocus}
           onChange={(e) => {
             if (Boolean(e.target.value)) {

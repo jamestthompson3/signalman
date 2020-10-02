@@ -8,6 +8,8 @@ export async function saveCard(data) {
   const cardId = v4();
   const card = {
     id: cardId,
+    // TODO remove when done testing
+    scheduled: new Date(),
     ...data,
     created: new Date(),
     modified: new Date(),

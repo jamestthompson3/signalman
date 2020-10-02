@@ -1,13 +1,34 @@
 /* General Classes */
 .card {
   border-radius: 5px;
-  background: #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  box-shadow: var(--shadow);
   will-change: transform;
   transform: translate(0, 0);
+  border: 1px solid var(--dark0);
+  padding: 0.25rem;
+}
+
+[data-status="done"] {
+  opacity: 0.75;
+}
+
+[data-time-allotted="short"] {
+  background: black;
+  color: white;
+}
+
+
+[data-time-allotted="medium"] {
+  background: #22ffa1;
+  color: black;
+}
+
+
+[data-time-allotted="long"] {
+  background: #5167f6;
+  color: white;
 }
 
 .card-title {
@@ -126,6 +147,14 @@
 .card-view-container {
   display: flex;
   flex-direction: column;
+  background: white;
+  padding: 0.5rem;
+  height: 100%;
+}
+
+.card-view-container h2 {
+  text-align: center;
+  position: sticky;
 }
 
 .hotkey-container {

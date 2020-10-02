@@ -11,9 +11,11 @@ export function CardView({ contents }) {
     }
     return () => deleteCardDriver.stop();
   }, []);
+  const today = new Date();
   const { templates, cards } = contents;
   return (
     <div className="card-view-container">
+      <h2>{today.toLocaleDateString()}</h2>
       {cards.map((card) => (
         <Card
           contents={card}
