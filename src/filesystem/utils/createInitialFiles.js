@@ -12,7 +12,7 @@ export const USER =
 // One thing that sucks right now is that if I load the entire state on startup, once you have a few cards initialized, then it will get super slow.
 const initialState = {
   name: `${USER}'s Switchyard`,
-  displayedCards: ["settings"],
+  cardList: ["settings"],
   theme: "default",
   user: USER,
 };

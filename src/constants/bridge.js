@@ -13,6 +13,7 @@ export const MESSAGES = {
   WORKSPACE_SEARCH: "workspace:search",
   SEARCH_RESULT: "workspace:searchResult",
   CLEAR_SEARCH: "workspace:searchClear",
+  SCHEDULED_TASKS: "workspace:todaysTasks",
 };
 
 export const STATES = {

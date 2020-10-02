@@ -3,8 +3,8 @@ import { useMachine } from "@xstate/react";
 
 import { Editable } from "common/components/ContentEditable.jsx";
 import { cardUpdateMachine } from "machines/card-update.machine";
-import { STATIC_FIELDS } from "./constants";
-import { workspaceDriver, deleteCardDriver } from "../utils/eventMachines";
+import { STATIC_FIELDS } from "../constants";
+import { workspaceDriver, deleteCardDriver } from "../../utils/eventMachines";
 import { MESSAGES } from "global/constants/bridge";
 
 const { WORKSPACE_REMOVE_CARD, DELETE_CARD } = MESSAGES;

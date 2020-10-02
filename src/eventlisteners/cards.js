@@ -40,7 +40,7 @@ export async function addCard(id) {
     readDataFile,
   } = require("../filesystem/utils/projectDir");
   const state = await readDataFile("state");
-  state.displayedCards.splice(0, 0, id);
+  state.cardList.splice(0, 0, id);
   await writeDataFile("state", state);
 }
 

@@ -1,10 +1,10 @@
 import fs from "fs";
 import util from "util";
 
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
-const readDir = util.promisify(fs.readdir);
-const deleteFile = util.promisify(fs.unlink);
+export const readFile = util.promisify(fs.readFile);
+export const writeFile = util.promisify(fs.writeFile);
+export const readDir = util.promisify(fs.readdir);
+export const deleteFile = util.promisify(fs.unlink);
 
 // Data dir is found in the following locations:
 // Linux:   /home/alice/.local/share/signalman
@@ -58,7 +58,7 @@ export async function readTemplateFiles() {
       readFile(path + filePath, "utf8")
         .then((data) => data.toString())
         .then(JSON.parse)
-        .catch(console.errror)
+        .catch(console.error)
     )
   ).catch(console.error);
 }
@@ -72,6 +72,9 @@ export function writeDataFile(name, data) {
   return writeFile(filePath, JSON.stringify(data));
 }
 
+/*
+ * @returns: Promise<>
+ */
 export function deleteDataFile(name) {
   const dataDir = getDataDir();
   const filePath = `${dataDir}${name}.json`;

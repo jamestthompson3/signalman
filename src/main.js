@@ -3,6 +3,7 @@ import * as shortcut from "electron-squirrel-startup";
 
 import { bootstrap } from "./filesystem/utils/createInitialFiles";
 import { registerHandlers } from "./eventlisteners";
+import { spawnDateWatcher } from "./services";
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -35,6 +36,9 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+  mainWindow.webContents.on("did-finish-load", () =>
+    spawnDateWatcher(mainWindow.webContents)
+  );
 };
 
 // This method will be called when Electron has finished

@@ -15,15 +15,23 @@ async function loadWorkspace() {
     readDataFile,
     readTemplateFiles,
   } = require("../filesystem/utils/projectDir");
+  const dayjs = require("dayjs");
   const { PROMISE_STATUS } = require("../constants");
 
   const state = await readDataFile("state");
-  const { displayedCards } = state;
-  const startupCards = displayedCards.map(readDataFile);
+  const { cardList } = state;
+  const startupCards = cardList.map(readDataFile);
   const cardContents = await Promise.allSettled(startupCards);
   const filteredCards = cardContents
     .filter((card) => card.status !== PROMISE_STATUS.REJECTED)
-    .map((promise) => promise.value);
+    .map((promise) => promise.value)
+    .filter((card) => {
+      if (!card.scheduled) {
+        return true;
+      }
+      // today's tasks will be displayed in the day view, so they can be removed from the list view
+      return !dayjs().isSame(card.scheduled, "day");
+    });
 
   const templateContents = await readTemplateFiles();
   const filteredTemplates = keyBy(
@@ -32,7 +40,10 @@ async function loadWorkspace() {
       .map((promise) => promise.value),
     "name"
   );
-  return { state, shown: [filteredCards, filteredTemplates] };
+  return {
+    state,
+    shown: { cards: filteredCards, templates: filteredTemplates },
+  };
 }
 
 export async function workspaceRequest(event) {
@@ -56,7 +67,7 @@ export async function updateGlobalState({ type, data, event }) {
     case SAVE_CARD: {
       const updatedState = {
         ...state,
-        displayedCards: [...state.displayedCards, data.id],
+        cardList: [...state.cardList, data.id],
       };
       await writeDataFile("state", updatedState);
       const newWorkspace = await loadWorkspace();
@@ -66,7 +77,7 @@ export async function updateGlobalState({ type, data, event }) {
     case WORKSPACE_REMOVE_CARD: {
       const updatedState = {
         ...state,
-        displayedCards: state.displayedCards.filter((card) => card !== data),
+        cardList: state.cardList.filter((card) => card !== data),
       };
       await writeDataFile("state", updatedState);
       const newWorkspace = await loadWorkspace();

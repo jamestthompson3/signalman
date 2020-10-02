@@ -10,6 +10,7 @@ const {
   RELOAD_STATE,
   ADD_CARD,
   WORKSPACE_REMOVE_CARD,
+  SCHEDULED_TASKS,
 } = MESSAGES;
 const { REMOVING_CARD, ADDING_CARD } = STATES;
 
@@ -58,6 +59,9 @@ export const workspaceMachine = Machine(
         on(WORKSPACE_LOADED, (_, data) => {
           workspaceDriver.send(WORKSPACE_LOADED, data);
         });
+        on(SCHEDULED_TASKS, (_, data) =>
+          console.log("from scheduled listener", { data })
+        );
         on(RELOAD_STATE, (_, data) => {
           workspaceDriver.send(RELOAD_STATE, data);
         });
@@ -67,7 +71,7 @@ export const workspaceMachine = Machine(
         send(WORKSPACE_REMOVE_CARD, e.data);
       },
       addCard: (ctx, e) => {
-        if (e.data && !ctx.shown[0].find((card) => card.id === e.data)) {
+        if (e.data && !ctx.shown.cards.find((card) => card.id === e.data)) {
           send(ADD_CARD, e.data);
         }
       },
