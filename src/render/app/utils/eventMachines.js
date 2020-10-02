@@ -8,7 +8,7 @@ function eventDriver(machine) {
   return {
     init(trace) {
       if (service) {
-        throw new Error("driver already initialzed");
+        throw new Error(`driver: ${machine.id} already initialzed`);
       }
       if (trace) console.log("INITIALZING DRIVER: ", machine.id);
       service = interpret(machine).start();
@@ -17,7 +17,7 @@ function eventDriver(machine) {
     },
     send(event, data) {
       if (!service) {
-        throw new Error("driver is not yet initialized");
+        throw new Error(`driver: ${machine.id} is not yet initialized`);
       }
       service.send({ type: event, data });
     },

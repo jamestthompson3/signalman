@@ -12,24 +12,24 @@ import { saveCard, updateCard, addCard, deleteCard } from "./cards";
 const {
   ADD_CARD,
   BG_GLOBAL_UPDATE,
-  REQUEST_WORKSPACE,
+  DELETE_CARD,
   RELOAD_STATE,
+  REQUEST_WORKSPACE,
   SAVE_CARD,
   UPDATE_CARD,
   WORKSPACE_REMOVE_CARD,
   WORKSPACE_SEARCH,
-  DELETE_CARD,
 } = MESSAGES;
 
 const {
   ADDING_CARD,
   BG_STATE_UPDATING,
+  DELETING_CARD,
   INITIALIZING_WORKSPACE,
   REMOVING_CARD,
   SAVING_CARD,
   SEARCHING,
   UPDATING_CARD,
-  DELETING_CARD,
 } = STATES;
 
 export const eventHandlerMachine = Machine(
@@ -42,12 +42,12 @@ export const eventHandlerMachine = Machine(
         on: {
           [ADD_CARD]: ADDING_CARD,
           [BG_GLOBAL_UPDATE]: BG_STATE_UPDATING,
+          [DELETE_CARD]: DELETING_CARD,
           [REQUEST_WORKSPACE]: INITIALIZING_WORKSPACE,
           [SAVE_CARD]: SAVING_CARD,
           [UPDATE_CARD]: UPDATING_CARD,
           [WORKSPACE_REMOVE_CARD]: REMOVING_CARD,
           [WORKSPACE_SEARCH]: SEARCHING,
-          [DELETE_CARD]: DELETING_CARD,
         },
       },
       [INITIALIZING_WORKSPACE]: {
