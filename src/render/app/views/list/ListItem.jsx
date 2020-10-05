@@ -2,29 +2,31 @@ import React from "react";
 import { useMachine } from "@xstate/react";
 
 import { Editable } from "common/components/ContentEditable.jsx";
+import { Card } from "../card/Card.jsx";
 import { cardUpdateMachine } from "machines/card-update.machine";
-import { STATIC_FIELDS } from "../constants";
-import { workspaceDriver, deleteCardDriver } from "../../utils/eventMachines";
+import { workspaceDriver } from "../../utils/eventMachines";
 import { MESSAGES } from "global/constants/bridge";
 
-const { WORKSPACE_REMOVE_CARD, DELETE_CARD } = MESSAGES;
+const { WORKSPACE_REMOVE_CARD } = MESSAGES;
 
 // This thing is gonna get messy
 // FIXME I don't like prop-drilling the send function.
 // TODO figure out editing titles
 function parseTemplate({ contents, template, send }) {
-  const { displayFields, labelFields } = template;
-  return (
+  const [view, setView] = React.useState("list");
+  return view === "card" ? (
+    <Card contents={contents} template={template} />
+  ) : (
     <div className="list">
       <div className="list-content">
         {contents.id !== "settings" ? (
           <Editable
             className="field-content"
             value={contents.title || contents.text}
-            send={(data) =>
+            send={data =>
               send({
                 type: "UPDATE_FIELD",
-                data: { field: contents.title ? "title" : "text", value: data },
+                data: { field: contents.title ? "title" : "text", value: data }
               })
             }
           />
@@ -40,14 +42,9 @@ function parseTemplate({ contents, template, send }) {
           >
             close
           </button>
-          {contents.id !== "settings" && (
-            <button
-              className="action-button danger"
-              onClick={() => deleteCardDriver.send(DELETE_CARD, contents.id)}
-            >
-              delete
-            </button>
-          )}
+          <button className="action-button" onClick={() => setView("card")}>
+            edit
+          </button>
         </div>
       </div>
     </div>
