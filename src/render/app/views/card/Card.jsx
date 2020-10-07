@@ -12,6 +12,7 @@ import {
   deleteCardDriver,
   cardStatusDriver
 } from "../../utils/eventMachines";
+import { parseTimeAllotted } from "../utils/parse";
 import { MESSAGES } from "global/constants/bridge";
 
 const { WORKSPACE_REMOVE_CARD, DELETE_CARD } = MESSAGES;
@@ -58,54 +59,63 @@ function parseTemplate({ contents, template, send }) {
   const { fields, labelFields } = template;
   return (
     <div
-      data-status={contents.status}
-      data-time-allotted={contents.timeAllotted}
       className="card"
+      data-status={contents.status}
+      data-time-allotted={parseTimeAllotted(contents.timeAllotted)}
     >
-      <div className="card-title">
-        <h2 data-field="title">{contents.title}</h2>
-        <div style={{ display: "flex" }}>
-          <button
-            className="action-button"
-            onClick={() => {
-              workspaceDriver.send(WORKSPACE_REMOVE_CARD, contents.id);
-            }}
-          >
-            close
-          </button>
-          {contents.id !== "settings" && (
-            <>
-              <button
-                className="action-button danger"
-                onClick={() => deleteCardDriver.send(DELETE_CARD, contents.id)}
-              >
-                delete
-              </button>
-              <button
-                className="action-button"
-                onClick={() =>
-                  send({
-                    type: "UPDATE_FIELD",
-                    data: {
-                      field: "status",
-                      value: contents.status === "done" ? "inProgress" : "done"
-                    }
-                  })
-                }
-              >
-                {contents.status === "done" ? "undo" : "done"}
-              </button>
-            </>
-          )}
+      <div className="card-meta-container">
+        <div className="card-title">
+          <h4 data-field="title">{contents.title}</h4>
+          <div style={{ display: "flex" }}>
+            <button
+              className="action-button"
+              onClick={() => {
+                workspaceDriver.send(WORKSPACE_REMOVE_CARD, contents.id);
+              }}
+            >
+              close
+            </button>
+            {contents.id !== "settings" && (
+              <>
+                <button
+                  className="action-button danger"
+                  onClick={() =>
+                    deleteCardDriver.send(DELETE_CARD, contents.id)
+                  }
+                >
+                  delete
+                </button>
+                <button
+                  className="action-button"
+                  onClick={() =>
+                    send({
+                      type: "UPDATE_FIELD",
+                      data: {
+                        field: "status",
+                        value:
+                          contents.status === "done" ? "inProgress" : "done"
+                      }
+                    })
+                  }
+                >
+                  {contents.status === "done" ? "undo" : "done"}
+                </button>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-      <div className="card-meta">
-        <i>{contents.modifier === "" ? "Signalman User" : contents.modifier}</i>
-        <small>created: {new Date(contents.created).toLocaleString()}</small>
-        <small>modified: {new Date(contents.modified).toLocaleString()}</small>
-        <small>
-          id: <i>{contents.id}</i>
-        </small>
+        <div className="card-meta">
+          <i>
+            {contents.modifier === "" ? "Signalman User" : contents.modifier}
+          </i>
+          <small>created: {new Date(contents.created).toLocaleString()}</small>
+          <small>
+            modified: {new Date(contents.modified).toLocaleString()}
+          </small>
+          <small>
+            id: <i>{contents.id}</i>
+          </small>
+        </div>
       </div>
       <div className="card-body">
         {Object.keys(fields).map(field => (

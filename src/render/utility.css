@@ -1,38 +1,51 @@
 /* General Classes */
 .card {
-  border-radius: 5px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   will-change: transform;
   transform: translate(0, 0);
-  border: 1px solid var(--dark0);
+  margin: 0.25rem 0rem;
+  box-shadow: var(--shadow);
+}
+
+.card:first-child {
+  margin-top: 0rem;
+  margin-bottom: 0.25rem;
+}
+
+.card:last-child {
+  margin-bottom: 0rem;
+  margin-top: 0.25rem;
+}
+
+.card:only-child {
+  margin: 0rem;
+}
+
+.card-meta-container {
   padding: 0.25rem;
 }
 
-.card [data-status="done"] {
+[data-status="done"] {
   opacity: 0.75;
 }
 
-.card [data-time-allotted="short"] {
-  background: black;
-  color: white;
+[data-time-allotted="short"] {
+  border-top: 5px solid var(--dark0);
 }
 
 
-.card [data-time-allotted="medium"] {
-  background: #22ffa1;
-  color: black;
+[data-time-allotted="medium"] {
+  border-top: 5px solid hsl(154, 75%, 51%);
 }
 
 
-.card [data-time-allotted="long"] {
-  background: #5167f6;
-  color: white;
+[data-time-allotted="long"] {
+  border-top: 5px solid hsl(232, 45%, 64%);
 }
 
 .card-title {
-  color: var(--dark1);
   text-align: center;
   display: flex;
   justify-content: space-between;
@@ -80,9 +93,6 @@
 .searchbox {
   margin: 0;
   padding: 0.5rem;
-  border-radius: 3px;
-  border: none;
-  box-shadow: var(--shadow);
   width: 100%;
   -webkit-appearance: none;
   font-size: 13px;
@@ -93,7 +103,6 @@
   cursor: pointer;
   padding: 0.5rem;
   position: relative;
-  box-shadow: var(--shadow);
 }
 
 .search-result.focused {
@@ -103,7 +112,6 @@
 .action-button {
   background: transparent;
   border: 1px solid var(--dark1);
-  border-radius: 3px;
   cursor: pointer;
 }
 
@@ -114,24 +122,9 @@
 .list {
   background: white;
   padding: 0.5rem;
-  border-left: 3px solid var(--dark0);
   margin: 0.25rem 0rem;
   min-height: 55px;
-}
-
-
-.list [data-time-allotted="short"] {
-  border-left: 3px solid var(--dark0);
-}
-
-
-.list [data-time-allotted="medium"] {
-  border-left: 3px solid #22ffa1;
-}
-
-
-.list [data-time-allotted="long"] {
-  border-left: 3px solid #5167f6;
+  box-shadow: var(--shadow);
 }
 
 .list-container {
@@ -161,11 +154,9 @@
   align-items: center;
 }
 
-
 .card-view-container {
   display: flex;
   flex-direction: column;
-  background: white;
   padding: 0.5rem;
   flex: 1 1 auto;
   min-height: 55px;
@@ -173,7 +164,6 @@
 }
 
 .card-view-container h2 {
-  text-align: center;
   position: sticky;
 }
 
@@ -185,6 +175,5 @@
 .hotkey {
   width: 50px;
   height: 40px;
-  border-radius: 2px;
   border: 1px solid var(--dark0);
 }

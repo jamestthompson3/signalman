@@ -29,7 +29,11 @@ const initialConfig = {
 };
 const configurationTemplate = {
   name: "configuration",
-  displayFields: "all",
+  fields: {
+    title: {
+      type: "text"
+    }
+  },
   labelFields: true
 };
 const viewTemplate = {

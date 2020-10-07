@@ -4,24 +4,29 @@
 
 :root {
   /* CSS HEX */
-  --light0: #d9e5e6ff;
-  --light1: #b9d3d4ff;
-  --mid: #579c9eff;
-  --dark1: #447c7dff;
-  --dark0: #091818ff;
+  --light0: hsl(0, 0%, 89%);
+  --light1: hsl(0, 0%, 76%);
+  --dark1: hsl(0, 0%, 39%);
+  --dark0: hsl(0, 0%, 0%);
   --accent: #E59600;
-  --shadow: hsl(185, 21%, 65%) 0px 4px 6px -1px,hsl(185, 21%, 53%) 0px 2px 4px -1px;
+  --bg-gradient: linear-gradient(hsl(0, 0%, 100%), hsl(0, 0%, 96%));
+  --shadow: 0 5px 15px 0 hsla(0, 0%, 0%, 0.10);
 }
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin: auto;
   padding: 2rem;
   color: var(--dark0);
-  background: linear-gradient(hsl(185, 21%, 88%), hsl(185, 21%, 79%));
+  background: var(--bg-gradient);
   background-repeat: no-repeat;
 }
 
 h1 {
+  font-weight: 400;
   color: var(--dark1);
+}
+
+h1, h2 {
   text-align: center;
 }

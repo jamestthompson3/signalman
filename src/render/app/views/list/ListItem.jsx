@@ -5,6 +5,7 @@ import { Editable } from "common/components/ContentEditable.jsx";
 import { Card } from "../card/Card.jsx";
 import { cardUpdateMachine } from "machines/card-update.machine";
 import { workspaceDriver } from "../../utils/eventMachines";
+import { parseTimeAllotted } from "../utils/parse";
 import { MESSAGES } from "global/constants/bridge";
 
 const { WORKSPACE_REMOVE_CARD } = MESSAGES;
@@ -17,7 +18,10 @@ function parseTemplate({ contents, template, send }) {
   return view === "card" ? (
     <Card contents={contents} template={template} />
   ) : (
-    <div className="list">
+    <div
+      className="list"
+      data-time-allotted={parseTimeAllotted(contents.timeAllotted)}
+    >
       <div className="list-content">
         {contents.id !== "settings" ? (
           <Editable
