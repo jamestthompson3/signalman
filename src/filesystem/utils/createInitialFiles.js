@@ -42,6 +42,13 @@ const viewTemplate = {
     text: {
       type: "text"
     },
+    timeAllotted: {
+      type: "text"
+    },
+    status: {
+      type: "enum",
+      options: ["done", "not done"]
+    },
     scheduled: {
       type: "date"
     }

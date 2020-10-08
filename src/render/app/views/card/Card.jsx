@@ -12,7 +12,7 @@ import {
   deleteCardDriver,
   cardStatusDriver
 } from "../../utils/eventMachines";
-import { parseTimeAllotted } from "../utils/parse";
+import { parseTimeAllotted, parseHeight } from "../utils/parse";
 import { MESSAGES } from "global/constants/bridge";
 
 const { WORKSPACE_REMOVE_CARD, DELETE_CARD } = MESSAGES;
@@ -66,43 +66,6 @@ function parseTemplate({ contents, template, send }) {
       <div className="card-meta-container">
         <div className="card-title">
           <h4 data-field="title">{contents.title}</h4>
-          <div style={{ display: "flex" }}>
-            <button
-              className="action-button"
-              onClick={() => {
-                workspaceDriver.send(WORKSPACE_REMOVE_CARD, contents.id);
-              }}
-            >
-              close
-            </button>
-            {contents.id !== "settings" && (
-              <>
-                <button
-                  className="action-button danger"
-                  onClick={() =>
-                    deleteCardDriver.send(DELETE_CARD, contents.id)
-                  }
-                >
-                  delete
-                </button>
-                <button
-                  className="action-button"
-                  onClick={() =>
-                    send({
-                      type: "UPDATE_FIELD",
-                      data: {
-                        field: "status",
-                        value:
-                          contents.status === "done" ? "inProgress" : "done"
-                      }
-                    })
-                  }
-                >
-                  {contents.status === "done" ? "undo" : "done"}
-                </button>
-              </>
-            )}
-          </div>
         </div>
         <div className="card-meta">
           <i>

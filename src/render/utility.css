@@ -80,7 +80,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 100%;
+  width: 80%;
+  margin: auto;
+  padding: 3rem 1rem;
 }
 
 .search-form {
@@ -123,8 +125,12 @@
   background: white;
   padding: 0.5rem;
   margin: 0.25rem 0rem;
-  min-height: 55px;
   box-shadow: var(--shadow);
+}
+
+.card-view-container .list-box {
+  position: relative;
+  background: white;
 }
 
 .list-container {
@@ -159,12 +165,23 @@
   flex-direction: column;
   padding: 0.5rem;
   flex: 1 1 auto;
-  min-height: 55px;
   margin: 0rem 0.25rem;
+  height: 400px;
+  overflow: auto;
 }
 
-.card-view-container h2 {
-  position: sticky;
+.card-container {
+  min-height: 1440px;
+  display: flex;
+  flex-direction: column;
+  background-size: 15px 30px;
+  background-image:
+  linear-gradient(to right, transparent 1px, transparent 1px),
+  linear-gradient(to bottom, var(--light1) 1px, transparent 1px);
+}
+
+.card-container .list {
+  margin: 0;
 }
 
 .hotkey-container {
