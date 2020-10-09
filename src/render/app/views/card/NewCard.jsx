@@ -2,7 +2,7 @@ import React from "react";
 import { useMachine } from "@xstate/react";
 import { cardSaveMachine } from "machines/card-save.machine";
 
-export function NewCard({ close, open, template }) {
+export function NewCard({ close, open }) {
   const [_, send] = useMachine(cardSaveMachine);
   const input = React.useRef(null);
   const saveAndClose = () => {
@@ -15,15 +15,16 @@ export function NewCard({ close, open, template }) {
     }
   }, [open]);
   return open ? (
-    <div className="card">
+    <div>
       <form onSubmit={saveAndClose}>
-        <textarea
+        <input
+          type="text"
           ref={input}
           className="field-content"
           onChange={(e) =>
             send({
               type: "UPDATE_FIELD",
-              data: { field: "text", value: e.target.value },
+              data: { field: "title", value: e.target.value },
             })
           }
         />
