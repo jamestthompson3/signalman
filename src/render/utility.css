@@ -134,6 +134,12 @@
   background: white;
 }
 
+.card-view-container h2 {
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+
 .list-container {
   display: flex;
   flex-direction: column;

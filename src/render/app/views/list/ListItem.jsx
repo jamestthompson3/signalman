@@ -19,10 +19,29 @@ const { WORKSPACE_REMOVE_CARD } = MESSAGES;
 export function ListItem({ contents, template, dayView }) {
   const [, send] = useMachine(cardUpdateMachine.withContext(contents));
   const [view, setView] = React.useState("list");
+
+  const boxRef = React.useRef(null);
+  const today = new Date();
+  React.useEffect(
+    () => {
+      if (boxRef.current) {
+        const d = new Date(contents.scheduled);
+        if (today.getHours() === d.getHours()) {
+          boxRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+            inline: "nearest"
+          });
+        }
+      }
+    },
+    [boxRef.current]
+  );
   return (
     <div
       className="list-box"
       data-status={contents.status}
+      ref={dayView && boxRef}
       style={dayView && { top: parseDayPosition(contents.scheduled) }}
     >
       <div style={{ display: "flex" }}>
