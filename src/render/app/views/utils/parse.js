@@ -22,6 +22,5 @@ const TOTAL_HEIGHT = 1440;
 const HEIGHT_OFFSET = 60; // TOTAL_HEIGHT / 24 hours
 export function parseDayPosition(date) {
   const d = new Date(date);
-  console.log(d.getHours());
   return d.getHours() * HEIGHT_OFFSET;
 }

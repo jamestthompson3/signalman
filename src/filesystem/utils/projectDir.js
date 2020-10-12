@@ -29,7 +29,7 @@ export function getDataDir() {
       break;
   }
   if (process.env.NODE_ENV !== "production") {
-    dataDir = `${dataDir}dev${path.sep}`;
+    dataDir = `${dataDir}dev${path.sep || "/"}`;
   }
   // TODO, maybe a good usecase for different workspaces?
   return dataDir;
@@ -42,7 +42,7 @@ export function readDataFile(name) {
   const dataDir = getDataDir();
   const filePath = `${dataDir}${name}.json`;
   return readFile(filePath, "utf8")
-    .then((data) => data.toString())
+    .then(data => data.toString())
     .then(JSON.parse)
     .catch(console.error);
 }
@@ -54,9 +54,9 @@ export async function readTemplateFiles() {
   const path = `${getDataDir()}templates/`;
   const files = await readDir(path);
   return Promise.allSettled(
-    files.map((filePath) =>
+    files.map(filePath =>
       readFile(path + filePath, "utf8")
-        .then((data) => data.toString())
+        .then(data => data.toString())
         .then(JSON.parse)
         .catch(console.error)
     )
