@@ -30,7 +30,10 @@ const initialConfig = {
 const configurationTemplate = {
   name: "configuration",
   fields: {
-    title: {
+    name: {
+      type: "text"
+    },
+    user: {
       type: "text"
     }
   },
