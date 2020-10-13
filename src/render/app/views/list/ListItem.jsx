@@ -12,7 +12,7 @@ import {
 } from "../utils/parse";
 import { MESSAGES } from "global/constants/bridge";
 
-const { WORKSPACE_REMOVE_CARD } = MESSAGES;
+const { WORKSPACE_REMOVE_CARD, DELETE_CARD } = MESSAGES;
 
 // This thing is gonna get messy
 // TODO figure out editing titles
@@ -22,21 +22,18 @@ export function ListItem({ contents, template, dayView }) {
 
   const boxRef = React.useRef(null);
   const today = new Date();
-  React.useEffect(
-    () => {
-      if (boxRef.current) {
-        const d = new Date(contents.scheduled);
-        if (today.getHours() === d.getHours()) {
-          boxRef.current.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-            inline: "nearest"
-          });
-        }
+  React.useEffect(() => {
+    if (boxRef.current) {
+      const d = new Date(contents.scheduled);
+      if (today.getHours() === d.getHours()) {
+        boxRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest"
+        });
       }
-    },
-    [boxRef.current]
-  );
+    }
+  }, [boxRef.current]);
   return (
     <div
       className="list-box"
