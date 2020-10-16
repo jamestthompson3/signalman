@@ -11,6 +11,7 @@ const {
   ADD_CARD,
   WORKSPACE_REMOVE_CARD,
   SCHEDULED_TASKS,
+  WORKSPACE_PATCH_UPDATE,
 } = MESSAGES;
 const { REMOVING_CARD, ADDING_CARD } = STATES;
 
@@ -37,6 +38,9 @@ export const workspaceMachine = Machine(
           [ADD_CARD]: ADDING_CARD,
           [SCHEDULED_TASKS]: {
             actions: "saveTodaysTasks",
+          },
+          [WORKSPACE_PATCH_UPDATE]: {
+            actions: "patchUpdates",
           },
         },
       },
@@ -81,6 +85,25 @@ export const workspaceMachine = Machine(
           send(ADD_CARD, e.data);
         }
       },
+      patchUpdates: assign($patchUpdates),
     },
   }
 );
+
+//Data lenses
+function $patchUpdates(ctx, e) {
+  const {
+    data: { id },
+  } = e;
+  const { today, shown } = ctx;
+  const updatedToday = today.map($updateIfEmitted);
+  const updatedList = shown.cards.map($updateIfEmitted);
+  return {
+    ...ctx,
+    today: updatedToday,
+    shown: { ...shown, card: updatedList },
+  };
+  function $updateIfEmitted(card) {
+    return card.id === id ? e.data : card;
+  }
+}

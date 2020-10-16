@@ -14,6 +14,7 @@ export const MESSAGES = {
   WORKSPACE_NAME_UPDATE: "workspace:nameUpdate",
   WORKSPACE_REMOVE_CARD: "workspace:removeCard",
   WORKSPACE_SEARCH: "workspace:search",
+  WORKSPACE_PATCH_UPDATE: "workspace:cardPatch",
 };
 
 export const STATES = {
