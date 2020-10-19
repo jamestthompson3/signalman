@@ -8,6 +8,8 @@ const { WORKSPACE_SEARCH, CLEAR_SEARCH, ADD_CARD } = MESSAGES;
 import { searchDriver, workspaceDriver } from "../utils/eventMachines";
 
 const searchService = searchDriver.init();
+const getCardId = (text) =>
+  text.split(window.pathSep).pop().split(".json").shift();
 
 export function Search() {
   const [currentState] = useService(searchService);
@@ -34,6 +36,7 @@ export function Search() {
         break;
     }
   };
+  console.log(currentState.context.result);
   return (
     <>
       <form
@@ -68,14 +71,16 @@ export function Search() {
         <p
           tabIndex="-1"
           className={focused === i ? "search-result focused" : "search-result"}
-          key={result.id || result.name}
+          key={result.absolute_offset + i}
           onClick={() => {
-            workspaceDriver.send(ADD_CARD, result.id);
+            workspaceDriver.send(ADD_CARD, result.path.text);
             form.current && form.current.reset();
             searchDriver.send(CLEAR_SEARCH);
           }}
         >
-          {result.text || result.title}
+          {getCardId(result.path.text)}
+          <br />
+          <span>{result.lines.text}</span>
         </p>
       ))}
     </>

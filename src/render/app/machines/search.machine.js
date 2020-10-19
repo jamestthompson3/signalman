@@ -53,7 +53,12 @@ export const searchMachine = Machine(
         result: [],
       }),
       saveResult: assign((_, e) => ({
-        result: e.data.split("\n").filter(Boolean).map(JSON.parse),
+        result: e.data
+          .split("\n")
+          .filter(Boolean)
+          .map(JSON.parse)
+          .filter((r) => r.type === "match")
+          .map((r) => r.data),
       })),
     },
     services: {

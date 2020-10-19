@@ -36,13 +36,15 @@ export async function updateCard(data) {
   return id;
 }
 
-export async function addCard(id) {
+export async function addCard(path) {
   const {
     writeDataFile,
     readDataFile,
+    getDataDir,
   } = require("../filesystem/utils/projectDir");
+  const cardId = path.split(getDataDir()).pop().split(".json").shift();
   const state = await readDataFile("state");
-  state.cardList.splice(0, 0, id);
+  state.cardList.splice(0, 0, cardId);
   await writeDataFile("state", state);
 }
 

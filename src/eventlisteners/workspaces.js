@@ -115,6 +115,7 @@ export function workspaceSearch(data, event) {
       "--color",
       "never",
       "-I",
+      "--json",
       data,
       dataDir,
     ],
