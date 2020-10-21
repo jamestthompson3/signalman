@@ -8,12 +8,8 @@ const { WORKSPACE_SEARCH, CLEAR_SEARCH, ADD_CARD } = MESSAGES;
 import { searchDriver, workspaceDriver } from "../utils/eventMachines";
 
 const searchService = searchDriver.init();
-const getCardId = text =>
-  text
-    .split(window.pathSep)
-    .pop()
-    .split(".json")
-    .shift();
+const getCardId = (text) =>
+  text.split(window.pathSep).pop().split(".json").shift();
 
 export function Search() {
   const [currentState] = useService(searchService);
@@ -22,10 +18,10 @@ export function Search() {
     return () => searchDriver.stop();
   }, []);
   const {
-    context: { result }
+    context: { result },
   } = currentState;
   const [focused, setFocused] = React.useState(0);
-  const captureFocus = e => {
+  const captureFocus = (e) => {
     switch (e.which) {
       // up arrow
       case 40: {
@@ -70,7 +66,7 @@ export function Search() {
           className="searchbox"
           placeholder="search"
           onKeyDown={captureFocus}
-          onChange={e => {
+          onChange={(e) => {
             if (Boolean(e.target.value)) {
               searchDriver.send(WORKSPACE_SEARCH, e.target.value);
             } else {

@@ -10,7 +10,7 @@ import { STATIC_FIELDS } from "../constants";
 import {
   workspaceDriver,
   deleteCardDriver,
-  cardStatusDriver
+  cardStatusDriver,
 } from "../../utils/eventMachines";
 import { parseTimeAllotted, parseHeight } from "../utils/parse";
 import { MESSAGES } from "global/constants/bridge";
@@ -20,7 +20,7 @@ const { WORKSPACE_REMOVE_CARD, DELETE_CARD } = MESSAGES;
 // TODO:
 // expose templatting to parent component so I can execute logic on the fields
 function renderOnFieldType({ type, value, send, field }) {
-  const formatDate = date => {
+  const formatDate = (date) => {
     const dateObj = new Date(date);
     return dateObj.toLocaleDateString();
   };
@@ -30,7 +30,7 @@ function renderOnFieldType({ type, value, send, field }) {
         <Editable
           className="field-content"
           value={value}
-          send={data =>
+          send={(data) =>
             send({ type: "UPDATE_FIELD", data: { field, value: data } })
           }
         />
@@ -39,12 +39,12 @@ function renderOnFieldType({ type, value, send, field }) {
       return (
         <DayPickerInput
           value={formatDate(value)}
-          onDayChange={day =>
+          onDayChange={(day) =>
             send({ type: "UPDATE_FIELD", data: { field, value: day } })
           }
           formatDate={formatDate}
           dayPickerProps={{
-            selectedDays: new Date(value)
+            selectedDays: new Date(value),
           }}
         />
       );
@@ -81,14 +81,14 @@ function parseTemplate({ contents, template, send }) {
         </div>
       </div>
       <div className="card-body">
-        {Object.keys(fields).map(field => (
+        {Object.keys(fields).map((field) => (
           <div className="card-field" key={field}>
             {labelFields && <p>{field}: </p>}
             {renderOnFieldType({
               type: get(template, `fields.${field}.type`, "text"),
               value: get(contents, field),
               send,
-              field
+              field,
             })}
           </div>
         ))}

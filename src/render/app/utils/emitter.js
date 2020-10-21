@@ -11,7 +11,7 @@ export function emitter() {
     },
     emit(event, ...args) {
       if (listeners.has(event)) {
-        Array.from(listeners.get(event)).map(cb => {
+        Array.from(listeners.get(event)).map((cb) => {
           cb(...args);
         });
       }
@@ -25,7 +25,7 @@ export function emitter() {
       for (const key of listeners.keys()) {
         listeners.delete(key);
       }
-    }
+    },
   };
 }
 

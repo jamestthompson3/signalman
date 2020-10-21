@@ -14,7 +14,7 @@ const initialState = {
   name: `${USER}'s Switchyard`,
   cardList: ["settings"],
   theme: "default",
-  user: USER
+  user: USER,
 };
 
 const initialConfig = {
@@ -25,38 +25,38 @@ const initialConfig = {
   user: USER,
   modifier: "System",
   title: "settings",
-  viewTemplate: "configuration"
+  viewTemplate: "configuration",
 };
 const configurationTemplate = {
   name: "configuration",
   fields: {
     name: {
-      type: "text"
+      type: "text",
     },
     user: {
-      type: "text"
-    }
+      type: "text",
+    },
   },
-  labelFields: true
+  labelFields: true,
 };
 const viewTemplate = {
   name: "basic-view",
   fields: {
     text: {
-      type: "text"
+      type: "text",
     },
     timeAllotted: {
-      type: "text"
+      type: "text",
     },
     status: {
       type: "enum",
-      options: ["done", "not done"]
+      options: ["done", "not done"],
     },
     scheduled: {
-      type: "date"
-    }
+      type: "date",
+    },
   },
-  labelFields: true
+  labelFields: true,
 };
 
 export function bootstrap() {

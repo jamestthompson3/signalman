@@ -16,7 +16,7 @@ export function CardView({ contents }) {
     <div className="card-view-container">
       <h2>{today.toLocaleDateString()}</h2>
       <div className="card-container">
-        {cards.map(card => (
+        {cards.map((card) => (
           <ListItem
             contents={card}
             template={templates[card.viewTemplate] || templates["basic-view"]}

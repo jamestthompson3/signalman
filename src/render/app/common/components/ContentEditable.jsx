@@ -9,7 +9,7 @@ export class Editable extends React.Component {
     this.contentEditable = React.createRef();
   }
 
-  disableNewlines = e => {
+  disableNewlines = (e) => {
     const keyCode = e.keyCode || e.which;
 
     // if (keyCode === 13 && !e.ctrlKey) {
@@ -31,7 +31,7 @@ export class Editable extends React.Component {
     }, 0);
   };
 
-  handleCEUpdate = e => {
+  handleCEUpdate = (e) => {
     this.setState({ value: e.target.value }, () =>
       this.props.send(e.target.value)
     );

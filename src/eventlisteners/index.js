@@ -1,7 +1,9 @@
 import { ipcMain } from "electron";
 import { interpret } from "xstate";
+
 import { MESSAGES } from "../constants/bridge";
 import { eventHandlerMachine } from "./eventHandler.machine";
+import ipc from "../ipc";
 
 const {
   REQUEST_WORKSPACE,
@@ -55,4 +57,17 @@ export function registerHandlers() {
       data,
     });
   });
+
+  /* NODE IPC */
+  registerBackgroundState();
+}
+
+function registerBackgroundState() {
+  ipc.config.id = "background";
+  ipc.serve(() => {
+    ipc.server.on(BG_GLOBAL_UPDATE, (data, socket) => {
+      ipc.server.broadcast(BG_GLOBAL_UPDATE);
+    });
+  });
+  ipc.server.start();
 }

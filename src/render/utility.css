@@ -36,11 +36,9 @@
   border-top: 5px solid var(--dark0);
 }
 
-
 [data-time-allotted="medium"] {
   border-top: 5px solid hsl(154, 75%, 51%);
 }
-
 
 [data-time-allotted="long"] {
   border-top: 5px solid hsl(232, 45%, 64%);
@@ -73,7 +71,8 @@
   color: #000;
 }
 
-.field-content p:focus, .field-content p:active {
+.field-content p:focus,
+.field-content p:active {
   outline: var(--accent) auto 1px;
 }
 
@@ -182,9 +181,8 @@
   display: flex;
   flex-direction: column;
   background-size: 15px 30px;
-  background-image:
-  linear-gradient(to right, transparent 1px, transparent 1px),
-  linear-gradient(to bottom, var(--light1) 1px, transparent 1px);
+  background-image: linear-gradient(to right, transparent 1px, transparent 1px),
+    linear-gradient(to bottom, var(--light1) 1px, transparent 1px);
 }
 
 .card-container .list {

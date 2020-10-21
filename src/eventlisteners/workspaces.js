@@ -112,6 +112,7 @@ export function workspaceSearch(data, event) {
       "--block-buffered",
       "--no-column",
       "--no-line-number",
+      "--smart-case",
       "--color",
       "never",
       "-I",

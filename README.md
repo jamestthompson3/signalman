@@ -1,6 +1,7 @@
 ## Development Prerequisites
-* Node 12.18+
-* Yarn / NPM
+
+- Node 12.18+
+- Yarn / NPM
 
 ## Getting started
 

@@ -13,7 +13,7 @@ export function ListView({ contents }) {
   const { templates, cards } = contents;
   return (
     <div className="list-container">
-      {cards.map(card => (
+      {cards.map((card) => (
         <ListItem
           contents={card}
           template={templates[card.viewTemplate] || templates["basic-view"]}

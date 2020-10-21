@@ -1,4 +1,5 @@
 import { Machine, send } from "xstate";
+import ipc from "../ipc";
 
 import { MESSAGES, STATES } from "../constants/bridge";
 import {
@@ -39,6 +40,7 @@ export const eventHandlerMachine = Machine(
     initial: "LISTENING",
     states: {
       LISTENING: {
+        entry: "connectBgIPC",
         on: {
           [ADD_CARD]: ADDING_CARD,
           [BG_GLOBAL_UPDATE]: BG_STATE_UPDATING,
@@ -146,11 +148,22 @@ export const eventHandlerMachine = Machine(
         };
       },
       updateCard: (_, { data }) => updateCard(data),
-      updateGlobalState: (_, { data }) => updateGlobalState(data),
+      updateGlobalState: (_, { data }) => {
+        ipc.of.background.emit(BG_GLOBAL_UPDATE, {
+          id: ipc.config.id,
+        });
+        return updateGlobalState(data);
+      },
     },
     actions: {
       logError: (_, e) => {
         console.error(e);
+      },
+      connectBgIPC: () => {
+        ipc.config.id = "event-handler";
+        ipc.config.retry = 1500;
+
+        ipc.connectTo("background", () => {});
       },
       workspaceRemoveCard: send((_, { data, event }) => ({
         type: BG_GLOBAL_UPDATE,

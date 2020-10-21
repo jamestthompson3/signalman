@@ -8,7 +8,7 @@ import { workspaceDriver, deleteCardDriver } from "../../utils/eventMachines";
 import {
   parseTimeAllotted,
   parseHeight,
-  parseDayPosition
+  parseDayPosition,
 } from "../utils/parse";
 import { MESSAGES } from "global/constants/bridge";
 
@@ -29,7 +29,7 @@ export function ListItem({ contents, template, dayView }) {
         boxRef.current.scrollIntoView({
           behavior: "smooth",
           block: "start",
-          inline: "nearest"
+          inline: "nearest",
         });
       }
     }
@@ -63,8 +63,8 @@ export function ListItem({ contents, template, dayView }) {
               type: "UPDATE_FIELD",
               data: {
                 field: "status",
-                value: contents.status === "done" ? "inProgress" : "done"
-              }
+                value: contents.status === "done" ? "inProgress" : "done",
+              },
             })
           }
         >
@@ -85,7 +85,7 @@ export function ListItem({ contents, template, dayView }) {
           data-time-allotted={parseTimeAllotted(contents.timeAllotted)}
           style={
             dayView && {
-              height: parseHeight(contents.timeAllotted)
+              height: parseHeight(contents.timeAllotted),
             }
           }
         >
@@ -94,13 +94,13 @@ export function ListItem({ contents, template, dayView }) {
               <Editable
                 className="field-content"
                 value={contents.title || contents.text}
-                send={data =>
+                send={(data) =>
                   send({
                     type: "UPDATE_FIELD",
                     data: {
                       field: contents.title ? "title" : "text",
-                      value: data
-                    }
+                      value: data,
+                    },
                   })
                 }
               />
