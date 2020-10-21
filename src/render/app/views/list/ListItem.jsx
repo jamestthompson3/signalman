@@ -39,6 +39,7 @@ export function ListItem({ contents, template, dayView }) {
       className="list-box"
       data-status={contents.status}
       ref={dayView && boxRef}
+      id={contents.id}
       style={dayView && { top: parseDayPosition(contents.scheduled) }}
     >
       <div style={{ display: "flex" }}>

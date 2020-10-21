@@ -1,4 +1,5 @@
 import { MESSAGES } from "../constants/bridge";
+import ipc from "../ipc";
 
 function checkScheduled(webContents) {
   const { getDataDir, readFile } = require("../filesystem/utils/projectDir");
@@ -38,6 +39,13 @@ function startWatcher(webContents) {
       today = dayjs().dayOfYear();
     }
   }, 60000);
+  ipc.config.id = "day-watcher-service";
+  ipc.config.retry = 1500;
+  ipc.connectTo("background", () => {
+    ipc.of.background.on(MESSAGES.BG_GLOBAL_UPDATE, () => {
+      checkScheduled(webContents);
+    });
+  });
 }
 
 export function spawnDateWatcher(webContents) {
