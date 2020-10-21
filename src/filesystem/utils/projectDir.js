@@ -19,7 +19,7 @@ export function getDataDir() {
       dataDir = path.join(app.getPath("home"), ".local/share/signalman/");
       break;
     case "darwin":
-      dataDir = app.getPath("userData");
+      dataDir = path.join(app.getPath("userData"), "data/");
       break;
     case "win32":
       dataDir = path.join(app.getPath("userData"), "data\\");
@@ -29,7 +29,7 @@ export function getDataDir() {
       break;
   }
   if (process.env.NODE_ENV !== "production") {
-    dataDir = `${dataDir}dev${path.sep || "/"}`;
+    dataDir = `${dataDir}dev${path.sep}`;
   }
   // TODO, maybe a good usecase for different workspaces?
   return dataDir;
