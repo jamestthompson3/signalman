@@ -9,6 +9,7 @@ import {
   parseTimeAllotted,
   parseHeight,
   parseDayPosition,
+  BASE_TIME_TICK,
 } from "../utils/parse";
 import { MESSAGES } from "global/constants/bridge";
 
@@ -86,7 +87,7 @@ export function ListItem({ contents, template, dayView }) {
           data-time-allotted={parseTimeAllotted(contents.timeAllotted)}
           style={
             dayView && {
-              height: parseHeight(contents.timeAllotted),
+              height: parseHeight(contents.timeAllotted || BASE_TIME_TICK),
             }
           }
         >

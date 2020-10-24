@@ -101,7 +101,7 @@ function $patchUpdates(ctx, e) {
   return {
     ...ctx,
     today: updatedToday,
-    shown: { ...shown, card: updatedList },
+    shown: { ...shown, cards: updatedList },
   };
   function $updateIfEmitted(card) {
     return card.id === id ? e.data : card;

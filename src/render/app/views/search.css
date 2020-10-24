@@ -12,6 +12,7 @@
   width: var(--width);
   -webkit-appearance: none;
   font-size: 13px;
+  border: 1px solid var(--dark1);
 }
 
 .search-form
@@ -37,7 +38,7 @@
   width: var(--width);
   max-width: var(--width);
   text-overflow: ellipsis;
-  whitespace: nowrap;
+  white-space: nowrap;
   word-wrap: normal;
 }
 

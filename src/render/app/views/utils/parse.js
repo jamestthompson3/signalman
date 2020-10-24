@@ -11,7 +11,7 @@ export function parseTimeAllotted(time) {
   }
 }
 
-const BASE_TIME_TICK = 15;
+export const BASE_TIME_TICK = 15;
 const BASE_HEIGHT = 15;
 export function parseHeight(time) {
   return Math.round(time / BASE_TIME_TICK) * BASE_HEIGHT;

@@ -22,8 +22,8 @@ function checkScheduled(webContents) {
             scheduledToday.push(contents);
           }
         }
-        webContents.send(MESSAGES.SCHEDULED_TASKS, scheduledToday);
       }
+      webContents.send(MESSAGES.SCHEDULED_TASKS, scheduledToday);
     }
   });
 }
