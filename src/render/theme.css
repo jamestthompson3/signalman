@@ -8,7 +8,7 @@
   --light1: hsl(0, 0%, 76%);
   --dark1: hsl(0, 0%, 39%);
   --dark0: hsl(0, 0%, 0%);
-  --accent: #e59600;
+  --accent: #00adff;
   --bg-gradient: linear-gradient(hsl(0, 0%, 100%), hsl(0, 0%, 96%));
   --shadow: 0 5px 15px 0 hsla(0, 0%, 0%, 0.1);
 }

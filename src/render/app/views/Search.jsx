@@ -47,7 +47,29 @@ export function Search() {
         break;
     }
   };
-  console.log(result);
+
+  const renderTextMatches = (result) => {
+    const children = [];
+    const submatches = result.submatches;
+    const text = result.lines.text;
+    for (let i = 0; i < submatches.length; i++) {
+      const startString = text.slice(
+        i === 0 ? 0 : submatches[i - 1].end,
+        submatches[i].start
+      );
+      const submatchString = (
+        <mark className="exactMatch">
+          {text.slice(submatches[i].start, submatches[i].end)}
+        </mark>
+      );
+      const endString = text.slice(
+        submatches[i].end,
+        submatches[i + 1] ? submatches[i + 1].start : text.length
+      );
+      children.push(startString, submatchString, endString);
+    }
+    return children;
+  };
   return (
     <>
       <form
@@ -75,7 +97,7 @@ export function Search() {
           }}
         />
       </form>
-      {currentState.context.result.map((result, i) => (
+      {result.map((result, i) => (
         <p
           tabIndex="-1"
           className={focused === i ? "search-result focused" : "search-result"}
@@ -86,9 +108,9 @@ export function Search() {
             searchDriver.send(CLEAR_SEARCH);
           }}
         >
-          {getCardId(result.path.text)}
+          <span className="id-label">{getCardId(result.path.text)}</span>
           <br />
-          <span>{result.lines.text}</span>
+          {renderTextMatches(result)}
         </p>
       ))}
     </>

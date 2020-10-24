@@ -100,6 +100,11 @@
   font-size: 13px;
 }
 
+.searchbox:focus {
+  outline: var(--accent) auto 1px;
+  border-radius: 0px;
+}
+
 .search-result {
   background: white;
   cursor: pointer;
@@ -107,8 +112,17 @@
   position: relative;
 }
 
-.search-result.focused {
+.search-result > .exactMatch {
   background: var(--accent);
+}
+
+.search-result > .id-label {
+  font-weight: bold;
+}
+
+.search-result.focused {
+  background: var(--dark0);
+  color: var(--light0);
 }
 
 .action-button {
@@ -182,7 +196,7 @@
   flex-direction: column;
   background-size: 15px 30px;
   background-image: linear-gradient(to right, transparent 1px, transparent 1px),
-    linear-gradient(to bottom, var(--light1) 1px, transparent 1px);
+  linear-gradient(to bottom, var(--light1) 1px, transparent 1px);
 }
 
 .card-container .list {
