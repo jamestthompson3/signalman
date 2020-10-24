@@ -6,6 +6,7 @@ import { ListView } from "../list/index.jsx";
 import { Search } from "../Search.jsx";
 import { WorkspaceTitle } from "./WorkspaceTitle.jsx";
 import { workspaceDriver } from "../../utils/eventMachines";
+import "./workspace.css";
 
 const workspaceService = workspaceDriver.init();
 

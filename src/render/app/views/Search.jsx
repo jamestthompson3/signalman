@@ -2,10 +2,10 @@ import React from "react";
 import { useService } from "@xstate/react";
 import { MESSAGES } from "global/constants/bridge";
 import get from "lodash/get";
+import "./search.css";
+import { searchDriver, workspaceDriver } from "../utils/eventMachines";
 
 const { WORKSPACE_SEARCH, CLEAR_SEARCH, ADD_CARD } = MESSAGES;
-
-import { searchDriver, workspaceDriver } from "../utils/eventMachines";
 
 const searchService = searchDriver.init();
 const getCardId = (text) =>
@@ -43,6 +43,10 @@ export function Search() {
         searchDriver.send(CLEAR_SEARCH);
         break;
       }
+      case 27: {
+        searchDriver.send(CLEAR_SEARCH);
+        break;
+      }
       default:
         break;
     }
@@ -58,7 +62,7 @@ export function Search() {
         submatches[i].start
       );
       const submatchString = (
-        <mark className="exactMatch">
+        <mark className="exactMatch" key={submatches[i].start + startString}>
           {text.slice(submatches[i].start, submatches[i].end)}
         </mark>
       );
@@ -71,9 +75,8 @@ export function Search() {
     return children;
   };
   return (
-    <>
+    <div className="search-form">
       <form
-        className="search-form"
         ref={form}
         onSubmit={() => {
           workspaceDriver.send(ADD_CARD, get(result, `${focused}.id`));
@@ -97,22 +100,26 @@ export function Search() {
           }}
         />
       </form>
-      {result.map((result, i) => (
-        <p
-          tabIndex="-1"
-          className={focused === i ? "search-result focused" : "search-result"}
-          key={result.absolute_offset + i}
-          onClick={() => {
-            workspaceDriver.send(ADD_CARD, result.path.text);
-            form.current && form.current.reset();
-            searchDriver.send(CLEAR_SEARCH);
-          }}
-        >
-          <span className="id-label">{getCardId(result.path.text)}</span>
-          <br />
-          {renderTextMatches(result)}
-        </p>
-      ))}
-    </>
+      <div className="search-result-box -top">
+        {result.map((result, i) => (
+          <p
+            tabIndex="-1"
+            className={
+              focused === i ? "search-result focused" : "search-result"
+            }
+            key={Math.random() * result.absolute_offset + i}
+            onClick={() => {
+              workspaceDriver.send(ADD_CARD, result.path.text);
+              form.current && form.current.reset();
+              searchDriver.send(CLEAR_SEARCH);
+            }}
+          >
+            <span className="id-label">{getCardId(result.path.text)}</span>
+            <br />
+            {renderTextMatches(result)}
+          </p>
+        ))}
+      </div>
+    </div>
   );
 }

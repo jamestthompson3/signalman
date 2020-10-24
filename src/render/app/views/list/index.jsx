@@ -2,6 +2,7 @@ import React from "react";
 
 import { deleteCardDriver } from "../../utils/eventMachines";
 import { ListItem } from "./ListItem.jsx";
+import "./list.css";
 
 export function ListView({ contents }) {
   React.useEffect(() => {

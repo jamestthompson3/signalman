@@ -28,7 +28,6 @@ function renderOnFieldType({ type, value, send, field }) {
     case "text":
       return (
         <Editable
-          className="field-content"
           value={value}
           send={(data) =>
             send({ type: "UPDATE_FIELD", data: { field, value: data } })

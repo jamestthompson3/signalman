@@ -1,0 +1,86 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  will-change: transform;
+  transform: translate(0, 0);
+  margin: 0.25rem 0rem;
+  box-shadow: var(--shadow);
+}
+
+.card:first-child {
+  margin-top: 0rem;
+  margin-bottom: 0.25rem;
+}
+
+.card:last-child {
+  margin-bottom: 0rem;
+  margin-top: 0.25rem;
+}
+
+.card:only-child {
+  margin: 0rem;
+}
+
+.card-meta-container {
+  padding: 0.25rem;
+}
+
+.card-title {
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-meta {
+  color: var(--dark0);
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.card-body {
+  color: var(--dark1);
+}
+
+.card-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1.25rem;
+}
+
+.card-view-container .list-box {
+  position: relative;
+  background: white;
+}
+
+.card-view-container h2 {
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+
+
+.card-view-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  flex: 1 1 auto;
+  margin: 0rem 0.25rem;
+  height: 400px;
+  overflow: auto;
+}
+
+.card-container {
+  min-height: 1440px;
+  display: flex;
+  flex-direction: column;
+  background-size: 15px 30px;
+  background-image: linear-gradient(to right, transparent 1px, transparent 1px),
+  linear-gradient(to bottom, var(--light1) 1px, transparent 1px);
+}
+
+.card-container .list {
+  margin: 0;
+}
+

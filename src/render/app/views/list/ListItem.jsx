@@ -90,10 +90,9 @@ export function ListItem({ contents, template, dayView }) {
             }
           }
         >
-          <div className="list-content">
+          <div>
             {contents.id !== "settings" ? (
               <Editable
-                className="field-content"
                 value={contents.title || contents.text}
                 send={(data) =>
                   send({

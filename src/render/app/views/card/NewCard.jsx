@@ -20,7 +20,6 @@ export function NewCard({ close, open }) {
         <input
           type="text"
           ref={input}
-          className="field-content"
           onChange={(e) =>
             send({
               type: "UPDATE_FIELD",

@@ -2,6 +2,7 @@ import React from "react";
 
 import { deleteCardDriver } from "../../utils/eventMachines";
 import { ListItem } from "../list/ListItem.jsx";
+import "./card.css";
 
 export function CardView({ contents }) {
   React.useEffect(() => {

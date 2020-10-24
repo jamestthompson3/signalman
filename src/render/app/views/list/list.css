@@ -1,0 +1,28 @@
+.list-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  margin: 0rem 0.25rem;
+}
+
+.list {
+  background: white;
+  padding: 0.5rem;
+  margin: 0.25rem 0rem;
+  box-shadow: var(--shadow);
+}
+
+.list:first-child {
+  margin-top: 0rem;
+  margin-bottom: 0.25rem;
+}
+
+.list:last-child {
+  margin-bottom: 0rem;
+  margin-top: 0.25rem;
+}
+
+.list:only-child {
+  margin: 0rem;
+}
+

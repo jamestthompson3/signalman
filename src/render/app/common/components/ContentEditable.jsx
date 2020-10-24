@@ -2,21 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom";
 import ContentEditable from "react-contenteditable";
 
+import "./contenteditable.css";
+
 export class Editable extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: props.value };
     this.contentEditable = React.createRef();
   }
-
-  disableNewlines = (e) => {
-    const keyCode = e.keyCode || e.which;
-
-    // if (keyCode === 13 && !e.ctrlKey) {
-    //   e.returnValue = false;
-    //   if (e.preventDefault) e.preventDefault();
-    // }
-  };
 
   // pastePlainText = evt => {
   //       evt.preventDefault()
@@ -39,12 +32,12 @@ export class Editable extends React.Component {
 
   render() {
     // onPaste={this.pastePlainText}
+    // onKeyPress={this.disableNewlines}
+    // onFocus={this.highlightAll}
     return (
       <ContentEditable
         html={this.state.value}
         className="content-editable"
-        onKeyPress={this.disableNewlines}
-        onFocus={this.highlightAll}
         onChange={this.handleCEUpdate}
       />
     );
