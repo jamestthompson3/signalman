@@ -14,25 +14,29 @@ async function loadWorkspace() {
   const {
     readDataFile,
     readTemplateFiles,
+    readDataDir,
   } = require("../filesystem/utils/projectDir");
   const dayjs = require("dayjs");
   const { PROMISE_STATUS } = require("../constants");
+  const uniq = require("lodash/uniq");
 
   const state = await readDataFile("state");
   const { cardList } = state;
   const startupCards = cardList.map(readDataFile);
   const cardContents = await Promise.allSettled(startupCards);
-  const filteredCards = cardContents
+  const allCards = await readDataDir();
+  const filteredContents = cardContents
     .filter((card) => card.status !== PROMISE_STATUS.REJECTED)
-    .map((promise) => promise.value)
-    .filter((card) => {
-      if (!card.scheduled) {
-        return true;
-      }
-      // today's tasks will be displayed in the day view, so they can be removed from the list view
+    .map((promise) => promise.value);
+  const filteredCards = allCards
+    .filter((card) => card.status !== "done")
+    .filter((card) => card.id !== "state");
+  const workspaceCards = uniq(
+    filteredContents.concat(filteredCards).filter((card) => {
+      if (!card.scheduled) return true;
       return !dayjs().isSame(card.scheduled, "day");
-    });
-
+    })
+  );
   const templateContents = await readTemplateFiles();
   const filteredTemplates = keyBy(
     templateContents
@@ -42,7 +46,7 @@ async function loadWorkspace() {
   );
   return {
     state,
-    shown: { cards: filteredCards, templates: filteredTemplates },
+    shown: { cards: workspaceCards, templates: filteredTemplates },
   };
 }
 

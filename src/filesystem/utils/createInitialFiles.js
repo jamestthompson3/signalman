@@ -15,6 +15,7 @@ const initialState = {
   cardList: ["settings"],
   theme: "default",
   user: USER,
+  id: "state",
 };
 
 const initialConfig = {

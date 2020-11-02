@@ -8,7 +8,7 @@ export const deleteFile = util.promisify(fs.unlink);
 
 // Data dir is found in the following locations:
 // Linux:   /home/alice/.local/share/signalman
-// Windows: C:\Users\Alice\AppData\Roaming\emojipicker\data
+// Windows: C:\Users\Alice\AppData\Roaming\signalman\data
 // macOS:   /Users/Alice/Library/Application Support/signalman
 export function getDataDir() {
   const path = require("path");
@@ -79,4 +79,21 @@ export function deleteDataFile(name) {
   const dataDir = getDataDir();
   const filePath = `${dataDir}${name}.json`;
   return deleteFile(filePath);
+}
+
+/*
+ * Used for recursing through the data directory
+ * @returns: Promise<JSONObject[]>
+ */
+export async function readDataDir() {
+  const dataDir = getDataDir();
+  const dataDirEntries = await readDir(dataDir, { withFileTypes: true });
+  let parsedFiles = [];
+  for (const entry of dataDirEntries) {
+    if (entry.isFile()) {
+      const file = await readFile(`${dataDir}${entry.name.toString()}`);
+      parsedFiles.push(JSON.parse(file.toString()));
+    }
+  }
+  return parsedFiles;
 }
