@@ -3,7 +3,7 @@ import { useService } from "@xstate/react";
 import { CardView } from "../card/index.jsx";
 import { NewCard } from "../card/NewCard.jsx";
 import { ListView } from "../list/index.jsx";
-import { Search } from "../Search.jsx";
+import { Search } from "../search/index.jsx";
 import { WorkspaceTitle } from "./WorkspaceTitle.jsx";
 import { workspaceDriver } from "../../utils/eventMachines";
 import "./workspace.css";

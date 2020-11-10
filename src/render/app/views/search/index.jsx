@@ -4,6 +4,7 @@ import { MESSAGES } from "global/constants/bridge";
 import get from "lodash/get";
 import "./search.css";
 import { searchDriver, workspaceDriver } from "../utils/eventMachines";
+import { Matches } from "./Matches.jsx";
 
 const { WORKSPACE_SEARCH, CLEAR_SEARCH, ADD_CARD } = MESSAGES;
 
@@ -52,28 +53,6 @@ export function Search() {
     }
   };
 
-  const renderTextMatches = (result) => {
-    const children = [];
-    const submatches = result.submatches;
-    const text = result.lines.text;
-    for (let i = 0; i < submatches.length; i++) {
-      const startString = text.slice(
-        i === 0 ? 0 : submatches[i - 1].end,
-        submatches[i].start
-      );
-      const submatchString = (
-        <mark className="exactMatch" key={submatches[i].start + startString}>
-          {text.slice(submatches[i].start, submatches[i].end)}
-        </mark>
-      );
-      const endString = text.slice(
-        submatches[i].end,
-        submatches[i + 1] ? submatches[i + 1].start : text.length
-      );
-      children.push(startString, submatchString, endString);
-    }
-    return children;
-  };
   return (
     <div className="search-form">
       <form
@@ -116,7 +95,7 @@ export function Search() {
           >
             <span className="id-label">{getCardId(result.path.text)}</span>
             <br />
-            {renderTextMatches(result)}
+            <Matches result={result} />
           </p>
         ))}
       </div>
