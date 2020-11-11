@@ -51,6 +51,9 @@ export const eventHandlerMachine = Machine(
           [WORKSPACE_REMOVE_CARD]: REMOVING_CARD,
           [WORKSPACE_SEARCH]: SEARCHING,
         },
+        meta: {
+          test: (ctx) => expect(ctx).toBe(3),
+        },
       },
       [INITIALIZING_WORKSPACE]: {
         invoke: {
@@ -98,6 +101,9 @@ export const eventHandlerMachine = Machine(
           src: "updateGlobalState",
           onDone: "LISTENING",
           onError: "ERROR",
+        },
+        meta: {
+          test: (ctx) => expect(ctx).toBe(3),
         },
       },
       [SEARCHING]: {
