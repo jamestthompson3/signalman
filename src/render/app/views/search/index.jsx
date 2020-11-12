@@ -2,8 +2,8 @@ import React from "react";
 import { useService } from "@xstate/react";
 import { MESSAGES } from "global/constants/bridge";
 import get from "lodash/get";
-import "./search.css";
-import { searchDriver, workspaceDriver } from "../utils/eventMachines";
+import "../search.css";
+import { searchDriver, workspaceDriver } from "../../utils/eventMachines";
 import { Matches } from "./Matches.jsx";
 
 const { WORKSPACE_SEARCH, CLEAR_SEARCH, ADD_CARD } = MESSAGES;
