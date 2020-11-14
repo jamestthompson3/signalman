@@ -51,9 +51,6 @@ export const eventHandlerMachine = Machine(
           [WORKSPACE_REMOVE_CARD]: REMOVING_CARD,
           [WORKSPACE_SEARCH]: SEARCHING,
         },
-        meta: {
-          test: (ctx) => expect(ctx).toBe(3),
-        },
       },
       [INITIALIZING_WORKSPACE]: {
         invoke: {
@@ -101,9 +98,6 @@ export const eventHandlerMachine = Machine(
           src: "updateGlobalState",
           onDone: "LISTENING",
           onError: "ERROR",
-        },
-        meta: {
-          test: (ctx) => expect(ctx).toBe(3),
         },
       },
       [SEARCHING]: {
@@ -153,12 +147,14 @@ export const eventHandlerMachine = Machine(
           data,
         };
       },
-      updateCard: (_, { data }) => updateCard(data),
-      // TODO this fires too often when doing things like removing a card from the view
-      updateGlobalState: (_, { data }) => {
-        ipc.of.background.emit(BG_GLOBAL_UPDATE, {
+      updateCard: (_, { data }) => {
+        // TODO this fires too often when doing things like removing a card from the view
+        ipc.of.background.emit(UPDATE_CARD, {
           id: ipc.config.id,
         });
+        updateCard(data);
+      },
+      updateGlobalState: (_, { data }) => {
         return updateGlobalState(data);
       },
     },

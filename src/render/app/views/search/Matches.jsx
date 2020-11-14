@@ -1,5 +1,9 @@
 import React from "react";
 
+function getStartStringBeginning(i, submatches) {
+  return i === 0 ? 0 : submatches[i - 1].end;
+}
+
 export function Matches({ result }) {
   const submatches = result.submatches;
   const text = result.lines.text;

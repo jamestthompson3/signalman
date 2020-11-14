@@ -50,7 +50,7 @@ export function ListItem({ contents, template, dayView }) {
             workspaceDriver.send(WORKSPACE_REMOVE_CARD, contents.id);
           }}
         >
-          close
+          hide
         </button>
         <button
           className="action-button"
@@ -58,26 +58,32 @@ export function ListItem({ contents, template, dayView }) {
         >
           {view === "card" ? "view" : "edit"}
         </button>
-        <button
-          className="action-button"
-          onClick={() =>
-            send({
-              type: "UPDATE_FIELD",
-              data: {
-                field: "status",
-                value: contents.status === "done" ? "inProgress" : "done",
-              },
-            })
-          }
-        >
-          {contents.status === "done" ? "mark as not done" : " mark as done"}
-        </button>
-        <button
-          className="action-button danger"
-          onClick={() => deleteCardDriver.send(DELETE_CARD, contents.id)}
-        >
-          delete
-        </button>
+        {contents.id !== "settings" && (
+          <>
+            <button
+              className="action-button"
+              onClick={() =>
+                send({
+                  type: "UPDATE_FIELD",
+                  data: {
+                    field: "status",
+                    value: contents.status === "done" ? "inProgress" : "done",
+                  },
+                })
+              }
+            >
+              {contents.status === "done"
+                ? "mark as not done"
+                : " mark as done"}
+            </button>
+            <button
+              className="action-button danger"
+              onClick={() => deleteCardDriver.send(DELETE_CARD, contents.id)}
+            >
+              delete
+            </button>
+          </>
+        )}
       </div>
       {view === "card" ? (
         <Card contents={contents} template={template} />

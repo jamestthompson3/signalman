@@ -6,16 +6,7 @@ import "react-day-picker/lib/style.css";
 
 import { Editable } from "common/components/ContentEditable.jsx";
 import { cardUpdateMachine } from "machines/card-update.machine";
-import { STATIC_FIELDS } from "../constants";
-import {
-  workspaceDriver,
-  deleteCardDriver,
-  cardStatusDriver,
-} from "../../utils/eventMachines";
-import { parseTimeAllotted, parseHeight } from "../utils/parse";
-import { MESSAGES } from "global/constants/bridge";
-
-const { WORKSPACE_REMOVE_CARD, DELETE_CARD } = MESSAGES;
+import { parseTimeAllotted } from "../utils/parse";
 
 // TODO:
 // expose templatting to parent component so I can execute logic on the fields

@@ -42,7 +42,8 @@ function startWatcher(webContents) {
   ipc.config.id = "day-watcher-service";
   ipc.config.retry = 1500;
   ipc.connectTo("background", () => {
-    ipc.of.background.on(MESSAGES.BG_GLOBAL_UPDATE, () => {
+    ipc.of.background.on(MESSAGES.UPDATE_CARD, () => {
+      ipc.log("GOT IPC MESSAGE");
       checkScheduled(webContents);
     });
   });

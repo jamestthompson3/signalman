@@ -1,8 +1,6 @@
 import fs from "fs";
 import { getDataDir } from "./projectDir";
-
-export const USER =
-  process.env.NAME || process.env.USER || process.env.USERNAME;
+import { USER } from "../../constants";
 
 // TODO rethink how cards are loaded up
 // Preserve the whole state instead of just having cards at startup?

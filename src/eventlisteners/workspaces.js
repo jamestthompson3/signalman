@@ -14,16 +14,42 @@ async function loadWorkspace() {
   const {
     readDataFile,
     readTemplateFiles,
-    readDataDir,
   } = require("../filesystem/utils/projectDir");
-  const dayjs = require("dayjs");
   const { PROMISE_STATUS } = require("../constants");
-  const uniq = require("lodash/uniq");
+  const dayjs = require("dayjs");
 
   const state = await readDataFile("state");
   const { cardList } = state;
   const startupCards = cardList.map(readDataFile);
   const cardContents = await Promise.allSettled(startupCards);
+  const cards = cardContents
+    .filter((card) => card.status !== PROMISE_STATUS.REJECTED)
+    .map((promise) => promise.value)
+    .filter((card) =>
+      !card.scheduled ? true : !dayjs().isSame(card.scheduled, "day")
+    );
+  const templateContents = await readTemplateFiles();
+  const filteredTemplates = keyBy(
+    templateContents
+      .filter((template) => template.status !== PROMISE_STATUS.REJECTED)
+      .map((promise) => promise.value),
+    "name"
+  );
+  return {
+    state,
+    shown: { cards, templates: filteredTemplates },
+  };
+}
+
+// TODO figure this mess out
+async function loadAllCardsInWorkspace(event) {
+  const {
+    readDataFile,
+    readTemplateFiles,
+    readDataDir,
+  } = require("../filesystem/utils/projectDir");
+  const dayjs = require("dayjs");
+  const uniq = require("lodash/uniq");
   const allCards = await readDataDir();
   const filteredContents = cardContents
     .filter((card) => card.status !== PROMISE_STATUS.REJECTED)
@@ -37,17 +63,6 @@ async function loadWorkspace() {
       return !dayjs().isSame(card.scheduled, "day");
     })
   );
-  const templateContents = await readTemplateFiles();
-  const filteredTemplates = keyBy(
-    templateContents
-      .filter((template) => template.status !== PROMISE_STATUS.REJECTED)
-      .map((promise) => promise.value),
-    "name"
-  );
-  return {
-    state,
-    shown: { cards: workspaceCards, templates: filteredTemplates },
-  };
 }
 
 export async function workspaceRequest(event) {

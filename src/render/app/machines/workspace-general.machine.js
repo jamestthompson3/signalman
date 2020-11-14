@@ -3,6 +3,7 @@ import { Machine, assign } from "xstate";
 import { send, on } from "../utils/messagePassing.js";
 import { MESSAGES, STATES } from "global/constants/bridge";
 import { workspaceDriver } from "../utils/eventMachines";
+import { deepDiff } from "../utils/diff";
 
 const {
   WORKSPACE_LOADED,
@@ -38,6 +39,7 @@ export const workspaceMachine = Machine(
           [ADD_CARD]: ADDING_CARD,
           [SCHEDULED_TASKS]: {
             actions: "saveTodaysTasks",
+            cond: { type: "tasksAreDifferent" },
           },
           [WORKSPACE_PATCH_UPDATE]: {
             actions: "patchUpdates",
@@ -69,9 +71,9 @@ export const workspaceMachine = Machine(
         on(WORKSPACE_LOADED, (_, data) => {
           workspaceDriver.send(WORKSPACE_LOADED, data);
         });
-        on(SCHEDULED_TASKS, (_, data) =>
-          workspaceDriver.send(SCHEDULED_TASKS, data)
-        );
+        on(SCHEDULED_TASKS, (_, data) => {
+          workspaceDriver.send(SCHEDULED_TASKS, data);
+        });
         on(RELOAD_STATE, (_, data) => {
           workspaceDriver.send(RELOAD_STATE, data);
         });
@@ -86,6 +88,9 @@ export const workspaceMachine = Machine(
         }
       },
       patchUpdates: assign($patchUpdates),
+    },
+    guards: {
+      tasksAreDifferent: $diffTasks,
     },
   }
 );
@@ -106,4 +111,9 @@ function $patchUpdates(ctx, e) {
   function $updateIfEmitted(card) {
     return card.id === id ? e.data : card;
   }
+}
+
+function $diffTasks(ctx, e) {
+  const diff = deepDiff(ctx.today, e.data);
+  return diff;
 }

@@ -65,8 +65,8 @@ export function registerHandlers() {
 function registerBackgroundState() {
   ipc.config.id = "background";
   ipc.serve(() => {
-    ipc.server.on(BG_GLOBAL_UPDATE, (data, socket) => {
-      ipc.server.broadcast(BG_GLOBAL_UPDATE);
+    ipc.server.on(UPDATE_CARD, () => {
+      ipc.server.broadcast(UPDATE_CARD);
     });
   });
   ipc.server.start();
