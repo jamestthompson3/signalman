@@ -16,7 +16,7 @@ export function Workspace() {
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
   const { context } = currentState;
-  console.log({ context });
+  // console.log({ context });
   React.useEffect(() => {
     return () => workspaceDriver.stop();
   }, []);

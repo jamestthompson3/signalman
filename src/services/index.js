@@ -43,7 +43,6 @@ function startWatcher(webContents) {
   ipc.config.retry = 1500;
   ipc.connectTo("background", () => {
     ipc.of.background.on(MESSAGES.UPDATE_CARD, () => {
-      ipc.log("GOT IPC MESSAGE");
       checkScheduled(webContents);
     });
   });

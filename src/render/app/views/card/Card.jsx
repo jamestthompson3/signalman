@@ -1,20 +1,15 @@
 import React from "react";
 import { useMachine } from "@xstate/react";
-import DayPickerInput from "react-day-picker/DayPickerInput";
 import get from "lodash/get";
-import "react-day-picker/lib/style.css";
 
 import { Editable } from "common/components/ContentEditable.jsx";
+import { DayPicker } from "common/components/DayPicker.jsx";
 import { cardUpdateMachine } from "machines/card-update.machine";
 import { parseTimeAllotted } from "../utils/parse";
 
 // TODO:
 // expose templatting to parent component so I can execute logic on the fields
 function renderOnFieldType({ type, value, send, field }) {
-  const formatDate = (date) => {
-    const dateObj = new Date(date);
-    return dateObj.toLocaleDateString();
-  };
   switch (type) {
     case "text":
       return (
@@ -26,18 +21,7 @@ function renderOnFieldType({ type, value, send, field }) {
         />
       );
     case "date":
-      return (
-        <DayPickerInput
-          value={formatDate(value)}
-          onDayChange={(day) =>
-            send({ type: "UPDATE_FIELD", data: { field, value: day } })
-          }
-          formatDate={formatDate}
-          dayPickerProps={{
-            selectedDays: new Date(value),
-          }}
-        />
-      );
+      return <DayPicker day={new Date(value)} send={send} field={field} />;
     default:
       return null;
   }

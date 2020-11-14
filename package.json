@@ -86,7 +86,6 @@
     "jest": "^26.4.2",
     "node-loader": "^1.0.1",
     "prettier": "^2.1.2",
-    "react-day-picker": "^7.4.8",
     "react-refresh": "^0.8.3",
     "style-loader": "^1.2.1",
     "thread-loader": "^3.0.0"
