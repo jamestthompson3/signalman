@@ -3,7 +3,7 @@ import { Machine, assign } from "xstate";
 import { send, on } from "../utils/messagePassing.js";
 import { MESSAGES, STATES } from "global/constants/bridge";
 import { workspaceDriver } from "../utils/eventMachines";
-import { deepDiff } from "../utils/diff";
+import { areDifferent } from "../utils/diff";
 
 const {
   WORKSPACE_LOADED,
@@ -36,7 +36,10 @@ export const workspaceMachine = Machine(
             actions: "saveWorkspace",
           },
           [WORKSPACE_REMOVE_CARD]: REMOVING_CARD,
-          [ADD_CARD]: ADDING_CARD,
+          [ADD_CARD]: {
+            target: ADDING_CARD,
+            cond: { type: "cardIsNotInList" },
+          },
           [SCHEDULED_TASKS]: {
             actions: "saveTodaysTasks",
             cond: { type: "tasksAreDifferent" },
@@ -82,15 +85,14 @@ export const workspaceMachine = Machine(
       removeCard: (_, e) => {
         send(WORKSPACE_REMOVE_CARD, e.data);
       },
-      addCard: (ctx, e) => {
-        if (e.data && !ctx.shown.cards.find((card) => card.id === e.data)) {
-          send(ADD_CARD, e.data);
-        }
+      addCard: (_, e) => {
+        send(ADD_CARD, e.data);
       },
       patchUpdates: assign($patchUpdates),
     },
     guards: {
-      tasksAreDifferent: $diffTasks,
+      tasksAreDifferent: diffTasks,
+      cardIsNotInList: cardIsNotInList,
     },
   }
 );
@@ -113,7 +115,18 @@ function $patchUpdates(ctx, e) {
   }
 }
 
-function $diffTasks(ctx, e) {
-  const diff = deepDiff(ctx.today, e.data);
-  return diff;
+// Guards
+function diffTasks(ctx, e) {
+  return areDifferent(ctx.today, e.data);
+}
+
+function cardIsNotInList(ctx, e) {
+  if (!e.data) return false;
+  else {
+    const id = e.data.split("\\").pop().split(".json").shift();
+    return !Boolean(
+      ctx.shown.cards.find((card) => card.id === id) ||
+        ctx.today.find((card) => card.id === id)
+    );
+  }
 }

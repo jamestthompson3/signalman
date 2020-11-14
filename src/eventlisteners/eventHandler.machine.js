@@ -148,11 +148,10 @@ export const eventHandlerMachine = Machine(
         };
       },
       updateCard: (_, { data }) => {
-        // TODO this fires too often when doing things like removing a card from the view
         ipc.of.background.emit(UPDATE_CARD, {
           id: ipc.config.id,
         });
-        updateCard(data);
+        return updateCard(data);
       },
       updateGlobalState: (_, { data }) => {
         return updateGlobalState(data);

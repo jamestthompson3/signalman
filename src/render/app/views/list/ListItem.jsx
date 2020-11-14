@@ -45,6 +45,7 @@ export function ListItem({ contents, template, dayView }) {
     >
       <div style={{ display: "flex" }}>
         <button
+          data-buttonaction={dayView && "hide"}
           className="action-button"
           onClick={() => {
             workspaceDriver.send(WORKSPACE_REMOVE_CARD, contents.id);

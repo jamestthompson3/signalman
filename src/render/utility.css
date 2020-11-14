@@ -31,6 +31,9 @@
   background: red;
 }
 
+[data-buttonaction="hide"].action-button {
+  display: none;
+}
 
 .hotkey-container {
   display: flex;

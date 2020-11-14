@@ -94,10 +94,12 @@ export async function updateGlobalState({ type, data, event }) {
       break;
     }
     case WORKSPACE_REMOVE_CARD: {
+      console.log("REMOVING");
       const updatedState = {
         ...state,
         cardList: state.cardList.filter((card) => card !== data),
       };
+      console.log({ old: state.cardList, new: updatedState.cardList });
       await writeDataFile("state", updatedState);
       const newWorkspace = await loadWorkspace();
       event.reply(RELOAD_STATE, newWorkspace);

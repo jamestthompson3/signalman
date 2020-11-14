@@ -19,7 +19,7 @@ const {
 const eventService = interpret(eventHandlerMachine);
 
 eventService.onEvent((e) => console.log({ type: e.type, data: e.data }));
-// eventService.onTransition((e) => console.log({ history: e.historyValue }));
+eventService.onTransition((s) => console.log(s.value));
 eventService.start();
 
 export function registerHandlers() {

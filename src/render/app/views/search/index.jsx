@@ -57,8 +57,11 @@ export function Search() {
     <div className="search-form">
       <form
         ref={form}
-        onSubmit={() => {
+        onSubmit={(e) => {
+          e.preventDefault();
           workspaceDriver.send(ADD_CARD, get(result, `${focused}.id`));
+          form.current && form.current.reset();
+          searchDriver.send(CLEAR_SEARCH);
         }}
       >
         <label style={{ display: "none" }} htmlFor="search" aria-hidden="true">

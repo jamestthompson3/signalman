@@ -5,13 +5,16 @@ function getStartStringBeginning(i, submatches) {
 }
 
 export function Matches({ result }) {
+  // console.log({ result });
   const submatches = result.submatches;
   const text = result.lines.text;
-  return submatches.map((match, i) => {
-    const startString = text.slice(
-      getStartStringBeginning(i, submatches),
-      submatches[i].start
-    );
+  return submatches.map((_, i) => {
+    // get the preceeding text to the chars that match
+    // add spacer text '...' in front of match
+    const startString = text
+      .slice(getStartStringBeginning(i, submatches), submatches[i].start)
+      .slice(10, 30)
+      .concat("... ");
     const submatchString = (
       <mark className="exactMatch" key={submatches[i].start + startString}>
         {text.slice(submatches[i].start, submatches[i].end)}
