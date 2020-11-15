@@ -21,17 +21,3 @@
 }
 
 
-.action-button {
-  background: transparent;
-  border: 1px solid var(--dark1);
-  cursor: pointer;
-}
-
-.action-button.danger {
-  background: red;
-}
-
-[data-buttonaction="hide"].action-button {
-  display: none;
-}
-

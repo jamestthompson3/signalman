@@ -50,7 +50,7 @@
   padding: 0.5rem 1.25rem;
 }
 
-.card-view-container .list-box {
+.card-view-container {
   position: relative;
   background: white;
 }

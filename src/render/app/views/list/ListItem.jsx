@@ -42,7 +42,7 @@ export function ListItem({ contents, template, dayView }) {
       id={contents.id}
       style={dayView && { top: parseDayPosition(contents.scheduled) }}
     >
-      <div style={{ display: "flex" }}>
+      <div className="action-button-container">
         <button
           data-buttonaction={dayView && "hide"}
           className="action-button"
@@ -50,13 +50,13 @@ export function ListItem({ contents, template, dayView }) {
             workspaceDriver.send(WORKSPACE_REMOVE_CARD, contents.id);
           }}
         >
-          hide
+          🙈
         </button>
         <button
           className="action-button"
           onClick={() => setView(view === "card" ? "list" : "card")}
         >
-          {view === "card" ? "view" : "edit"}
+          {view === "card" ? "👓" : "📝"}
         </button>
         {contents.id !== "settings" && (
           <>
@@ -72,15 +72,13 @@ export function ListItem({ contents, template, dayView }) {
                 })
               }
             >
-              {contents.status === "done"
-                ? "mark as not done"
-                : " mark as done"}
+              {contents.status === "done" ? "⭕" : "✔️"}
             </button>
             <button
               className="action-button danger"
               onClick={() => deleteCardDriver.send(DELETE_CARD, contents.id)}
             >
-              delete
+              🗑️
             </button>
           </>
         )}
@@ -98,24 +96,37 @@ export function ListItem({ contents, template, dayView }) {
           }
         >
           <div>
-            {contents.id !== "settings" ? (
-              <input
-                type="text"
-                className="as-title"
-                value={contents.title || contents.id}
-                onChange={(e) => {
-                  send({
-                    type: "UPDATE_FIELD",
-                    data: {
-                      field: "title",
-                      value: e.target.value,
-                    },
-                  });
-                }}
-              />
-            ) : (
-              <h3>{contents.title}</h3>
-            )}
+            <div className="title-container">
+              {contents.id !== "settings" ? (
+                <input
+                  type="text"
+                  className="as-title"
+                  value={contents.title || contents.id}
+                  onChange={(e) => {
+                    send({
+                      type: "UPDATE_FIELD",
+                      data: {
+                        field: "title",
+                        value: e.target.value,
+                      },
+                    });
+                  }}
+                />
+              ) : (
+                <h3>{contents.title}</h3>
+              )}
+              {contents.scheduled && (
+                <div className="time-label">
+                  <p>⏰</p>
+                  <time
+                    className="date-scheduled"
+                    datetime={contents.scheduled}
+                  >
+                    {new Date(contents.scheduled).toLocaleDateString()}
+                  </time>
+                </div>
+              )}
+            </div>
             {Boolean(contents.text) && (
               <textarea
                 className="as-text"
