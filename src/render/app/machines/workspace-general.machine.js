@@ -13,6 +13,7 @@ const {
   WORKSPACE_REMOVE_CARD,
   SCHEDULED_TASKS,
   WORKSPACE_PATCH_UPDATE,
+  WORKSPACE_LOAD_ALL,
 } = MESSAGES;
 const { REMOVING_CARD, ADDING_CARD } = STATES;
 
@@ -46,6 +47,9 @@ export const workspaceMachine = Machine(
           },
           [WORKSPACE_PATCH_UPDATE]: {
             actions: "patchUpdates",
+          },
+          [WORKSPACE_LOAD_ALL]: {
+            actions: "loadAllCardsInWorkspace",
           },
         },
       },
@@ -87,6 +91,9 @@ export const workspaceMachine = Machine(
       },
       addCard: (_, e) => {
         send(ADD_CARD, e.data);
+      },
+      loadAllCardsInWorkspace: (_, e) => {
+        send(WORKSPACE_LOAD_ALL, e.data);
       },
       patchUpdates: assign($patchUpdates),
     },

@@ -11,6 +11,7 @@
   --accent: #00adff;
   --bg-gradient: linear-gradient(hsl(0, 0%, 100%), hsl(0, 0%, 96%));
   --shadow: 0 5px 15px 0 hsla(0, 0%, 0%, 0.1);
+  --shadow-button: 0px -1px 20px 0px hsla(0, 0%, 0%, 0.18);
 }
 
 body {

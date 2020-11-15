@@ -6,6 +6,7 @@ import {
   workspaceRequest,
   updateGlobalState,
   workspaceSearch,
+  loadAllCardsInWorkspace,
 } from "./workspaces";
 // TODO, maybe JIT import these??
 import { saveCard, updateCard, addCard, deleteCard } from "./cards";
@@ -20,6 +21,7 @@ const {
   UPDATE_CARD,
   WORKSPACE_REMOVE_CARD,
   WORKSPACE_SEARCH,
+  WORKSPACE_LOAD_ALL,
 } = MESSAGES;
 
 const {
@@ -31,6 +33,7 @@ const {
   SAVING_CARD,
   SEARCHING,
   UPDATING_CARD,
+  LOADING_ALL_CARDS,
 } = STATES;
 
 export const eventHandlerMachine = Machine(
@@ -50,6 +53,7 @@ export const eventHandlerMachine = Machine(
           [UPDATE_CARD]: UPDATING_CARD,
           [WORKSPACE_REMOVE_CARD]: REMOVING_CARD,
           [WORKSPACE_SEARCH]: SEARCHING,
+          [WORKSPACE_LOAD_ALL]: LOADING_ALL_CARDS,
         },
       },
       [INITIALIZING_WORKSPACE]: {
@@ -107,6 +111,13 @@ export const eventHandlerMachine = Machine(
           onError: "ERROR",
         },
       },
+      [LOADING_ALL_CARDS]: {
+        invoke: {
+          src: "loadAllCardsInWorkspace",
+          onDone: "LISTENING",
+          onError: "ERROR",
+        },
+      },
       ERROR: {
         actions: "logError",
       },
@@ -115,6 +126,8 @@ export const eventHandlerMachine = Machine(
   {
     services: {
       requestWorkspace: (_, e) => workspaceRequest(e.event),
+      loadAllCardsInWorkspace: (_, { data, event }) =>
+        loadAllCardsInWorkspace({ data, event }),
       saveCard: async (_, { data, event }) => {
         const card = await saveCard(data);
         return {

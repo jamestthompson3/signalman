@@ -14,6 +14,7 @@ const {
   UPDATE_CARD,
   BG_GLOBAL_UPDATE,
   WORKSPACE_SEARCH,
+  WORKSPACE_LOAD_ALL,
 } = MESSAGES;
 
 const eventService = interpret(eventHandlerMachine);
@@ -45,6 +46,9 @@ export function registerHandlers() {
   });
   ipcMain.on(DELETE_CARD, (event, data) => {
     eventService.send({ type: DELETE_CARD, data, event });
+  });
+  ipcMain.on(WORKSPACE_LOAD_ALL, (event, data) => {
+    eventService.send({ type: WORKSPACE_LOAD_ALL, data, event });
   });
   ipcMain.on(UPDATE_CARD, async (event, data) => {
     eventService.send({

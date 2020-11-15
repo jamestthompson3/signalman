@@ -69,8 +69,9 @@
   border: none;
   border-radius: 2px;
   cursor: pointer;
-  background: var(--light1);
+  background: white;
   padding: 4px;
+  box-shadow: var(--shadow-button);
 }
 
 .action-button-container > .action-button.danger {

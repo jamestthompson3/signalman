@@ -15,6 +15,7 @@ export const MESSAGES = {
   WORKSPACE_REMOVE_CARD: "workspace:removeCard",
   WORKSPACE_SEARCH: "workspace:search",
   WORKSPACE_PATCH_UPDATE: "workspace:cardPatch",
+  WORKSPACE_LOAD_ALL: "workspace:addAllCards",
 };
 
 export const STATES = {
@@ -26,4 +27,5 @@ export const STATES = {
   SAVING_CARD: "card:saving",
   SEARCHING: "workspace:searching",
   UPDATING_CARD: "card:updating",
+  LOADING_ALL_CARDS: "workspace:allCardsLoading",
 };

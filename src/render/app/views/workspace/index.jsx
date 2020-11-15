@@ -8,7 +8,7 @@ import { WorkspaceTitle } from "./WorkspaceTitle.jsx";
 import { workspaceDriver } from "../../utils/eventMachines";
 import "./workspace.css";
 
-const workspaceService = workspaceDriver.init();
+const workspaceService = workspaceDriver.init(true);
 
 export function Workspace() {
   const [showDialog, setShowDialog] = React.useState(false);

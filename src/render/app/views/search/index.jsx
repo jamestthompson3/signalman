@@ -6,7 +6,12 @@ import "../search.css";
 import { searchDriver, workspaceDriver } from "../../utils/eventMachines";
 import { Matches } from "./Matches.jsx";
 
-const { WORKSPACE_SEARCH, CLEAR_SEARCH, ADD_CARD } = MESSAGES;
+const {
+  WORKSPACE_SEARCH,
+  CLEAR_SEARCH,
+  ADD_CARD,
+  WORKSPACE_LOAD_ALL,
+} = MESSAGES;
 
 const searchService = searchDriver.init();
 const getCardId = (text) =>
@@ -82,6 +87,26 @@ export function Search() {
           }}
         />
       </form>
+      <div className="workspace-action-container">
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            workspaceDriver.send(WORKSPACE_LOAD_ALL);
+          }}
+        >
+          Display all
+        </button>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            workspaceDriver.send(WORKSPACE_LOAD_ALL, true);
+          }}
+        >
+          Display unfinished
+        </button>
+      </div>
       <div className="search-result-box -top">
         {result.map((result, i) => (
           <p

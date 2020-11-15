@@ -5,6 +5,7 @@ const {
   SAVE_CARD,
   RELOAD_STATE,
   WORKSPACE_REMOVE_CARD,
+  WORKSPACE_LOAD_ALL,
   SEARCH_RESULT,
 } = MESSAGES;
 
@@ -42,27 +43,47 @@ async function loadWorkspace() {
 }
 
 // TODO figure this mess out
-async function loadAllCardsInWorkspace(event) {
+export async function loadAllCardsInWorkspace({ data: onlyUnFinished, event }) {
   const {
-    readDataFile,
     readTemplateFiles,
     readDataDir,
+    readDataFile,
+    writeDataFile,
   } = require("../filesystem/utils/projectDir");
   const dayjs = require("dayjs");
-  const uniq = require("lodash/uniq");
+  const keyBy = require("lodash/keyBy");
+  const { PROMISE_STATUS } = require("../constants");
   const allCards = await readDataDir();
-  const filteredContents = cardContents
-    .filter((card) => card.status !== PROMISE_STATUS.REJECTED)
-    .map((promise) => promise.value);
-  const filteredCards = allCards
-    .filter((card) => card.status !== "done")
-    .filter((card) => card.id !== "state");
-  const workspaceCards = uniq(
-    filteredContents.concat(filteredCards).filter((card) => {
-      if (!card.scheduled) return true;
-      return !dayjs().isSame(card.scheduled, "day");
-    })
+  const filteredCards = allCards.filter(
+    (card) => card.id !== "state" && card.id !== "settings"
   );
+  const workspaceCards = filteredCards.filter((card) => {
+    if (!card.scheduled) return true;
+    return !dayjs().isSame(card.scheduled, "day");
+  });
+
+  const templateContents = await readTemplateFiles();
+  const filteredTemplates = keyBy(
+    templateContents
+      .filter((template) => template.status !== PROMISE_STATUS.REJECTED)
+      .map((promise) => promise.value),
+    "name"
+  );
+  const state = await readDataFile("state");
+  const cards = onlyUnFinished
+    ? workspaceCards.filter((card) => card.status !== "done")
+    : workspaceCards;
+  event.reply(RELOAD_STATE, {
+    state,
+    shown: {
+      cards,
+      templates: filteredTemplates,
+    },
+  });
+  writeDataFile("state", {
+    ...state,
+    cardList: cards.map((card) => card.id),
+  });
 }
 
 export async function workspaceRequest(event) {
