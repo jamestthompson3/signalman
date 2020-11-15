@@ -11,6 +11,10 @@
   padding: 5px;
 }
 
+.month > span {
+  font-weight: bold;
+}
+
 .day-container * >  .increment-decrement {
   font-weight: bold;
   font-size: 1rem;

@@ -20,7 +20,7 @@ const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1800,
-    height: 800,
+    height: 900,
     backgroundColor: "#091818ff",
     webPreferences: {
       preload: `${__dirname}/preload.js`,

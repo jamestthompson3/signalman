@@ -120,7 +120,7 @@ export function ListItem({ contents, template, dayView }) {
                   <p>⏰</p>
                   <time
                     className="date-scheduled"
-                    datetime={contents.scheduled}
+                    dateTime={contents.scheduled}
                   >
                     {new Date(contents.scheduled).toLocaleDateString()}
                   </time>

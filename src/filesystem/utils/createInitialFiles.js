@@ -31,12 +31,13 @@ const configurationTemplate = {
   fields: {
     name: {
       type: "text",
+      label: "workspace name",
     },
     user: {
       type: "text",
+      label: "user",
     },
   },
-  labelFields: true,
 };
 const viewTemplate = {
   name: "basic-view",

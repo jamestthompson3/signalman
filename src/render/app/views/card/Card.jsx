@@ -49,7 +49,7 @@ function CardField({ type, value, send, field, label }) {
   };
   return (
     <>
-      {label && <p>{label}</p>}
+      {label && <p className="field-label">{label}</p>}
       {renderOnType(type)}
     </>
   );
