@@ -1,0 +1,29 @@
+.hotkey-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.hotkey-container > .hotkey {
+  width: 50px;
+  height: 40px;
+  border: 1px solid var(--dark0);
+  padding: 5px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.hotkey > .hotkey-actions {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.hotkey > .keycode {
+  font-size: 0.6rem;
+  position: relative;
+  top: 0;
+  right: 20px;
+}

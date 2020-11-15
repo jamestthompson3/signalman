@@ -1,7 +1,6 @@
 import React from "react";
 import { useMachine } from "@xstate/react";
 
-import { Editable } from "common/components/ContentEditable.jsx";
 import { Card } from "../card/Card.jsx";
 import { cardUpdateMachine } from "machines/card-update.machine";
 import { workspaceDriver, deleteCardDriver } from "../../utils/eventMachines";
@@ -100,20 +99,37 @@ export function ListItem({ contents, template, dayView }) {
         >
           <div>
             {contents.id !== "settings" ? (
-              <Editable
-                value={contents.title || contents.text}
-                send={(data) =>
+              <input
+                type="text"
+                className="as-title"
+                value={contents.title || contents.id}
+                onChange={(e) => {
                   send({
                     type: "UPDATE_FIELD",
                     data: {
-                      field: contents.title ? "title" : "text",
-                      value: data,
+                      field: "title",
+                      value: e.target.value,
                     },
-                  })
-                }
+                  });
+                }}
               />
             ) : (
-              <p>{contents.title}</p>
+              <h3>{contents.title}</h3>
+            )}
+            {Boolean(contents.text) && (
+              <textarea
+                className="as-text"
+                value={contents.text}
+                onChange={(e) => {
+                  send({
+                    type: "UPDATE_FIELD",
+                    data: {
+                      field: "text",
+                      value: e.target.value,
+                    },
+                  });
+                }}
+              />
             )}
           </div>
         </div>

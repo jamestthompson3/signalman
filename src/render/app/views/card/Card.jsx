@@ -2,35 +2,62 @@ import React from "react";
 import { useMachine } from "@xstate/react";
 import get from "lodash/get";
 
-import { Editable } from "common/components/ContentEditable.jsx";
 import { DayPicker } from "common/components/DayPicker.jsx";
 import { cardUpdateMachine } from "machines/card-update.machine";
 import { parseTimeAllotted } from "../utils/parse";
 
 // TODO:
 // expose templatting to parent component so I can execute logic on the fields
-function renderOnFieldType({ type, value, send, field }) {
-  switch (type) {
-    case "text":
-      return (
-        <Editable
-          value={value}
-          send={(data) =>
-            send({ type: "UPDATE_FIELD", data: { field, value: data } })
-          }
-        />
-      );
-    case "date":
-      return <DayPicker day={new Date(value)} send={send} field={field} />;
-    default:
-      return null;
-  }
+function CardField({ type, value, send, field, label }) {
+  const renderOnType = (type) => {
+    switch (type) {
+      case "text":
+        return (
+          <textarea
+            type="text"
+            value={value}
+            className="textarea-input"
+            onChange={(e) => {
+              send({
+                type: "UPDATE_FIELD",
+                data: { field, value: e.target.value },
+              });
+            }}
+          />
+        );
+      case "number":
+        return (
+          <input
+            type="text"
+            className="number-input"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            onChange={(e) => {
+              send({
+                type: "UPDATE_FIELD",
+                data: { field, value: parseInt(e.target.value) },
+              });
+            }}
+            value={value && parseInt(value)}
+          />
+        );
+      case "date":
+        return <DayPicker day={new Date(value)} send={send} field={field} />;
+      default:
+        return null;
+    }
+  };
+  return (
+    <>
+      {label && <p>{label}</p>}
+      {renderOnType(type)}
+    </>
+  );
 }
 
 // This thing is gonna get messy
-// TODO figure out editing titles
 function parseTemplate({ contents, template, send }) {
-  const { fields, labelFields } = template;
+  const { fields } = template;
   return (
     <div
       className="card"
@@ -39,7 +66,7 @@ function parseTemplate({ contents, template, send }) {
     >
       <div className="card-meta-container">
         <div className="card-title">
-          <h4 data-field="title">{contents.title}</h4>
+          <h3 data-field="title">{contents.title}</h3>
         </div>
         <div className="card-meta">
           <i>
@@ -57,13 +84,13 @@ function parseTemplate({ contents, template, send }) {
       <div className="card-body">
         {Object.keys(fields).map((field) => (
           <div className="card-field" key={field}>
-            {labelFields && <p>{field}: </p>}
-            {renderOnFieldType({
-              type: get(template, `fields.${field}.type`, "text"),
-              value: get(contents, field),
-              send,
-              field,
-            })}
+            <CardField
+              type={get(template, `fields.${field}.type`, "text")}
+              value={get(contents, field)}
+              send={send}
+              field={field}
+              label={get(fields, `${field}.label`)}
+            />
           </div>
         ))}
       </div>
@@ -71,6 +98,7 @@ function parseTemplate({ contents, template, send }) {
   );
 }
 
+// TODO fix prop drilling
 export function Card({ contents, template }) {
   const [currentState, send] = useMachine(
     cardUpdateMachine.withContext(contents)

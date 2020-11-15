@@ -1,7 +1,0 @@
-.content-editable {
-  color: #000;
-}
-
-.content-editable:focus {
-  outline: var(--accent) auto 1px;
-}

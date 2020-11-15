@@ -26,3 +26,29 @@
   margin: 0rem;
 }
 
+.list * > .as-text {
+  font-style: italic;
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  border: none;
+  background: transparent;
+  width: 100%;
+  resize: none;
+  font-family: inherit;
+}
+
+.list * > .as-title {
+  display: block;
+  font-size: 1.17em;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+  border: none;
+  width: auto;
+  background: transparent;
+}

@@ -29,7 +29,8 @@
 .card-title {
   text-align: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  padding: 5px;
 }
 
 .card-meta {
@@ -82,4 +83,20 @@
 
 .card-container .list {
   margin: 0;
+}
+
+.card-field > .textarea-input {
+  padding: 8px 12px;
+  width: 100%;
+}
+
+.card-field > input {
+  border: 1px solid var(--light1);
+  background: transparent;
+}
+
+.card-field > textarea {
+  border: none;
+  background: transparent;
+  font-family: inherit;
 }

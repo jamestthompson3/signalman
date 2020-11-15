@@ -17,12 +17,18 @@
   color: var(--dark0);
   user-select: none;
   background: transparent;
-  border: 1px solid var(--light1);
+  border: none;
+  padding: 3px;
   cursor: pointer;
 }
 
 .day-modifier > .day-input {
   width: 20%;
+  border: 1px solid var(--light1);
+}
+
+.day > .time-input {
+  border: 1px solid var(--light1);
 }
 
 .day > .day-modifier {

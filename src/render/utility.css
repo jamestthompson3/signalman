@@ -35,13 +35,3 @@
   display: none;
 }
 
-.hotkey-container {
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.hotkey {
-  width: 50px;
-  height: 40px;
-  border: 1px solid var(--dark0);
-}

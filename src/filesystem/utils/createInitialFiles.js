@@ -45,17 +45,18 @@ const viewTemplate = {
       type: "text",
     },
     timeAllotted: {
-      type: "text",
+      type: "number",
+      label: "time estimate (minutes)",
     },
     status: {
-      type: "enum",
-      options: ["done", "not done"],
+      type: "boolean",
+      lable: "done",
     },
     scheduled: {
       type: "date",
+      label: "scheduled for",
     },
   },
-  labelFields: true,
 };
 
 export function bootstrap() {

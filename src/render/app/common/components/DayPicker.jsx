@@ -1,30 +1,32 @@
 import * as React from "react";
 import "./daypicker.css";
 
+import { addDays, addMonths } from "../../utils/time";
+
 export function DayPicker({ day, send, field }) {
   const decrementMonth = () => {
     send({
       type: "UPDATE_FIELD",
-      data: { field, value: new Date(day.setMonth(day.getMonth() - 1)) },
+      data: { field, value: addMonths(day, -1) },
     });
   };
   const incrementMonth = () => {
     send({
       type: "UPDATE_FIELD",
-      data: { field, value: new Date(day.setMonth(day.getMonth() + 1)) },
+      data: { field, value: addMonths(day, 1) },
     });
   };
 
   const decrementDay = () => {
     send({
       type: "UPDATE_FIELD",
-      data: { field, value: new Date(day.setDate(day.getDate() - 1)) },
+      data: { field, value: addDays(day, -1) },
     });
   };
   const incrementDay = () => {
     send({
       type: "UPDATE_FIELD",
-      data: { field, value: new Date(day.setDate(day.getDate() + 1)) },
+      data: { field, value: addDays(day, 1) },
     });
   };
   const updateDay = (value) => {
@@ -48,7 +50,7 @@ export function DayPicker({ day, send, field }) {
             decrementMonth();
           }}
         >
-          &lt;
+          👈
         </button>
         <span>
           {new Intl.DateTimeFormat("en-US", { month: "long" }).format(day)}
@@ -59,7 +61,7 @@ export function DayPicker({ day, send, field }) {
             incrementMonth();
           }}
         >
-          &gt;
+          👉
         </button>
       </div>
       <div className="day">
@@ -70,7 +72,7 @@ export function DayPicker({ day, send, field }) {
               decrementDay();
             }}
           >
-            &lt;
+            👇
           </button>
           <input
             type="text"
@@ -86,11 +88,12 @@ export function DayPicker({ day, send, field }) {
               incrementDay();
             }}
           >
-            &gt;
+            ☝️
           </button>
         </div>
         <input
           type="time"
+          className="time-input"
           value={String.prototype.concat(day.getHours(), ":", day.getMinutes())}
           onChange={(e) => setTime(e.target.value.split(":"))}
         />
