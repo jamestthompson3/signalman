@@ -8,14 +8,14 @@ import {
   parseTimeAllotted,
   parseHeight,
   parseDayPosition,
+  getHeight,
   BASE_TIME_TICK,
 } from "../utils/parse";
 import { MESSAGES } from "global/constants/bridge";
+import { Timestamp } from "common/components/Timestamp.jsx";
 
 const { WORKSPACE_REMOVE_CARD, DELETE_CARD } = MESSAGES;
 
-// This thing is gonna get messy
-// TODO figure out editing titles
 export function ListItem({ contents, template, dayView }) {
   const [, send] = useMachine(cardUpdateMachine.withContext(contents));
   const [view, setView] = React.useState("list");
@@ -25,6 +25,8 @@ export function ListItem({ contents, template, dayView }) {
   React.useEffect(() => {
     if (boxRef.current) {
       const d = new Date(contents.scheduled);
+      // TODO scroll into view even if there isn't any cards
+      // scheduled for this hour
       if (today.getHours() === d.getHours()) {
         boxRef.current.scrollIntoView({
           behavior: "smooth",
@@ -89,11 +91,7 @@ export function ListItem({ contents, template, dayView }) {
         <div
           className="list"
           data-time-allotted={parseTimeAllotted(contents.timeAllotted)}
-          style={
-            dayView && {
-              height: parseHeight(contents.timeAllotted || BASE_TIME_TICK),
-            }
-          }
+          style={getHeight(dayView, contents.timeAllotted)}
         >
           <div>
             <div className="title-container">
@@ -117,13 +115,7 @@ export function ListItem({ contents, template, dayView }) {
               )}
               {contents.scheduled && (
                 <div className="time-label">
-                  <p>⏰</p>
-                  <time
-                    className="date-scheduled"
-                    dateTime={contents.scheduled}
-                  >
-                    {new Date(contents.scheduled).toLocaleDateString()}
-                  </time>
+                  <Timestamp date={new Date(contents.scheduled)} />
                 </div>
               )}
             </div>

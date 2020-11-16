@@ -29,10 +29,12 @@
 .day-modifier > .day-input {
   width: 20%;
   border: 1px solid var(--light1);
+  border-radius: var(--radius);
 }
 
 .day > .time-input {
   border: 1px solid var(--light1);
+  border-radius: var(--radius);
 }
 
 .day > .day-modifier {

@@ -4,18 +4,6 @@
   opacity: 0.7;
 }
 
-[data-time-allotted="short"] {
-  border-top: 5px solid var(--dark0);
-}
-
-[data-time-allotted="medium"] {
-  border-top: 5px solid hsl(154, 75%, 51%);
-}
-
-[data-time-allotted="long"] {
-  border-top: 5px solid hsl(232, 45%, 64%);
-}
-
 .-top {
   z-index: 1;
 }

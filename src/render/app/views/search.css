@@ -6,19 +6,20 @@
 }
 
 .search-form
-  > * > .searchbox {
+   * > .searchbox {
   margin: 0;
   padding: 0.5rem;
   width: var(--width);
   -webkit-appearance: none;
   font-size: 13px;
   border: 1px solid var(--dark1);
+  border-radius: var(--radius)
 }
 
 .search-form
-  > * > .searchbox:focus {
+   * > .searchbox:focus {
   outline: var(--accent) auto 1px;
-  border-radius: 0px;
+  border-radius: var(--radius);
 }
 
 .search-form
@@ -74,7 +75,7 @@
   background: white;
   /* box-shadow: var(--shadow-button); */
   padding: 4px;
-  border-radius: 2px;
+  border-radius: var(--radius);
   cursor: pointer;
 }
 

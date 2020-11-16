@@ -17,7 +17,6 @@ async function loadWorkspace() {
     readTemplateFiles,
   } = require("../filesystem/utils/projectDir");
   const { PROMISE_STATUS } = require("../constants");
-  const dayjs = require("dayjs");
 
   const state = await readDataFile("state");
   const { cardList } = state;
@@ -25,10 +24,7 @@ async function loadWorkspace() {
   const cardContents = await Promise.allSettled(startupCards);
   const cards = cardContents
     .filter((card) => card.status !== PROMISE_STATUS.REJECTED)
-    .map((promise) => promise.value)
-    .filter((card) =>
-      !card.scheduled ? true : !dayjs().isSame(card.scheduled, "day")
-    );
+    .map((promise) => promise.value);
   const templateContents = await readTemplateFiles();
   const filteredTemplates = keyBy(
     templateContents

@@ -1,6 +1,6 @@
 /* Can be edited by the user to change the appearance w/o having
  * to change class names or add data attributes, etc.
-*/
+ */
 
 :root {
   /* CSS HEX */
@@ -12,11 +12,12 @@
   --bg-gradient: linear-gradient(hsl(0, 0%, 100%), hsl(0, 0%, 96%));
   --shadow: 0 5px 15px 0 hsla(0, 0%, 0%, 0.1);
   --shadow-button: 0px -1px 20px 0px hsla(0, 0%, 0%, 0.18);
+  --radius: 2px;
 }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif;
+  Arial, sans-serif;
   margin: auto;
   padding: 2rem;
   color: var(--dark0);
@@ -32,4 +33,8 @@ h1 {
 h1,
 h2 {
   text-align: center;
+}
+
+*:focus {
+  outline: var(--accent) auto 1px;
 }

@@ -7,6 +7,7 @@ import { Search } from "../search/index.jsx";
 import { WorkspaceTitle } from "./WorkspaceTitle.jsx";
 import { workspaceDriver } from "../../utils/eventMachines";
 import "./workspace.css";
+import dayjs from "dayjs";
 
 const workspaceService = workspaceDriver.init(true);
 
@@ -15,7 +16,9 @@ export function Workspace() {
   const [currentState] = useService(workspaceService);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
-  const { context } = currentState;
+  const {
+    context: { state, shown, today },
+  } = currentState;
   // console.log({ context });
   React.useEffect(() => {
     return () => workspaceDriver.stop();
@@ -32,22 +35,28 @@ export function Workspace() {
     document.addEventListener("keydown", newCard);
     () => document.removeEventListener("keydown", newCard, true);
   }, []);
-  if (!context.state) return null;
+  if (!state) return null;
+  const shownCards = {
+    ...shown,
+    cards: shown.cards.filter((card) =>
+      !card.scheduled ? true : !dayjs().isSame(card.scheduled, "day")
+    ),
+  };
   return (
     <>
-      <WorkspaceTitle name={context.state.name} />
+      <WorkspaceTitle name={state.name} />
       <Search />
       <NewCard
         open={showDialog}
         close={close}
-        template={context.shown.templates["basic-view"]}
+        template={shown.templates["basic-view"]}
       />
       <div className="workspace-view-container">
-        <ListView contents={context.shown} />
+        <ListView contents={shownCards} />
         <CardView
           contents={{
-            cards: context.today,
-            templates: context.shown.templates,
+            cards: today,
+            templates: shown.templates,
           }}
         />
       </div>

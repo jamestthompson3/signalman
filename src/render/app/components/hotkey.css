@@ -7,6 +7,7 @@
   width: 50px;
   height: 40px;
   border: 1px solid var(--dark0);
+  border-radius: var(--radius);
   padding: 5px;
   box-shadow: var(--shadow);
   text-align: center;
