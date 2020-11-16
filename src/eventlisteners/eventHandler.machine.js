@@ -130,6 +130,9 @@ export const eventHandlerMachine = Machine(
         loadAllCardsInWorkspace({ data, event }),
       saveCard: async (_, { data, event }) => {
         const card = await saveCard(data);
+        ipc.of.background.emit(UPDATE_CARD, {
+          id: ipc.config.id,
+        });
         return {
           type: SAVE_CARD,
           data: card,

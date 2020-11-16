@@ -3,5 +3,5 @@ export function addMonths(date, numMonths) {
 }
 
 export function addDays(date, numDays) {
-  return new Date(date.setDate(date.getDate() - 1));
+  return new Date(date.setDate(date.getDate() + numDays));
 }
