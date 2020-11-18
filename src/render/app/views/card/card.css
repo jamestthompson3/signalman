@@ -56,6 +56,18 @@
   background: white;
 }
 
+.card-view-container * > [data-time-allotted="short"] {
+  border-top: 5px solid var(--dark0);
+}
+
+.card-view-container * > [data-time-allotted="medium"] {
+  border-top: 5px solid hsl(154, 75%, 51%);
+}
+
+.card-view-container * > [data-time-allotted="long"] {
+  border-top: 5px solid hsl(232, 45%, 64%);
+}
+
 .card-view-container h2 {
   position: sticky;
   top: 0;

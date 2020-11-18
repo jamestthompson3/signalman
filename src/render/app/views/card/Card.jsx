@@ -33,9 +33,13 @@ function CardField({ type, value, send, field, label }) {
             inputMode="numeric"
             pattern="[0-9]*"
             onChange={(e) => {
+              const isValidNumber = !isNaN(parseInt(e.target.value));
               send({
                 type: "UPDATE_FIELD",
-                data: { field, value: parseInt(e.target.value) },
+                data: {
+                  field,
+                  value: isValidNumber ? parseInt(e.target.value) : undefined,
+                },
               });
             }}
             value={value && parseInt(value)}

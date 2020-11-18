@@ -29,6 +29,6 @@ export function getHeight(dayView, timeAllotted) {
   if (!dayView) return null;
   else if (isNaN(parseHeight(timeAllotted))) return null;
   return {
-    height: parseHeight(contents.timeAllotted),
+    height: parseHeight(timeAllotted),
   };
 }
