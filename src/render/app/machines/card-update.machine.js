@@ -16,7 +16,7 @@ function $processData(ctx, e) {
       delete ctx.completedAt;
     }
   }
-  return { ...ctx, [e.data.field]: e.data.value };
+  return { ...ctx, [e.data.field]: e.data.value, changed: true };
 }
 
 export const cardUpdateMachine = Machine(
@@ -29,6 +29,15 @@ export const cardUpdateMachine = Machine(
       LISTENING: {
         on: {
           UPDATE_FIELD: {
+            actions: "updateField",
+          },
+          PUBLISH_UPDATE: {
+            actions: "emitUpdated",
+          },
+          UPDATE_WORKSPACE_NAME: {
+            actions: "emitWorkspaceName",
+          },
+          UPDATE_IMMEDIATE: {
             actions: ["updateField", "emitUpdated"],
           },
         },
@@ -39,12 +48,14 @@ export const cardUpdateMachine = Machine(
     actions: {
       updateField: assign($processData),
       emitUpdated: (ctx, e) => {
+        delete ctx.changed;
         send(UPDATE_CARD, ctx);
-        if (e.data.field === "name") {
-          workspaceEmitter.emit(WORKSPACE_NAME_UPDATE, e.data.value);
-        } else {
-          workspaceDriver.send(WORKSPACE_PATCH_UPDATE, ctx);
-        }
+        workspaceDriver.send(WORKSPACE_PATCH_UPDATE, ctx);
+      },
+      emitWorkspaceName: (ctx, e) => {
+        delete ctx.changed;
+        send(UPDATE_CARD, ctx);
+        workspaceEmitter.emit(WORKSPACE_NAME_UPDATE, e.data.value);
       },
     },
   }

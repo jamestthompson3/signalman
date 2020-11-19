@@ -17,7 +17,12 @@ import { Timestamp } from "common/components/Timestamp.jsx";
 const { WORKSPACE_REMOVE_CARD, DELETE_CARD } = MESSAGES;
 
 export function ListItem({ contents, template, dayView }) {
-  const [, send] = useMachine(cardUpdateMachine.withContext(contents));
+  const [
+    {
+      context: { changed },
+    },
+    send,
+  ] = useMachine(cardUpdateMachine.withContext(contents));
   const [view, setView] = React.useState("list");
 
   const boxRef = React.useRef(null);
@@ -56,7 +61,10 @@ export function ListItem({ contents, template, dayView }) {
         </button>
         <button
           className="action-button"
-          onClick={() => setView(view === "card" ? "list" : "card")}
+          onClick={() => {
+            if (changed) send("PUBLISH_UPDATE");
+            setView(view === "card" ? "list" : "card");
+          }}
         >
           {view === "card" ? "👓" : "📝"}
         </button>
@@ -102,7 +110,7 @@ export function ListItem({ contents, template, dayView }) {
                   value={contents.title || contents.id}
                   onChange={(e) => {
                     send({
-                      type: "UPDATE_FIELD",
+                      type: "UPDATE_IMMEDIATE",
                       data: {
                         field: "title",
                         value: e.target.value,
@@ -125,7 +133,7 @@ export function ListItem({ contents, template, dayView }) {
                 value={contents.text}
                 onChange={(e) => {
                   send({
-                    type: "UPDATE_FIELD",
+                    type: "UPDATE_IMMEDIATE",
                     data: {
                       field: "text",
                       value: e.target.value,
