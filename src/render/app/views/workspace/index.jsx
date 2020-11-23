@@ -1,6 +1,5 @@
 import React from "react";
 import { useService } from "@xstate/react";
-import { CardView } from "../card/index.jsx";
 import { NewCard } from "../card/NewCard.jsx";
 import { ListView } from "../list/index.jsx";
 import { Search } from "../search/index.jsx";
@@ -17,7 +16,7 @@ export function Workspace() {
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
   const {
-    context: { state, shown, today },
+    context: { state, shown },
   } = currentState;
   // console.log({ context });
   React.useEffect(() => {
@@ -53,12 +52,6 @@ export function Workspace() {
       />
       <div className="workspace-view-container">
         <ListView contents={shownCards} />
-        <CardView
-          contents={{
-            cards: today,
-            templates: shown.templates,
-          }}
-        />
       </div>
     </>
   );

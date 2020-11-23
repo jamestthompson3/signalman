@@ -1,6 +1,7 @@
 import fs from "fs";
 import { getDataDir } from "./projectDir";
 import { USER } from "../../constants";
+import { migrate } from "../../lenses";
 
 // TODO rethink how cards are loaded up
 // Preserve the whole state instead of just having cards at startup?
@@ -11,7 +12,9 @@ import { USER } from "../../constants";
 const initialState = {
   name: `${USER}'s Switchyard`,
   cardList: ["settings"],
+  version: "0.0.1",
   theme: "default",
+  inboxes: ["personal"],
   user: USER,
   id: "state",
 };
@@ -39,7 +42,8 @@ const configurationTemplate = {
     },
   },
 };
-const viewTemplate = {
+
+export const viewTemplate = {
   name: "basic-view",
   fields: {
     text: {
@@ -51,16 +55,23 @@ const viewTemplate = {
     },
     status: {
       type: "boolean",
-      lable: "done",
+      label: "done",
     },
     scheduled: {
       type: "date",
       label: "scheduled for",
     },
+    inbox: {
+      type: "text",
+      label: "inbox",
+    },
+    tag: {
+      type: "array",
+    },
   },
 };
 
-export function bootstrap() {
+export async function bootstrap() {
   const dataDir = getDataDir();
 
   // make sure data directory exists
@@ -77,5 +88,7 @@ export function bootstrap() {
       `${dataDir}templates/basic-view.json`,
       JSON.stringify(viewTemplate)
     );
+  } else {
+    await migrate();
   }
 }

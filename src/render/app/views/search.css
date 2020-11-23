@@ -62,20 +62,4 @@
   color: var(--light0);
 }
 
-.search-form > .workspace-action-container {
-  display: flex;
-  width: 50%;
-  justify-content: space-between;
-  padding: 4px 0px;
-}
-
-.workspace-action-container button {
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  background: white;
-  /* box-shadow: var(--shadow-button); */
-  padding: 4px;
-  border-radius: var(--radius);
-  cursor: pointer;
-}
 

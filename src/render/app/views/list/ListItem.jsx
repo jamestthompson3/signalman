@@ -4,13 +4,7 @@ import { useMachine } from "@xstate/react";
 import { Card } from "../card/Card.jsx";
 import { cardUpdateMachine } from "machines/card-update.machine";
 import { workspaceDriver, deleteCardDriver } from "../../utils/eventMachines";
-import {
-  parseTimeAllotted,
-  parseHeight,
-  parseDayPosition,
-  getHeight,
-  BASE_TIME_TICK,
-} from "../utils/parse";
+import { parseTimeAllotted, parseDayPosition, getHeight } from "../utils/parse";
 import { MESSAGES } from "global/constants/bridge";
 import { Timestamp } from "common/components/Timestamp.jsx";
 

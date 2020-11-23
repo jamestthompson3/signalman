@@ -1,4 +1,4 @@
-import { Machine, assign } from "xstate";
+import { Machine, assign, actions } from "xstate";
 
 import { send } from "../utils/messagePassing";
 import { MESSAGES } from "global/constants/bridge";
@@ -6,6 +6,8 @@ import { workspaceEmitter } from "../utils/emitter";
 import { workspaceDriver } from "../utils/eventMachines";
 
 const { UPDATE_CARD, WORKSPACE_NAME_UPDATE, WORKSPACE_PATCH_UPDATE } = MESSAGES;
+
+const { choose } = actions;
 
 // Data lenses
 function $processData(ctx, e) {
@@ -29,13 +31,19 @@ export const cardUpdateMachine = Machine(
       LISTENING: {
         on: {
           UPDATE_FIELD: {
-            actions: "updateField",
+            actions: choose([
+              {
+                cond: (ctx) => ctx.id === "settings",
+                actions: ["updateField", "emitWorkspaceName"],
+              },
+              { actions: ["updateField"] },
+            ]),
           },
           PUBLISH_UPDATE: {
             actions: "emitUpdated",
           },
           UPDATE_WORKSPACE_NAME: {
-            actions: "emitWorkspaceName",
+            actions: ["updateField", "emitWorkspaceName"],
           },
           UPDATE_IMMEDIATE: {
             actions: ["updateField", "emitUpdated"],
@@ -47,13 +55,12 @@ export const cardUpdateMachine = Machine(
   {
     actions: {
       updateField: assign($processData),
-      emitUpdated: (ctx, e) => {
+      emitUpdated: (ctx) => {
         delete ctx.changed;
         send(UPDATE_CARD, ctx);
         workspaceDriver.send(WORKSPACE_PATCH_UPDATE, ctx);
       },
       emitWorkspaceName: (ctx, e) => {
-        delete ctx.changed;
         send(UPDATE_CARD, ctx);
         workspaceEmitter.emit(WORKSPACE_NAME_UPDATE, e.data.value);
       },

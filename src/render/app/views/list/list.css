@@ -118,3 +118,31 @@
   justify-content: space-between;
   flex: 1 0 105px;
 }
+
+
+.workspace-action-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 4px 0px;
+}
+
+.workspace-action-container button {
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  background: white;
+  /* box-shadow: var(--shadow-button); */
+  padding: 4px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin: 0px 4px;
+}
+
+.workspace-action-container button:hover {
+  background: var(--light0);
+}
+
+.workspace-action-container button:active {
+  background: var(--accent);
+  color: white;
+}
+

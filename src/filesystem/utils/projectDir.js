@@ -97,3 +97,23 @@ export async function readDataDir() {
   }
   return parsedFiles;
 }
+
+/*
+ * Used for recursing through only task files the data directory
+ * @returns: Promise<JSONObject[]>
+ */
+export async function readDataDirTasks() {
+  const dataDir = getDataDir();
+  const dataDirEntries = await readDir(dataDir, { withFileTypes: true });
+  let parsedFiles = [];
+  for (const entry of dataDirEntries) {
+    if (entry.isFile()) {
+      const file = await readFile(`${dataDir}${entry.name.toString()}`);
+      const parsedFile = JSON.parse(file.toString());
+      console.log(parsedFile.id);
+      if (parsedFile.id !== "settings" && parsedFile.id !== "state")
+        parsedFiles.push(parsedFile);
+    }
+  }
+  return parsedFiles;
+}
