@@ -20,7 +20,10 @@ const {
 const eventService = interpret(eventHandlerMachine);
 
 eventService.onEvent((e) =>
-  console.log({ type: e.type, data: e.data }, "\n=====================")
+  console.log(
+    { type: e.type, data: e.data },
+    "\n|==============================================|"
+  )
 );
 // eventService.onTransition((s) => console.log(s.value));
 eventService.start();

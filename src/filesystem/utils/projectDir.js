@@ -39,11 +39,18 @@ export function getDataDir() {
  * @returns: Promise<JSONObject>
  */
 export function readDataFile(name) {
+  const start = new Date();
   const dataDir = getDataDir();
   const filePath = `${dataDir}${name}.json`;
   return readFile(filePath, "utf8")
     .then((data) => data.toString())
-    .then(JSON.parse)
+    .then((data) => {
+      const end = new Date();
+      console.log(
+        `\n   --> Read Data File ${name}: \x1b[33m${end - start}ms\x1b[0m`
+      );
+      return JSON.parse(data);
+    })
     .catch(console.error);
 }
 
@@ -86,6 +93,7 @@ export function deleteDataFile(name) {
  * @returns: Promise<JSONObject[]>
  */
 export async function readDataDir() {
+  const start = new Date();
   const dataDir = getDataDir();
   const dataDirEntries = await readDir(dataDir, { withFileTypes: true });
   let parsedFiles = [];
@@ -95,6 +103,8 @@ export async function readDataDir() {
       parsedFiles.push(JSON.parse(file.toString()));
     }
   }
+  const end = new Date();
+  console.log(`\n -> Traversed Data Dir in \x1b[30m${end - start}ms\x1b[0m`);
   return parsedFiles;
 }
 
@@ -103,6 +113,7 @@ export async function readDataDir() {
  * @returns: Promise<JSONObject[]>
  */
 export async function readDataDirTasks() {
+  const start = new Date();
   const dataDir = getDataDir();
   const dataDirEntries = await readDir(dataDir, { withFileTypes: true });
   let parsedFiles = [];
@@ -110,10 +121,13 @@ export async function readDataDirTasks() {
     if (entry.isFile()) {
       const file = await readFile(`${dataDir}${entry.name.toString()}`);
       const parsedFile = JSON.parse(file.toString());
-      console.log(parsedFile.id);
       if (parsedFile.id !== "settings" && parsedFile.id !== "state")
         parsedFiles.push(parsedFile);
     }
   }
+  const end = new Date();
+  console.log(
+    `\n   --> Traversed Data Dir Tasks in \x1b[32m${end - start}ms\x1b[0m`
+  );
   return parsedFiles;
 }

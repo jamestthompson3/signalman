@@ -10,6 +10,8 @@ export async function saveCard(data) {
     id: cardId,
     // TODO remove when done testing
     scheduled: new Date(),
+    inbox: "personal",
+    status: "todo",
     ...data,
     created: new Date(),
     modified: new Date(),

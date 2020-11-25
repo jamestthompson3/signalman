@@ -5,7 +5,6 @@ const {
   SAVE_CARD,
   RELOAD_STATE,
   WORKSPACE_REMOVE_CARD,
-  WORKSPACE_LOAD_ALL,
   SEARCH_RESULT,
 } = MESSAGES;
 
@@ -14,17 +13,13 @@ async function loadWorkspace() {
   const keyBy = require("lodash/keyBy");
   const {
     readDataFile,
+    readDataDirTasks,
     readTemplateFiles,
   } = require("../filesystem/utils/projectDir");
   const { PROMISE_STATUS } = require("../constants");
-
+  const cardContents = await readDataDirTasks();
   const state = await readDataFile("state");
-  const { cardList } = state;
-  const startupCards = cardList.map(readDataFile);
-  const cardContents = await Promise.allSettled(startupCards);
-  const cards = cardContents
-    .filter((card) => card.status !== PROMISE_STATUS.REJECTED)
-    .map((promise) => promise.value);
+  const cards = cardContents.filter((card) => card.id !== "state");
   const templateContents = await readTemplateFiles();
   const filteredTemplates = keyBy(
     templateContents
@@ -111,7 +106,6 @@ export async function updateGlobalState({ type, data, event }) {
       break;
     }
     case WORKSPACE_REMOVE_CARD: {
-      console.log("REMOVING");
       const updatedState = {
         ...state,
         cardList: state.cardList.filter((card) => card !== data),
@@ -143,7 +137,6 @@ export function workspaceSearch(data, event) {
       : rgPath;
 
   const dataDir = getDataDir();
-  // FYI, ripgrep supports a "--json" flag with really detailed info, if needed
   execFile(
     rg,
     [

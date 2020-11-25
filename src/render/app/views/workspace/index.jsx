@@ -1,12 +1,12 @@
 import React from "react";
+import groupBy from "lodash/groupBy";
 import { useService } from "@xstate/react";
 import { NewCard } from "../card/NewCard.jsx";
-import { ListView } from "../list/index.jsx";
 import { Search } from "../search/index.jsx";
+import { Inboxes } from "../inbox/index.jsx";
 import { WorkspaceTitle } from "./WorkspaceTitle.jsx";
 import { workspaceDriver } from "../../utils/eventMachines";
 import "./workspace.css";
-import dayjs from "dayjs";
 
 const workspaceService = workspaceDriver.init(true);
 
@@ -35,12 +35,11 @@ export function Workspace() {
     () => document.removeEventListener("keydown", newCard, true);
   }, []);
   if (!state) return null;
-  const shownCards = {
-    ...shown,
-    cards: shown.cards.filter((card) =>
-      !card.scheduled ? true : !dayjs().isSame(card.scheduled, "day")
-    ),
-  };
+  // const shownCards = {
+  //   ...shown,
+  //   cards: shown.cards
+  // };
+  const inboxes = groupBy(shown.cards, "inbox");
   return (
     <>
       <WorkspaceTitle name={state.name} />
@@ -51,7 +50,8 @@ export function Workspace() {
         template={shown.templates["basic-view"]}
       />
       <div className="workspace-view-container">
-        <ListView contents={shownCards} />
+        <Inboxes inboxes={inboxes} templates={shown.templates} />
+        {/*<ListView contents={shownCards} />*/}
       </div>
     </>
   );

@@ -42,9 +42,14 @@ describe("saveCard", () => {
     });
   });
   it("generates a cardID and saves it with new card info", async () => {
-    const card = await saveCard({ text: "test", title: "card" });
+    const card = await saveCard({
+      text: "test",
+      title: "card",
+      inbox: "personal",
+    });
     expect(card).toBeDefined();
     expect(card.modifier).toBe("test");
+    expect(card.inbox).toBe("personal");
     const created = new Date(card.created);
     const modified = new Date(card.modified);
     expect(created.valueOf()).toBeDefined();
